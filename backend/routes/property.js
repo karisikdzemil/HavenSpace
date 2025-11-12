@@ -1,9 +1,9 @@
 const express = require('express');
-const propertyController = require('../controllers/propertyController');
+const propertyController = require('../controllers/property');
 
 const router = express.Router();
 
-router.get('/', );
+router.get('/', propertyController.getHome);
 
 // router.get('/properties');
 
