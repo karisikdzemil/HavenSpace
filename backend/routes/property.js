@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.get('/', propertyController.getHome);
 
-// router.get('/properties');
+router.get('/properties', propertyController.getProperties);
 
 // router.get('/property');
 
-// router.post('/property');
+router.post('/property', propertyController.postProperty);
 
 // router.put('/property');
 

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const Property = new Schema({
+const PropertySchema = new Schema({
     title: {
         type: String,
         required: true
@@ -18,4 +18,4 @@ const Property = new Schema({
     
 });
 
-module.exports =  mongoose.model('Property', Property);
+module.exports =  mongoose.model('Property', PropertySchema);
