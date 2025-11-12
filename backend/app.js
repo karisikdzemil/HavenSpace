@@ -7,10 +7,12 @@ const db_key = "mongodb+srv://karisikdzemil:Dzemil123@cluster0.ldrhrp1.mongodb.n
 
 const app = express();
 
+app.use(express.json());
+
 app.use('/api/properties', propertyRoutes);
 
 mongoose.connect(db_key).then(result => {
-    const p = new Property({title: 'djemsi'});
+    const p = new Property({title: 'djemsi', price: 20, description: 'tu i tamo'});
     p.save()
     app.listen(8080);
 }).catch(err => console.log(err))
