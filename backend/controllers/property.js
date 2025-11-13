@@ -4,22 +4,32 @@ exports.getHome = (req, res, next) => {
   Property.find()
     .then((properties) => {
       if (!properties) {
-        return res.status(500).json({ message: "Something went wrong!" });
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
       }
       res.status(200).json({ message: "Success!", properties: properties });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err.statusCode(500);
+      next(err);
+    });
 };
 
 exports.getProperties = (req, res, next) => {
   Property.find()
     .then((properties) => {
       if (!properties) {
-        return res.status(500).json({ message: "Something went wrong!" });
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
       }
       res.status(200).json({ message: "Success!", properties: properties });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err.statusCode(500);
+      next(err);
+    });
 };
 
 exports.getProperty = (req, res, next) => {
@@ -28,12 +38,15 @@ exports.getProperty = (req, res, next) => {
   Property.findOne(propertyId)
     .then((property) => {
       if (!property) {
-        // res 500
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
       }
       res.status(200).json({ message: "Property found!", property: property });
     })
     .catch((err) => {
-      console.log(err);
+      err.statusCode(500);
+      next(err);
     });
 };
 
@@ -51,11 +64,19 @@ exports.postProperty = (req, res, next) => {
   property
     .save()
     .then((result) => {
+      if (!result) {
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
+      }
       res
         .status(201)
         .json({ message: "Property created successfuly", property: result });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err.statusCode(500);
+      next(err);
+    });
 };
 
 exports.editProperty = (req, res, next) => {
@@ -73,11 +94,19 @@ exports.editProperty = (req, res, next) => {
   editedProperty
     .save()
     .then((result) => {
+      if (!result) {
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
+      }
       res
         .status(201)
         .json({ message: "Property updated successfully", property: result });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      err.statusCode(500);
+      next(err);
+    });
 };
 
 exports.deleteProperty = (req, res, next) => {
@@ -86,13 +115,16 @@ exports.deleteProperty = (req, res, next) => {
   Property.findOneAndDelete(propertyId)
     .then((property) => {
       if (!property) {
-        // res 500
+        const error = new Error("Property Not Found!");
+        error.statusCode = 500;
+        throw error;
       }
       res
         .status(200)
         .json({ message: "Property deleted!", property: property });
     })
     .catch((err) => {
-      console.log(err);
+      err.statusCode(500);
+      next(err);
     });
 };
