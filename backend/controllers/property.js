@@ -85,14 +85,15 @@ exports.editProperty = (req, res, next) => {
   const newPrice = req.body.price;
   const newDescription = req.body.description;
 
-  const editedProperty = {
-    _id: propertyId,
-    title: newTitle,
-    price: newPrice,
-    description: newDescription,
-  };
-  editedProperty
-    .save()
+  Property.findByIdAndUpdate(
+    propertyId,
+    {
+      title: newTitle,
+      price: newPrice,
+      description: newDescription,
+    },
+    { new: true }
+  )
     .then((result) => {
       if (!result) {
         const error = new Error("Property Not Found!");
