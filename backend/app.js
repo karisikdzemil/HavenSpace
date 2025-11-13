@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const propertyRoutes = require('./routes/property');
 const cors = require('cors');
 
-const db_key = "mongodb+srv://karisikdzemil:Dzemil123@cluster0.ldrhrp1.mongodb.net/havenspace?retryWrites=true&w=majority&appName=Cluster0";
+require('dotenv').config();
+const db_key = process.env.MONGO_URI;
 
 const app = express();
 

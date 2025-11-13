@@ -11,7 +11,7 @@ exports.getHome = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
@@ -27,7 +27,7 @@ exports.getProperties = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
@@ -45,7 +45,7 @@ exports.getProperty = (req, res, next) => {
       res.status(200).json({ message: "Property found!", property: property });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
@@ -74,7 +74,7 @@ exports.postProperty = (req, res, next) => {
         .json({ message: "Property created successfuly", property: result });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
@@ -104,7 +104,7 @@ exports.editProperty = (req, res, next) => {
         .json({ message: "Property updated successfully", property: result });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
@@ -124,7 +124,7 @@ exports.deleteProperty = (req, res, next) => {
         .json({ message: "Property deleted!", property: property });
     })
     .catch((err) => {
-      err.statusCode(500);
+      err.statusCode = 500;
       next(err);
     });
 };
