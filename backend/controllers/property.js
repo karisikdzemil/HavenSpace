@@ -22,6 +22,21 @@ exports.getProperties = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 
+exports.getProperty = (req, res, next) => {
+  const propertyId = req.params.id;
+
+  Property.findOne(propertyId)
+    .then((property) => {
+      if (!property) {
+        // res 500
+      }
+      res.status(200).json({ message: "Property found!", property: property });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 exports.postProperty = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
@@ -41,4 +56,43 @@ exports.postProperty = (req, res, next) => {
         .json({ message: "Property created successfuly", property: result });
     })
     .catch((err) => console.log(err));
+};
+
+exports.editProperty = (req, res, next) => {
+  const propertyId = req.params.id;
+  const newTitle = req.body.title;
+  const newPrice = req.body.price;
+  const newDescription = req.body.description;
+
+  const editedProperty = {
+    _id: propertyId,
+    title: newTitle,
+    price: newPrice,
+    description: newDescription,
+  };
+  editedProperty
+    .save()
+    .then((result) => {
+      res
+        .status(201)
+        .json({ message: "Property updated successfully", property: result });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.deleteProperty = (req, res, next) => {
+  const propertyId = req.params.id;
+
+  Property.findOneAndDelete(propertyId)
+    .then((property) => {
+      if (!property) {
+        // res 500
+      }
+      res
+        .status(200)
+        .json({ message: "Property deleted!", property: property });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
