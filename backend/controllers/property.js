@@ -1,4 +1,5 @@
 const Property = require("../models/Property");
+const { validationResult } = require("express-validator");
 
 exports.getHome = (req, res, next) => {
   Property.find()
@@ -11,7 +12,7 @@ exports.getHome = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-       if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
@@ -29,7 +30,7 @@ exports.getProperties = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-       if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
@@ -39,7 +40,7 @@ exports.getProperties = (req, res, next) => {
 exports.getProperty = (req, res, next) => {
   const propertyId = req.params.id;
 
-  Property.findOne(propertyId)
+  Property.findById(propertyId)
     .then((property) => {
       if (!property) {
         const error = new Error("Property Not Found!");
@@ -49,7 +50,7 @@ exports.getProperty = (req, res, next) => {
       res.status(200).json({ message: "Property found!", property: property });
     })
     .catch((err) => {
-      if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
@@ -57,6 +58,12 @@ exports.getProperty = (req, res, next) => {
 };
 
 exports.postProperty = (req, res, next) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    const error = new Error('Enter a valid data!');
+    error.statusCode = 500;
+    throw error;
+  }
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
@@ -80,7 +87,7 @@ exports.postProperty = (req, res, next) => {
         .json({ message: "Property created successfuly", property: result });
     })
     .catch((err) => {
-       if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
@@ -88,6 +95,12 @@ exports.postProperty = (req, res, next) => {
 };
 
 exports.editProperty = (req, res, next) => {
+    const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    const error = new Error('Enter a valid data!');
+    error.statusCode = 500;
+    throw error;
+  }
   const propertyId = req.params.id;
   const newTitle = req.body.title;
   const newPrice = req.body.price;
@@ -113,7 +126,7 @@ exports.editProperty = (req, res, next) => {
         .json({ message: "Property updated successfully", property: result });
     })
     .catch((err) => {
-       if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
@@ -123,7 +136,7 @@ exports.editProperty = (req, res, next) => {
 exports.deleteProperty = (req, res, next) => {
   const propertyId = req.params.id;
 
-  Property.findOneAndDelete(propertyId)
+  Property.findByIdDelete(propertyId)
     .then((property) => {
       if (!property) {
         const error = new Error("Property Not Found!");
@@ -135,7 +148,7 @@ exports.deleteProperty = (req, res, next) => {
         .json({ message: "Property deleted!", property: property });
     })
     .catch((err) => {
-      if(!err.statusCode){
+      if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
