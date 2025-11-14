@@ -3,7 +3,7 @@ const Property = require("../models/Property");
 exports.getHome = (req, res, next) => {
   Property.find()
     .then((properties) => {
-      if (!properties) {
+      if (properties.length === 0) {
         const error = new Error("Property Not Found!");
         error.statusCode = 500;
         throw error;
@@ -11,7 +11,9 @@ exports.getHome = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-      err.statusCode = 500;
+       if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };
@@ -19,7 +21,7 @@ exports.getHome = (req, res, next) => {
 exports.getProperties = (req, res, next) => {
   Property.find()
     .then((properties) => {
-      if (!properties) {
+      if (properties.length === 0) {
         const error = new Error("Property Not Found!");
         error.statusCode = 500;
         throw error;
@@ -27,7 +29,9 @@ exports.getProperties = (req, res, next) => {
       res.status(200).json({ message: "Success!", properties: properties });
     })
     .catch((err) => {
-      err.statusCode = 500;
+       if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };
@@ -45,7 +49,9 @@ exports.getProperty = (req, res, next) => {
       res.status(200).json({ message: "Property found!", property: property });
     })
     .catch((err) => {
-      err.statusCode = 500;
+      if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };
@@ -74,7 +80,9 @@ exports.postProperty = (req, res, next) => {
         .json({ message: "Property created successfuly", property: result });
     })
     .catch((err) => {
-      err.statusCode = 500;
+       if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };
@@ -105,7 +113,9 @@ exports.editProperty = (req, res, next) => {
         .json({ message: "Property updated successfully", property: result });
     })
     .catch((err) => {
-      err.statusCode = 500;
+       if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };
@@ -125,7 +135,9 @@ exports.deleteProperty = (req, res, next) => {
         .json({ message: "Property deleted!", property: property });
     })
     .catch((err) => {
-      err.statusCode = 500;
+      if(!err.statusCode){
+        err.statusCode = 500;
+      }
       next(err);
     });
 };

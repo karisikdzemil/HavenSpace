@@ -11,12 +11,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use('/api', propertyRoutes);
+
 app.use((error, req, res, next) => {
     const message = error.message || 'Something went wrong!';
     const status = error.statusCode || 500;
     res.status(status).json({message: message});
-})
-app.use('/api', propertyRoutes);
+});
 
 mongoose.connect(db_key).then(result => {
     console.log('Connected with mongodb!');
