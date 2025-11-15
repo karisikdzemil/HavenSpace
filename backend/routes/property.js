@@ -4,7 +4,7 @@ const { body } = require("express-validator");
 
 const router = express.Router();
 
-router.get("/", propertyController.getHome);
+// router.get("/", propertyController.getHome);
 
 router.get("/properties", propertyController.getProperties);
 
