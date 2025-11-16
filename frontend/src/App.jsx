@@ -1,13 +1,9 @@
-import Footer from "./components/footer"
-import Header from "./components/header"
-import Outlet from "./Outlet"
+import Router from "./Router"
 
 function App() {
   return (
     <>
-      <Header />
-      <Outlet />
-      <Footer />
+     <Router />
     </>
   )
 }

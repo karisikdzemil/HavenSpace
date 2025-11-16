@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="h-[50vh] w-full bg-[#1E1E1E]">
-      <div className="max-w-[1440px] p-10 flex flex-col justify-between">
+    <footer className="min-h-[50vh] w-full bg-[#1E1E1E]">
+      <div className="max-w-[1440px] p-10 flex flex-col m-auto justify-between">
         <div className="flex justify-between px-12 p-10">
         <div className="flex flex-col gap-12">
           <div>
