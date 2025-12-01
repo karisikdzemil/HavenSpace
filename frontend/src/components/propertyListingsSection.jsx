@@ -12,6 +12,7 @@ export default function PropertyListingsSections() {
             offer a variety of options to suit your lifestyle and budget.
           </p>
         </div>
+
       </ContentWrapper>
     </section>
   );

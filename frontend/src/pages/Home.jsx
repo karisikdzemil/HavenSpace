@@ -1,5 +1,6 @@
 import HomeDiscover from "../components/home/homeDiscover";
 import HomeHeroSection from "../components/home/homeHeroSection";
+import AskedQeustions from "../components/home/questionsSections";
 import PropertyListingsSections from "../components/propertyListingsSection";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
       <HomeHeroSection />
       <HomeDiscover />
       <PropertyListingsSections />
+      <AskedQeustions />
     </>
   );
 }
