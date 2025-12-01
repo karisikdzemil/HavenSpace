@@ -4,7 +4,7 @@ export default function HomeDiscover() {
   return (
     <section className="min-h-screen">
       <ContentWrapper>
-        <div className="flex w-full px-25 pt-25 gap-12">
+        <div className="flex w-full pt-25 gap-12">
           <div className="flex flex-col gap-7 w-2/5">
             <h2 className="text-5xl font-light">
               Explore Our Commitment to Your Real Estate Success
@@ -32,7 +32,7 @@ export default function HomeDiscover() {
             </p>
           </div>
         </div>
-        <div className="px-25 mt-15 flex gap-12">
+        <div className=" mt-15 flex gap-12">
           <div className="w-[300px] flex flex-col gap-2">
             <img
               className="w-full h-fit bg-cover rounded-2xl"

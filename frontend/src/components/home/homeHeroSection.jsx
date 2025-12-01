@@ -19,7 +19,7 @@ export default function HomeHeroSection() {
             <div></div>
           </div>
         </div>
-      </ContentWrapper>
+      </ContentWrapper>,
     </section>
   );
 }
