@@ -4,7 +4,7 @@ export default function Answer({ question, answer }) {
   const [visibility, setVisibility] = useState(false);
 
   return (
-    <div
+    <li
       onClick={() => setVisibility((prevVal) => !prevVal)}
       className="w-full p-3 rounded-md flex flex-col gap-3 cursor-pointer transition-all hover:bg-gray-100"
     >
@@ -27,6 +27,6 @@ export default function Answer({ question, answer }) {
       <div className={visibility ? "text-gray-700 font-light" : "hidden"}>
         {answer}
       </div>
-    </div>
+    </li>
   );
 }
