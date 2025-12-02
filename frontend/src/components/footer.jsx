@@ -42,8 +42,8 @@ export default function Footer() {
       
       <div className="flex justify-between border-t-2 border-gray-500 h-[10vh] px-12 items-center">
             <h3 className="text-2xl font-bold text-white">HavenSpace</h3>
-            <p className="text-sm text-gray-500">2025, All Rights Reserved</p>
-            <p className="text-white cursor-pointer">Back to top</p>
+            <p className="text-sm text-gray-500 font-light">2025, All Rights Reserved</p>
+            <p className="text-white cursor-pointer font-light">Back to top</p>
       </div>
       </div>
     </footer>
