@@ -1,6 +1,6 @@
 import ContentWrapper from "./contentWrapper";
 
-export default function PropertyListingsSections() {
+export default function PropertyListingsSections( { properties } ) {
   return (
     <section>
       <ContentWrapper>
@@ -12,6 +12,16 @@ export default function PropertyListingsSections() {
             offer a variety of options to suit your lifestyle and budget.
           </p>
         </div>
+
+        <ul>
+        {properties && properties.map((propertie, i) => (
+          <li key={i}>
+            <h3>{propertie.title}</h3>
+            <h3>{propertie.price}</h3>
+            <h3>{propertie.description}</h3>
+          </li>
+        ))}
+        </ul>
 
       </ContentWrapper>
     </section>

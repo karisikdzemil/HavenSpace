@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HomeDiscover from "../components/home/homeDiscover";
 import HomeHeroSection from "../components/home/homeHeroSection";
 import AskedQeustions from "../components/home/questionsSections";
 import PropertyListingsSection from "../components/propertyListingsSection";
 
 export default function Home() {  
+  const [properties, setProperties] = useState([]);
 
  useEffect(() => {
     const getProperties = async () => {
@@ -16,7 +17,7 @@ export default function Home() {
         }
 
         const data = await res.json();
-        console.log(data);
+        setProperties(data.properties);
       } catch (error) {
         console.error("Fetch error:", error);
       }
@@ -29,7 +30,7 @@ export default function Home() {
     <>
       <HomeHeroSection />
       <HomeDiscover />
-      <PropertyListingsSection />
+      <PropertyListingsSection properties={properties}/>
       <AskedQeustions />
     </>
   );
