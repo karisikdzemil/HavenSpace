@@ -1,5 +1,5 @@
 import ContentWrapper from "./contentWrapper";
-import PropertyCard from "./PropertyCard";
+import PropertyCard from "./propertyCard/PropertyCard";
 
 export default function PropertyListingsSections( { properties } ) {
   return (
@@ -13,16 +13,11 @@ export default function PropertyListingsSections( { properties } ) {
             offer a variety of options to suit your lifestyle and budget.
           </p>
         </div>
-        <div className="py-12">
+        <div className="py-22">
         <ul>
-        {properties && properties.map((propertie, i) => (
-          <li key={i}>
-            <h3>{propertie.title}</h3>
-            <h3>{propertie.price}</h3>
-            <h3>{propertie.description}</h3>
-          </li>
+        {properties && properties.map((propertie) => (
+          <PropertyCard key={propertie._id} propertie={propertie}/>
         ))}
-        <PropertyCard />
         </ul>
         </div>
 
