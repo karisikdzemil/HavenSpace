@@ -7,7 +7,8 @@ import SpecWrapper from "./components/SpecWrapper";
 export default function PropertyCard( {propertie} ) {
   return (
     <li className="w-1/3 h-112 rounded-md shadow-gray-400 shadow-xs cursor-pointer transition-all hover:scale-x-102">
-      <div className="w-full h-3/5 bg-[url(/heroBackground.png)] rounded-md bg-cover bg-center"></div>
+     <a href={`/propertie/:${propertie._id}`}>
+       <div className="w-full h-3/5 bg-[url(/heroBackground.png)] rounded-md bg-cover bg-center"></div>
         <div className="flex items-center justify-between px-5 py-5">
             <div className="flex flex-col gap-2 items-start justify-left">
                 <h3 className="text-2xl">{propertie.title}</h3>
@@ -23,6 +24,7 @@ export default function PropertyCard( {propertie} ) {
             <div className="h-4 w-px bg-gray-700"></div>
             <SpecWrapper icon={<FontAwesomeIcon icon={faSquare} />} text={'1,300 sq ft'}/>
         </div>
+     </a>
     </li>
   );
 }
