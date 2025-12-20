@@ -2,20 +2,29 @@ import { useState } from "react";
 import ContentWrapper from "../components/contentWrapper";
 
 export default function AddProperty() {
-    const [newPropertyData, setNewPropertyData] = useState({});
+    // const [newPropertyData, setNewPropertyData] = useState({});
     
 
-    const addPropertyHandler = (e) => {
+    const addPropertyHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const title = formData.get('title');
         const price = formData.get('price');
         const description = formData.get('description');
 
-        setNewPropertyData({title: title, price: price, description: description});
-    }
-        console.log(newPropertyData)
+        const result = await fetch('http://localhost:8080/api/property', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({title: title, price: +price, description: description})
+        });
+        const data = await result.json();
 
+        console.log(data)
+
+        // setNewPropertyData({title: title, price: price, description: description});
+    }
 
   return (
     <section className="pt-24">
