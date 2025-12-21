@@ -10,7 +10,7 @@ export default function PropertyListingsSections({ title, text, properties }) {
           <p className="text-gray-500 w-2/5">{text}</p>
         </div>
         <div className="py-22">
-          <ul>
+          <ul className="w-full h-auto flex items-center justify-center flex-row flex-wrap gap-7">
             {properties &&
               properties.map((propertie) => (
                 <PropertyCard key={propertie._id} propertie={propertie} />

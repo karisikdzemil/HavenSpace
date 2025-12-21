@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
 
 export default function Propertie() {
   const [property, setProperty] = useState(null);
   //   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getProperty = async () => {
@@ -22,6 +23,25 @@ export default function Propertie() {
     };
     getProperty();
   }, [id]);
+
+  const deletePropertyHandler = async () => {
+    try{
+        const response = await fetch(`http://localhost:8080/api/property/${id}`, {
+            method: 'DELETE'
+        });
+
+        if(!response.ok){
+            throw Error('Something went wrong!!!');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        alert(data.message);
+        navigate('/');
+    }catch(err){
+        console.log(err);
+    }
+  }
 
   return (
     <section>
@@ -46,6 +66,7 @@ export default function Propertie() {
                 </div>
             </div>
         </div>
+        <button onClick={deletePropertyHandler} className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5">Delete Property</button>
         </ContentWrapper>
     </section>
   );

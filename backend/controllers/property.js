@@ -136,7 +136,7 @@ exports.editProperty = (req, res, next) => {
 exports.deleteProperty = (req, res, next) => {
   const propertyId = req.params.id;
 
-  Property.findByIdDelete(propertyId)
+  Property.findByIdAndDelete(propertyId)
     .then((property) => {
       if (!property) {
         const error = new Error("Property Not Found!");

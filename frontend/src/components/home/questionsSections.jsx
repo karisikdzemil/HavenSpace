@@ -47,8 +47,8 @@ export default function AskedQeustions() {
             />
           </div>
           <ul className="w-[55%] px-5 flex flex-col gap-5">
-            {questions.map(question => (
-                <Answer question={question.question} answer={question.answer}/>
+            {questions.map((question, i) => (
+                <Answer key={i} question={question.question} answer={question.answer}/>
             ))}
           </ul>
         </div>
