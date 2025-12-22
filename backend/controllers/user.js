@@ -12,9 +12,9 @@ exports.postUser = (req, res, next) => {
   }
   const email = req.body.email;
   const password = req.body.password;
-  const repeatPassword = req.body.repeatPassword;
+  const confirmPassword = req.body.confirmPassword;
 
-  if (password !== repeatPassword) {
+  if (password !== confirmPassword) {
     const error = new Error("Passwords don't match!");
     error.statusCode = 422;
     throw error;

@@ -14,6 +14,7 @@ export default function Register() {
     <section>
       <ContentWrapper>
         <div className="flex items-center justify-center pt-42 flex-col gap-5">
+            <h1 className="text-5xl font-light">{registerType === "login" ? 'Login' : 'Sign Up'}</h1>
           {registerType === "login" ? <Login /> : <Signup />}
 
           <div className="flex items-center justify-center gap-5">
