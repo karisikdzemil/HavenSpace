@@ -2,7 +2,7 @@ import ContentWrapper from "../contentWrapper";
 
 export default function HomeHeroSection() {
   return (
-    <section className="bg-[url(./heroBackground.png)] bg-cover bg-center">
+    <section className="bg-[url(/heroBackground.png)] bg-cover bg-center">
       <ContentWrapper>
         <div className="flex justify-between items-end">
           {/* wrapper */}

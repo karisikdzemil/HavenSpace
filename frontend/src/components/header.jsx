@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function Header() {
   return (
     <header className="w-full h-[10vh] flex gap-22 px-12 bg-white absolute items-center">
-      <img className="h-[9vh]" src="./HavenSpaceLogo.png" alt="Logo" />
+      <img className="h-[9vh]" src="/HavenSpaceLogo.png" alt="Logo" />
       <nav className="w-full">
         <ul className="flex justify-between">
           <div className="flex gap-12 h-[10vh] items-center">
