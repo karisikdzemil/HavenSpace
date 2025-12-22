@@ -22,7 +22,7 @@ export default function Signup () {
               placeholder="Confirm Password"
               name="confirmPassword"
             />
-            <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
+            <button className="cursor-pointer font-light w-54 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 Create Account
             </button>
           </form>
