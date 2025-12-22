@@ -58,8 +58,18 @@ export default function Header() {
           </div>
 
           <div className="flex gap-12 items-center">
-            <li>Login</li>
-            <li>Register</li>
+            <li className="cursor-pointer">
+              <NavLink
+                to={"/register"}
+                className={({ isActive }) =>
+                  isActive
+                    ? "pb-0.5 transition-all border-b-2 border-black"
+                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                }
+              >
+                REGISTER
+              </NavLink>
+            </li>
           </div>
         </ul>
       </nav>

@@ -61,7 +61,7 @@ exports.postProperty = (req, res, next) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
     const error = new Error('Enter a valid data!');
-    error.statusCode = 500;
+    error.statusCode = 422;
     throw error;
   }
   const title = req.body.title;
