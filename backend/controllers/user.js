@@ -2,7 +2,9 @@ const User = require("../models/User");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
-exports.getUser = (req, res, next) => {};
+exports.getUser = (req, res, next) => {
+
+};
 
 exports.postUser = (req, res, next) => {
   const errors = validationResult(req);
@@ -21,25 +23,33 @@ exports.postUser = (req, res, next) => {
     throw error;
   }
 
-  bcrypt
-  .hash(password, 12)
-  .then((hash) => {
-    const user = new User({ email, password: hash });
+  User.findOne({ email })
+  .then((existingUser) => {
+    if (existingUser) {
+      const error = new Error("Email already exists!");
+      error.statusCode = 409;
+      throw error;
+    }
+
+    return bcrypt.hash(password, 12);
+  })
+  .then((hashedPassword) => {
+    const user = new User({
+      email,
+      password: hashedPassword,
+    });
     return user.save();
   })
   .then((result) => {
- if (!result) {
-        const error = new Error("Something went wrong!");
-        error.statusCode = 500;
-        throw error;
-      }
-
     res.status(201).json({
       message: "User created successfully!",
-      user: result,
+      userId: result._id,
     });
   })
-  .catch((err) => {
+  .catch(err => {
+    if(!err.statusCode){
+      err.statusCode = 500;
+    }
     next(err);
   });
 };
