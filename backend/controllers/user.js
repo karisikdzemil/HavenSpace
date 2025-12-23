@@ -3,8 +3,38 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
 exports.getUser = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Enter a valid data!')
+  }
 
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        const error = new Error("User doesn't exist!");
+        error.statusCode = 422;
+        throw error;
+      }
+
+      return bcrypt.compare(password, user.password)
+        .then((isMatch) => {
+          if (!isMatch) {
+            const error = new Error("Passwords don't match!");
+            error.statusCode = 422;
+            throw error;
+          }
+
+          res.status(200).json({
+            message: "Login successful!",
+            userId: user._id,
+          });
+        });
+    })
+    .catch(next);
 };
+
 
 exports.postUser = (req, res, next) => {
   const errors = validationResult(req);
