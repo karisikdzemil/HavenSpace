@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const propertyRoutes = require("./routes/property");
-const User = require("./models/user");
+const authRoutes = require('./routes/auth');
 const cors = require("cors");
+const User = require('./models/User');
 
 require("dotenv").config();
 const db_key = process.env.MONGO_URI;
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api", propertyRoutes);
+app.use("/api", authRoutes);
+
 
 app.use((error, req, res, next) => {
   const message = error.message || "Something went wrong!";

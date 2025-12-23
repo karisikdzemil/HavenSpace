@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcrypt");
 
 exports.getUser = (req, res, next) => {};
 
@@ -19,26 +20,28 @@ exports.postUser = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  const user = new User({ email: email, password: password });
 
-  user
-    .save()
-    .then((result) => {
-      if (!result) {
+  bcrypt
+  .hash(password, 12)
+  .then((hash) => {
+    const user = new User({ email, password: hash });
+    return user.save();
+  })
+  .then((result) => {
+ if (!result) {
         const error = new Error("Something went wrong!");
         error.statusCode = 500;
         throw error;
       }
-      res
-        .status(201)
-        .json({ message: "User created successfully!", user: result });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next();
+
+    res.status(201).json({
+      message: "User created successfully!",
+      user: result,
     });
+  })
+  .catch((err) => {
+    next(err);
+  });
 };
 
 exports.editUser = (req, res, next) => {};
