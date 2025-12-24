@@ -12,9 +12,12 @@ export default function AddProperty() {
         const price = formData.get('price');
         const description = formData.get('description');
 
+        const token = localStorage.getItem('token');
+
         const result = await fetch('http://localhost:8080/api/property', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({title: title, price: +price, description: description})
