@@ -1,6 +1,7 @@
 const express = require("express");
 const propertyController = require("../controllers/property");
 const { body } = require("express-validator");
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.post(
     body("price").isNumeric(),
     body("description").isLength(5),
   ],
+  isAuth,
   propertyController.postProperty
 );
 

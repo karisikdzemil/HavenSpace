@@ -1,10 +1,10 @@
-const jwt = reqiure('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     const authHeaders = req.header('Authorization');
     if(!authHeaders){
         const error = new Error('Not Authenticated!');
-        error.statusCode = 403;
+        error.statusCode = 401;
         throw error;
     }
 
@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     let decoded;
 
     try{
-        jwt.verify(token, process.env.JWT_SECRET);
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
     }catch(err){
             err.statusCode = 500;
         throw err;
