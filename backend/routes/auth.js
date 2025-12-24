@@ -23,7 +23,7 @@ router.post(
       .matches(/[a-z]/)
       .withMessage("Password must contant a lowercase letter!"),
   ],
-  userRoutes.getUser
+  userRoutes.login
 );
 
 router.post(

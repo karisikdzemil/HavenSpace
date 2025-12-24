@@ -1,11 +1,14 @@
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 
-exports.getUser = (req, res, next) => {
+exports.login = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Enter a valid data!')
+    error.statusCode = 422;
+    throw error;
   }
 
   const { email, password } = req.body;
@@ -25,10 +28,11 @@ exports.getUser = (req, res, next) => {
             error.statusCode = 422;
             throw error;
           }
-
+          const token = jwt.sign({email: user.email, userId: user._id}, process.env.JWT_SECRET, {expiresIn: '2h'});
           res.status(200).json({
             message: "Login successful!",
             userId: user._id,
+            token: token,
           });
         });
     })

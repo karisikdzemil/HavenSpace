@@ -26,25 +26,6 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(db_key)
   .then((result) => {
-    console.log("Connected with mongodb!");
-    User.find()
-      .then((users) => {
-        console.log(users)
-        if (users.length === 0) {
-          const user = new User({
-            email: "karisikdzemil@gmail.com",
-            password: "ljuljaska!2",
-          });
-          user
-            .save()
-            .then((user) => {
-              console.log(user);
-              app.listen(8080);
-            })
-            .catch((err) => console.log(err));
-        }
-      })
-      .catch((err) => console.log(err));
     app.listen(8080);
   })
   .catch((err) => console.log(err));
