@@ -57,10 +57,27 @@ exports.getProperty = (req, res, next) => {
     });
 };
 
+exports.getUserProperties = (req, res, next) => {
+  Property.find({ owner: req.userId })
+    .populate("owner", "-password")
+    .then((properties) => {
+      res.status(200).json({
+        message: "User properties found successfully!",
+        properties: properties,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 404;
+      }
+      next(err);
+    });
+};
+
 exports.postProperty = (req, res, next) => {
   const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error('Enter a valid data!');
+  if (!errors.isEmpty()) {
+    const error = new Error("Enter a valid data!");
     error.statusCode = 422;
     throw error;
   }
@@ -74,7 +91,7 @@ exports.postProperty = (req, res, next) => {
     description: description,
     owner: req.userId,
   });
-  console.log(req.userId, req.email)
+  console.log(req.userId, req.email);
 
   property
     .save()
@@ -97,9 +114,9 @@ exports.postProperty = (req, res, next) => {
 };
 
 exports.editProperty = (req, res, next) => {
-    const errors = validationResult(req);
-  if(!errors.isEmpty()){
-    const error = new Error('Enter a valid data!');
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error("Enter a valid data!");
     error.statusCode = 500;
     throw error;
   }

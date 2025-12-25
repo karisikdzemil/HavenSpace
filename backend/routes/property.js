@@ -11,6 +11,8 @@ router.get("/properties", propertyController.getProperties);
 
 router.get("/property/:id", propertyController.getProperty);
 
+router.get("/user-properties", isAuth, propertyController.getUserProperties);
+
 router.post(
   "/property",
   [

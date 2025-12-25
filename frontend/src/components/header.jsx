@@ -43,6 +43,18 @@ export default function Header() {
                 NEW LISTINGS
               </NavLink>
             </li>
+              <li className="cursor-pointer">
+              <NavLink
+                to={"/my-properties"}
+                className={({ isActive }) =>
+                  isActive
+                    ? "pb-0.5 transition-all border-b-2 border-black"
+                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                }
+              >
+                MY PROPERTIES
+              </NavLink>
+            </li>
             <li className="cursor-pointer">
               <NavLink
                 to={"/contact"}
