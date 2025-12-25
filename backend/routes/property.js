@@ -23,7 +23,7 @@ router.post(
 );
 
 router.put(
-  "/property/:id",
+  "/edit-property/:id",
   [
     body("title").trim().isLength(5),
     body("price").isNumeric(),
