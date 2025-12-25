@@ -32,6 +32,6 @@ router.put(
   propertyController.editProperty
 );
 
-router.delete("/property/:id", propertyController.deleteProperty);
+router.delete("/property/:id", isAuth,  propertyController.deleteProperty);
 
 module.exports = router;

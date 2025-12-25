@@ -5,6 +5,7 @@ import Properties from "./pages/Properties";
 import Contact from "./pages/Contact";
 import Propertie from "./pages/propertie";
 import AddProperty from "./pages/AddProperty";
+import EditProperty from "./pages/EditPropety";
 import Register from "./pages/Register";
 
 const router = createBrowserRouter([
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       {path: 'new-listings', element: <AddProperty />},
       { path: "contact", element: <Contact /> },
       {path: "propertie/:id", element: <Propertie />},
+      {path: "edit-property/:id", element: <EditProperty />},
       {path: "register", element: <Register />}
     ],
   },

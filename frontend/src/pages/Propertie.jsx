@@ -25,9 +25,13 @@ export default function Propertie() {
   }, [id]);
 
   const deletePropertyHandler = async () => {
+    const token = localStorage.getItem('token');
     try{
         const response = await fetch(`http://localhost:8080/api/property/${id}`, {
-            method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         });
 
         if(!response.ok){
@@ -67,6 +71,7 @@ export default function Propertie() {
             </div>
         </div>
         <button onClick={deletePropertyHandler} className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5">Delete Property</button>
+        <a href={`/edit-property/${id}`} className="text-xl text-white bg-gray-300 w-full rounded-md p-3 text-center cursor-pointer hover:bg-gray-400 hover:p-4 transition-all mt-5">Edit Property</a>
         </ContentWrapper>
     </section>
   );
