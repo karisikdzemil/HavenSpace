@@ -8,10 +8,16 @@ export default function EditProperty() {
     const params = useParams();
     const id = params.id;
 
+    const token = localStorage.getItem('token');
+
     useEffect(() => {
         const fetchInputValues = async () => {
             try{
-                const result = await fetch(`http://localhost:8080/api/property/${id}`);
+                const result = await fetch(`http://localhost:8080/api/property/${id}`, {
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
                 if(!result.ok){
                     console.log('Something went wrong!');
                     return;

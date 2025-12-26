@@ -31,6 +31,7 @@ router.put(
     body("price").isNumeric(),
     body("description").isLength(5),
   ],
+  isAuth,
   propertyController.editProperty
 );
 
