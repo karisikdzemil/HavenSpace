@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import ContentWrapper from "../components/contentWrapper";
 import { useState } from "react";
 import PropertyListingsSections from "../components/propertyListingsSection";
+import Loading from "../components/loading/Loading";
 
 export default function MyProperties (){
     const [properties, setProperties] = useState([]);
@@ -36,6 +37,7 @@ export default function MyProperties (){
         <section>
             <ContentWrapper>
                 <PropertyListingsSections properties={properties}/>
+                <Loading />
             </ContentWrapper>
         </section>
     )

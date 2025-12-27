@@ -30,7 +30,7 @@ export default function EditProperty() {
             }
         }
         fetchInputValues();
-    }, [id]);
+    }, [id, token]);
 
     const saveChangesHandler = async (e) => {
         e.preventDefault();
