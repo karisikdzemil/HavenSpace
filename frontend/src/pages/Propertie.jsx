@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
+import Loading from "../components/loading/Loading";
 
 export default function Propertie() {
   const [property, setProperty] = useState(null);
-  //   const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const getProperty = async () => {
       try {
-        // setLoading(true);
+        setLoading(true);
         const result = await fetch(`http://localhost:8080/api/property/${id}`);
         const data = await result.json();
         console.log(data);
         setProperty(data.property);
-        // setLoading(false);
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -27,6 +29,7 @@ export default function Propertie() {
   const deletePropertyHandler = async () => {
     const token = localStorage.getItem('token');
     try{
+        setDeleteLoading(true);
         const response = await fetch(`http://localhost:8080/api/property/${id}`, {
           method: 'DELETE',
           headers: {
@@ -39,7 +42,7 @@ export default function Propertie() {
         }
 
         const data = await response.json();
-        console.log(data);
+        setDeleteLoading(false);
         alert(data.message);
         navigate('/');
     }catch(err){
@@ -49,7 +52,7 @@ export default function Propertie() {
 
   return (
     <section>
-      <ContentWrapper>
+      {loading ? <div className="pt-36"><Loading loadingText={'Loading property details'}/></div> : <ContentWrapper>
         <div className="w-full flex items-center justify-between pt-22">
         {property && <h1 className="text-4xl font-medium">{property.title}</h1>}
         {property && <p className="text-4xl font-light">${property.price}</p>}
@@ -70,9 +73,9 @@ export default function Propertie() {
                 </div>
             </div>
         </div>
-        <button onClick={deletePropertyHandler} className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5">Delete Property</button>
+        <button onClick={deletePropertyHandler} className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5">{deleteLoading ? "Deleting..." : "Delete Property"}</button>
         <a href={`/edit-property/${id}`} className="text-xl text-white bg-gray-300 w-full rounded-md p-3 text-center cursor-pointer hover:bg-gray-400 hover:p-4 transition-all mt-5">Edit Property</a>
-        </ContentWrapper>
+        </ContentWrapper>}
     </section>
   );
 }

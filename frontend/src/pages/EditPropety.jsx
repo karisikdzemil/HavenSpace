@@ -2,9 +2,12 @@
 import { useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
 import { useEffect, useState } from "react";
+import Loading from "../components/loading/Loading";
 
 export default function EditProperty() {
     const [inputValues, setInputValues] = useState({})
+    const [isLoadingPropertyData, setIsLoadingPropertyData] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const params = useParams();
     const id = params.id;
 
@@ -13,6 +16,7 @@ export default function EditProperty() {
     useEffect(() => {
         const fetchInputValues = async () => {
             try{
+              setIsLoadingPropertyData(true);
                 const result = await fetch(`http://localhost:8080/api/property/${id}`, {
                   headers: {
                     'Authorization': `Bearer ${token}`
@@ -23,8 +27,8 @@ export default function EditProperty() {
                     return;
                 }
                 const data = await result.json();
-                console.log(data)
                 setInputValues({title: data.property.title, price: data.property.price, description: data.property.description});
+                setIsLoadingPropertyData(false);
             }catch(err){
                 console.log(err)
             }
@@ -42,6 +46,7 @@ export default function EditProperty() {
         const token = localStorage.getItem('token');
 
         try{
+          setIsLoading(true);
             const result = await fetch(`http://localhost:8080/api/edit-property/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -55,11 +60,7 @@ export default function EditProperty() {
                 console.log('Something went wrong!');
                 return;
             }
-
-            const data = await result.json();
-
-            console.log(data);
-
+            setIsLoading(false);
         }catch(err){
             console.log(err);
         }
@@ -69,8 +70,8 @@ export default function EditProperty() {
     <section className="pt-24">
       <ContentWrapper>
         <div className="flex flex-col items-center gap-12">
-          <h1 className="text-4xl font-bold">Add New Listings</h1>
-          <form
+          <h1 className="text-4xl font-bold">Edit Property</h1>
+          {isLoadingPropertyData ? <Loading loadingText={"Loading property data"}/> : <form
             className="w-3/5 h-auto py-22 rounded-md border-2 border-gray-500 flex flex-col items-center justify-center gap-5"
             action=""
             onSubmit={saveChangesHandler}
@@ -97,9 +98,10 @@ export default function EditProperty() {
               defaultValue={inputValues && inputValues.description}
             />
             <button type="submit" className="cursor-pointer font-light w-34 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
-                Save Changes
+                {isLoading ? "Saving" : "save changes"}
             </button>
-          </form>
+            {isLoading && <Loading />}
+          </form>}
         </div>
       </ContentWrapper>
     </section>
