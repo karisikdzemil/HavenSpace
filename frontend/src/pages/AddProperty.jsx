@@ -61,7 +61,7 @@ export default function AddProperty() {
               placeholder="Description"
               name="description"
             />
-            {data?.errors?.length > 0 && data.errors.map(err => (<p className="text-red-500">{err.msg}</p>))}
+            {data?.errors?.length > 0 && data.errors.map(err => (<p key={err.msg} className="text-red-500">{err.msg}</p>))}
             <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
              {isLoading ? "Adding..." : " Add New"}
             </button>
