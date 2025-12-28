@@ -77,9 +77,9 @@ exports.getUserProperties = (req, res, next) => {
 exports.postProperty = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Enter a valid data!");
-    error.statusCode = 422;
-    throw error;
+    return res
+      .status(422)
+      .json({ message: "Validation failed.", errors: errors.array() });
   }
   const title = req.body.title;
   const price = req.body.price;
@@ -116,9 +116,9 @@ exports.postProperty = (req, res, next) => {
 exports.editProperty = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Enter a valid data!");
-    error.statusCode = 500;
-    throw error;
+    return res
+      .status(422)
+      .json({ message: "Validation failed.", errors: errors.array() });
   }
   const propertyId = req.params.id;
   const newTitle = req.body.title;

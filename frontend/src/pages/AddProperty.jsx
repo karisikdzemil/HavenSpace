@@ -1,9 +1,10 @@
 // import { useState } from "react";
+import { useState } from "react";
 import ContentWrapper from "../components/contentWrapper";
 
 export default function AddProperty() {
-    // const [newPropertyData, setNewPropertyData] = useState({});
-    
+      const [isLoading, setIsLoading] = useState(false);
+      const [data, setData] = useState({});
 
     const addPropertyHandler = async (e) => {
         e.preventDefault();
@@ -12,21 +13,24 @@ export default function AddProperty() {
         const price = formData.get('price');
         const description = formData.get('description');
 
-        const token = localStorage.getItem('token');
-
-        const result = await fetch('http://localhost:8080/api/property', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({title: title, price: +price, description: description})
-        });
-        const data = await result.json();
-
-        console.log(data)
-
-        // setNewPropertyData({title: title, price: price, description: description});
+        const token = localStorage.getItem('token');  
+        try{
+          setIsLoading(true);
+          const result = await fetch('http://localhost:8080/api/property', {
+              method: 'POST',
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({title: title, price: +price, description: description})
+          });
+          
+          const data = await result.json();
+          setData(data);  
+          setIsLoading(false);
+        }catch(err){
+          console.log(err);
+        }
     }
 
   return (
@@ -57,8 +61,9 @@ export default function AddProperty() {
               placeholder="Description"
               name="description"
             />
+            {data?.errors?.length > 0 && data.errors.map(err => (<p className="text-red-500">{err.msg}</p>))}
             <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
-              Add New
+             {isLoading ? "Adding..." : " Add New"}
             </button>
           </form>
         </div>
