@@ -3,14 +3,22 @@ import ContentWrapper from "../components/contentWrapper";
 import { useState } from "react";
 import PropertyListingsSections from "../components/propertyListingsSection";
 import Loading from "../components/loading/Loading";
+import {useNavigate} from 'react-router-dom';
 
 export default function MyProperties() {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if(!token){
+          navigate('/');
+        }
+      }, [token, navigate]);
 
   useEffect(() => {
     const fetchUserProperties = async () => {
-      const token = localStorage.getItem("token");
       try {
         setIsLoading(true);
         const result = await fetch(
@@ -34,7 +42,7 @@ export default function MyProperties() {
       }
     };
     fetchUserProperties();
-  }, []);
+  }, [token]);
   return (
     <section className="pt-36">
       <ContentWrapper>

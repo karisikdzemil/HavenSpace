@@ -1,5 +1,5 @@
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
 import { useEffect, useState } from "react";
 import Loading from "../components/loading/Loading";
@@ -11,8 +11,15 @@ export default function EditProperty() {
     const [errors, setErrros] = useState([]);
     const params = useParams();
     const id = params.id;
+    const navigate = useNavigate();
 
     const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if(!token){
+          navigate('/');
+        }
+      }, [token, navigate]);
 
     useEffect(() => {
         const fetchInputValues = async () => {
@@ -43,8 +50,6 @@ export default function EditProperty() {
         const title = formData.get('title');
         const price = formData.get('price');
         const description = formData.get('description');
-
-        const token = localStorage.getItem('token');
 
         try{
           setIsLoading(true);

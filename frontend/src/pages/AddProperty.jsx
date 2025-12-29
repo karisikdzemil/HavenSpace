@@ -1,10 +1,19 @@
 // import { useState } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContentWrapper from "../components/contentWrapper";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProperty() {
       const [isLoading, setIsLoading] = useState(false);
       const [data, setData] = useState({});
+      const navigate = useNavigate();
+      const token = localStorage.getItem('token');  
+
+      useEffect(() => {
+        if(!token){
+          navigate('/');
+        }
+      }, [token, navigate]);
 
     const addPropertyHandler = async (e) => {
         e.preventDefault();
@@ -13,7 +22,6 @@ export default function AddProperty() {
         const price = formData.get('price');
         const description = formData.get('description');
 
-        const token = localStorage.getItem('token');  
         try{
           setIsLoading(true);
           const result = await fetch('http://localhost:8080/api/property', {
@@ -24,9 +32,16 @@ export default function AddProperty() {
               },
               body: JSON.stringify({title: title, price: +price, description: description})
           });
+
           
           const data = await result.json();
+          console.log(data)
+          if(!result.ok){ 
           setData(data);  
+          setIsLoading(false);
+            return;
+          }
+        
           setIsLoading(false);
             alert('Property added!')
         }catch(err){
