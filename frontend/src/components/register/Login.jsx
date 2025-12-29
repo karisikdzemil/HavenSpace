@@ -1,7 +1,9 @@
 import { useState } from "react";
+import Loading from "../loading/Loading";
 
 export default function Login (){
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -9,20 +11,31 @@ export default function Login (){
     const email = formData.get('email');
     const password = formData.get('password');
 
-    const result = await fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({email: email, password: password})
-    })
-    const data = await result.json();
-
-    if(!result.ok){
-      setErrors(data.errors);
+    try{
+      setIsLoading(true);
+      const result = await fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({email: email, password: password})
+      })
+      const data = await result.json();
+  
+      if(!result.ok){
+        setErrors(data.errors);
+        setIsLoading(false);
+        return;
+      }
+  
+      setErrors([]);
+  
+      localStorage.setItem('token', data.token);
+      setIsLoading(false);
+    }catch(err){
+      console.log(err);
     }
 
-    localStorage.setItem('token', data.token);
   }
 
     return (
@@ -47,6 +60,7 @@ export default function Login (){
             <button type="submit" className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 Login
             </button>
+            {isLoading && <Loading />}
           </form>
     )
 }

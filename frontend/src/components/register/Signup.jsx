@@ -1,7 +1,10 @@
 import { useState } from "react";
+import Loading from "../loading/Loading";
 
 export default function Signup () {
     const [errors, setErrors] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const singupHandler = async (e) => {
       e.preventDefault();
 
@@ -10,21 +13,29 @@ export default function Signup () {
       const password = formData.get('password');
       const confirmPassword = formData.get('confirmPassword');
 
-      const result = await fetch('http://localhost:8080/api/create-user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email: email, password: password, confirmPassword: confirmPassword})
-      });
-
-      const data = await result.json();
-
-      if(!result.ok){
-        setErrors(data.errors);
+      try{
+        setIsLoading(true);
+        const result = await fetch('http://localhost:8080/api/create-user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email: email, password: password, confirmPassword: confirmPassword})
+        });
+  
+        const data = await result.json();
+  
+        if(!result.ok){
+          setErrors(data.errors);
+          setIsLoading(false);
+          return;
+        }
+        setErrors([])
+        setIsLoading(false);
+      }catch(err){
+        console.log(err);
       }
       
-      console.log(data);
     }
 
     return(
@@ -54,6 +65,7 @@ export default function Signup () {
             <button type="submit" className="cursor-pointer font-light w-54 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 Create Account
             </button>
+            {isLoading && <Loading />}
           </form>
     )
 }

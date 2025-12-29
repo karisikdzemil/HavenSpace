@@ -28,6 +28,7 @@ export default function AddProperty() {
           const data = await result.json();
           setData(data);  
           setIsLoading(false);
+            alert('Property added!')
         }catch(err){
           console.log(err);
         }

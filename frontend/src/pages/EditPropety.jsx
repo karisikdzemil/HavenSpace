@@ -63,6 +63,7 @@ export default function EditProperty() {
                setErrros(data.errors);
             }
             setIsLoading(false);
+            alert('Property saved!')
         }catch(err){
             console.log(err);
         }
