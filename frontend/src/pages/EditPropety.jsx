@@ -8,6 +8,7 @@ export default function EditProperty() {
     const [inputValues, setInputValues] = useState({})
     const [isLoadingPropertyData, setIsLoadingPropertyData] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrros] = useState([]);
     const params = useParams();
     const id = params.id;
 
@@ -56,15 +57,18 @@ export default function EditProperty() {
                 body: JSON.stringify({title: title, price: price, description: description}),
             });
 
+            const data = await result.json();
+
             if(!result.ok){
-                console.log('Something went wrong!');
-                return;
+               setErrros(data.errors);
             }
             setIsLoading(false);
         }catch(err){
             console.log(err);
         }
     }
+
+    console.log(errors)
 
   return (
     <section className="pt-24">
@@ -97,6 +101,7 @@ export default function EditProperty() {
               name="description"
               defaultValue={inputValues && inputValues.description}
             />
+            {errors?.length > 0 && errors.map(err => (<p key={err.msg} className="text-red-500">{err.msg}</p>))}
             <button type="submit" className="cursor-pointer font-light w-34 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 {isLoading ? "Saving" : "save changes"}
             </button>

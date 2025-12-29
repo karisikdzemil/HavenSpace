@@ -1,5 +1,7 @@
-export default function Signup () {
+import { useState } from "react";
 
+export default function Signup () {
+    const [errors, setErrors] = useState([]);
     const singupHandler = async (e) => {
       e.preventDefault();
 
@@ -18,6 +20,10 @@ export default function Signup () {
 
       const data = await result.json();
 
+      if(!result.ok){
+        setErrors(data.errors);
+      }
+      
       console.log(data);
     }
 
@@ -44,6 +50,7 @@ export default function Signup () {
               placeholder="Confirm Password"
               name="confirmPassword"
             />
+            {errors?.length > 0 && errors.map(err => (<p key={err.msg} className="text-red-500">{err.msg}</p>))}
             <button type="submit" className="cursor-pointer font-light w-54 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 Create Account
             </button>

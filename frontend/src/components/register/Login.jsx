@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 export default function Login (){
+  const [errors, setErrors] = useState([]);
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -13,12 +16,13 @@ export default function Login (){
       },
       body: JSON.stringify({email: email, password: password})
     })
-
     const data = await result.json();
 
-    localStorage.setItem('token', data.token);
+    if(!result.ok){
+      setErrors(data.errors);
+    }
 
-    console.log(data)
+    localStorage.setItem('token', data.token);
   }
 
     return (
@@ -38,6 +42,8 @@ export default function Login (){
               placeholder="Password"
               name="password"
             />
+            {errors?.length > 0 && errors.map(err => (<p key={err.msg} className="text-red-500">{err.msg}</p>))}
+
             <button type="submit" className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
                 Login
             </button>
