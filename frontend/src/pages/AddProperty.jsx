@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddProperty() {
       const [isLoading, setIsLoading] = useState(false);
-      const [data, setData] = useState({});
+      const [errors, setErrors] = useState({});
       const navigate = useNavigate();
       const token = localStorage.getItem('token');  
 
@@ -15,12 +15,52 @@ export default function AddProperty() {
         }
       }, [token, navigate]);
 
+
+      const validation = (title, price, description) => {
+        const errs = {};
+
+        if(title.length < 5){
+          errs.title = "The name must be longer than 5 letters!";
+        }
+
+         if(price === 0){
+          errs.price = "Value must be greater than 0!";
+        }
+
+        if(description.length < 25){
+          errs.description = "The description must be longer than 25 letters!";
+        }
+
+        return errs;
+      }
+
+      const mapApiErrors = (apiErrors = []) => {
+        const errs = {};
+
+        apiErrors.forEach(err => {
+          if(err.field){
+            errs[err.field] = err.msg;
+          }else{
+            errs.general = err.msg;
+          }
+        })
+        return errs;
+      }
+
     const addPropertyHandler = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const title = formData.get('title');
         const price = formData.get('price');
         const description = formData.get('description');
+
+        const frontendErrors = validation(title, price, description);
+        if(Object.keys(frontendErrors).length > 0){
+          setErrors(frontendErrors);
+          return;
+        }
+
+        setErrors({});
 
         try{
           setIsLoading(true);
@@ -37,8 +77,8 @@ export default function AddProperty() {
           const data = await result.json();
           console.log(data)
           if(!result.ok){ 
-          setData(data);  
-          setIsLoading(false);
+            setErrors(mapApiErrors(data.errors));
+            setIsLoading(false);
             return;
           }
         
@@ -65,19 +105,22 @@ export default function AddProperty() {
               placeholder="Title"
               name="title"
             />
+            {errors.title && <p className="text-red-500">{errors.title}</p>}
             <input
               className="p-2 w-2/3 rounded-md border border-gray-500 "
               type="number"
               placeholder="Price"
               name="price"
             />
+            {errors.price && <p className="text-red-500">{errors.price}</p>}
             <input
               className="p-2 w-2/3 rounded-md border border-gray-500 "
               type="text"
               placeholder="Description"
               name="description"
             />
-            {data?.errors?.length > 0 && data.errors.map(err => (<p key={err.msg} className="text-red-500">{err.msg}</p>))}
+            {errors.description && <p className="text-red-500">{errors.description}</p>}
+            {errors.general && <p className="text-red-500">{errors.general}</p>}
             <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
              {isLoading ? "Adding..." : " Add New"}
             </button>
