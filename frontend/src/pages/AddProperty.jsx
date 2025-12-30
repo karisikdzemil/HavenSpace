@@ -4,90 +4,93 @@ import ContentWrapper from "../components/contentWrapper";
 import { useNavigate } from "react-router-dom";
 
 export default function AddProperty() {
-      const [isLoading, setIsLoading] = useState(false);
-      const [errors, setErrors] = useState({});
-      const navigate = useNavigate();
-      const token = localStorage.getItem('token');  
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-      useEffect(() => {
-        if(!token){
-          navigate('/');
-        }
-      }, [token, navigate]);
-
-
-      const validation = (title, price, description) => {
-        const errs = {};
-
-        if(title.length < 5){
-          errs.title = "The name must be longer than 5 letters!";
-        }
-
-         if(price === 0){
-          errs.price = "Value must be greater than 0!";
-        }
-
-        if(description.length < 25){
-          errs.description = "The description must be longer than 25 letters!";
-        }
-
-        return errs;
-      }
-
-      const mapApiErrors = (apiErrors = []) => {
-        const errs = {};
-
-        apiErrors.forEach(err => {
-          if(err.field){
-            errs[err.field] = err.msg;
-          }else{
-            errs.general = err.msg;
-          }
-        })
-        return errs;
-      }
-
-    const addPropertyHandler = async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const title = formData.get('title');
-        const price = formData.get('price');
-        const description = formData.get('description');
-
-        const frontendErrors = validation(title, price, description);
-        if(Object.keys(frontendErrors).length > 0){
-          setErrors(frontendErrors);
-          return;
-        }
-
-        setErrors({});
-
-        try{
-          setIsLoading(true);
-          const result = await fetch('http://localhost:8080/api/property', {
-              method: 'POST',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({title: title, price: +price, description: description})
-          });
-
-          
-          const data = await result.json();
-          console.log(data)
-          if(!result.ok){ 
-            setErrors(mapApiErrors(data.errors));
-            setIsLoading(false);
-            return;
-          }
-        
-          setIsLoading(false);
-            alert('Property added!')
-        }catch(err){
-          console.log(err);
-        }
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
     }
+  }, [token, navigate]);
+
+  const validate = (title, price, description) => {
+    const errs = {};
+
+    if (!title || title.length < 5) {
+      errs.title = "The name must be longer than 5 letters!";
+    }
+
+    const numericPrice = Number(price);
+    if (isNaN(numericPrice) || numericPrice <= 0) {
+      errs.price = "Value must be greater than 0!";
+    }
+
+    if (!description || description.length < 25) {
+      errs.description = "The description must be longer than 25 letters!";
+    }
+
+    return errs;
+  };
+
+  const mapApiErrors = (apiErrors = []) => {
+    const errs = {};
+
+    apiErrors.forEach((err) => {
+      if (err.field) {
+        errs[err.field] = err.msg;
+      } else {
+        errs.general = err.msg;
+      }
+    });
+    return errs;
+  };
+
+  const addPropertyHandler = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const title = formData.get("title");
+    const price = formData.get("price");
+    const description = formData.get("description");
+
+    const frontendErrors = validate(title, price, description);
+    if (Object.keys(frontendErrors).length > 0) {
+      setErrors(frontendErrors);
+      return;
+    }
+
+    setErrors({});
+
+    try {
+      setIsLoading(true);
+      const result = await fetch("http://localhost:8080/api/property", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          price: +price,
+          description: description,
+        }),
+      });
+
+      const data = await result.json();
+      console.log(data);
+      if (!result.ok) {
+        setErrors(mapApiErrors(data.errors));
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(false);
+      alert("Property added!");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="pt-24">
@@ -119,10 +122,12 @@ export default function AddProperty() {
               placeholder="Description"
               name="description"
             />
-            {errors.description && <p className="text-red-500">{errors.description}</p>}
+            {errors.description && (
+              <p className="text-red-500">{errors.description}</p>
+            )}
             {errors.general && <p className="text-red-500">{errors.general}</p>}
             <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
-             {isLoading ? "Adding..." : " Add New"}
+              {isLoading ? "Adding..." : " Add New"}
             </button>
           </form>
         </div>
