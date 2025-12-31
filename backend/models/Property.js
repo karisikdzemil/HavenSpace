@@ -11,6 +11,10 @@ const PropertySchema = new Schema({
     type: Number,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
     required: true,
@@ -20,7 +24,35 @@ const PropertySchema = new Schema({
     ref: 'User',
     required: true
   },
-  images: [String]
-});
+  images: [String],
+  typeSelling: {
+    type: String,
+    enum: ["rent", "sale"],
+    required: true,
+  },
+  bedNum: {
+    type: Number,
+    required: true
+  },  
+  bathNum: {
+    type: Number,
+    required: true
+  },
+  area: {
+    type: Number,
+    required: true
+  },
+  garage: {
+    type: Number,
+    required: true
+  },
+  interiorFeatures: [String],
+  exteriorFeatures: [String],
+},
+  {
+    timestamps: true, 
+  }
+
+);
 
 module.exports = mongoose.model("Property", PropertySchema);
