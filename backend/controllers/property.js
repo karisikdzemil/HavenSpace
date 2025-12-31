@@ -91,7 +91,6 @@ exports.postProperty = (req, res, next) => {
     description: description,
     owner: req.userId,
   });
-  console.log(req.userId, req.email);
 
   property
     .save()
