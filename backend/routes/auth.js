@@ -1,6 +1,8 @@
 const express = require("express");
 const { body } = require("express-validator");
 const userRoutes = require("../controllers/user");
+const multer = require('multer');
+const { uploadAvatar } = require("../middleware/upload");
 
 const router = express.Router();
 
@@ -111,7 +113,12 @@ router.post(
   userRoutes.login
 );
 
-router.post("/create-user", postUserValidation, userRoutes.postUser);
+router.post(
+  "/create-user",
+  uploadAvatar,
+  postUserValidation,
+  userRoutes.postUser
+);
 
 router.delete("/delete-user", userRoutes.deleteUser);
 
