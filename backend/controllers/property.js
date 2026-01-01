@@ -83,7 +83,10 @@ exports.postProperty = (req, res, next) => {
   }
   const title = req.body.title;
   const price = req.body.price;
-  const location = req.body.location;
+  const city = req.body.city;
+  const address = req.body.address;
+  const lat = req.body.lat;
+  const lng = req.body.lng;
   const description = req.body.description;
   const images = req.files ? req.files.map(file => file.path) : [];
   const type = req.body.type;
@@ -94,6 +97,13 @@ exports.postProperty = (req, res, next) => {
   const status = req.body.status;
   const interiorFeatures = req.body.interiorFeatures;
   const exteriorFeatures = req.body.exteriorFeatures;
+
+  const location = {
+    city: city,
+    address: address,
+    lat: lat,
+    lng: lng
+  }
 
   const property = new Property({
     title: title,

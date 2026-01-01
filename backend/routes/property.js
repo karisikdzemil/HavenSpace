@@ -17,22 +17,17 @@ const propertyValidation = [
     .withMessage("The value must be a number!")
     .isInt({ gt: 0 })
     .withMessage("The value must be greater than 0!"),
-  body("location")
-    .exists()
-    .withMessage("Location is required!")
-    .isObject()
-    .withMessage("Location must be an object!"),
-  body("location.city").trim().notEmpty().withMessage("City is required!"),
-  body("location.address")
+  body("city").trim().notEmpty().withMessage("City is required!"),
+  body("address")
     .trim()
     .notEmpty()
     .withMessage("Address is required!"),
-  body("location.lat")
+  body("lat")
     .notEmpty()
     .withMessage("Latitude is required!")
     .isFloat({ min: -90, max: 90 })
     .withMessage("Latitude must be between -90 and 90"),
-  body("location.lng")
+  body("lng")
     .notEmpty()
     .withMessage("Longitude is required!")
     .isFloat({ min: -180, max: 180 })
@@ -67,16 +62,12 @@ const propertyValidation = [
     .isInt({ gt: 0 })
     .withMessage("The value must be greater than 0!"),
   body("garage").isNumeric().withMessage("Value must be a number!"),
-  body("interiorFeatures")
-    .isArray({ min: 1 })
-    .withMessage("Interior features must an array!"),
+  body("interiorFeatures"),
   body("interiorFeatures.*")
     .trim()
     .isLength({ min: 3, max: 30 })
     .withMessage("Each interior feature must be between 2-3 words!"),
-  body("exteriorFeatures")
-    .isArray({ min: 1 })
-    .withMessage("Exterior features must an array!"),
+  body("exteriorFeatures"),
   body("exteriorFeatures.*")
     .trim()
     .isLength({ min: 3, max: 30 })

@@ -52,7 +52,41 @@ export default function AddProperty() {
     const formData = new FormData(e.target);
     const title = formData.get("title");
     const price = formData.get("price");
+    // const city = formData.get("city");
+    // const address = formData.get("address");
+    // const lat = formData.get("lat");
+    // const lng = formData.get("lng");
     const description = formData.get("description");
+    // const images = formData.get("images");
+    // const type = formData.get("type");
+    // const bedNum = formData.get("bedNum");
+    // const bathNum = formData.get("bathNum");
+    // const area = formData.get("area");
+    // const garage = formData.get("garage");
+    // const status = formData.get("status");
+    // const interiorFeatures = formData.get("interiorFeatures");
+    // const exteriorFeatures = formData.get("exteriorFeatures");
+
+    // const property = {
+    //    title: title,
+    //    price: +price,
+    //    location: {
+    //     city: city,
+    //     address: address,
+    //     lat: lat, 
+    //     lng: lng
+    //    },
+    //    escription: description,
+    //    images: images,
+    //    type: type,
+    //    bedNum: bedNum,
+    //    bathNum: bathNum,
+    //    area: area,
+    //    garage: garage,
+    //    status: status,
+    //    interiorFeatures: interiorFeatures,
+    //    exteriorFeatures: exteriorFeatures
+    // }
 
     const frontendErrors = validate(title, price, description);
     if (Object.keys(frontendErrors).length > 0) {
@@ -68,13 +102,8 @@ export default function AddProperty() {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title: title,
-          price: +price,
-          description: description,
-        }),
+        body: formData,
       });
 
       const data = await result.json();
