@@ -49,9 +49,21 @@ exports.postUser = (req, res, next) => {
       .status(422)
       .json({ message: "Validation failed.", errors: errors.array() });
   }
-  const email = req.body.email;
-  const password = req.body.password;
-  const confirmPassword = req.body.confirmPassword;
+  const {
+    name,
+    surname,
+    email,
+    password,
+    confirmPassword,
+    position,
+    description,
+    yearsExperience,
+    location,
+    linkedin,
+    facebook,
+    instagram,
+    languages,
+  } = req.body;
 
   if (password !== confirmPassword) {
     const error = new Error("Passwords don't match!");
@@ -71,8 +83,18 @@ exports.postUser = (req, res, next) => {
     })
     .then((hashedPassword) => {
       const user = new User({
-        email,
+        name: name, 
+        surname: surname,
+        email: email,
         password: hashedPassword,
+        position: position, 
+        description: description,
+        yearsExperience: yearsExperience,
+        location: location,
+        linkedin: linkedin,
+        facebook: facebook,
+        instagram: instagram,
+        languages: languages
       });
       return user.save();
     })
