@@ -64,6 +64,7 @@ exports.postUser = (req, res, next) => {
     instagram,
     languages,
   } = req.body;
+  const avatar = req.file ? req.file.path : null;
 
   if (password !== confirmPassword) {
     const error = new Error("Passwords don't match!");
@@ -86,6 +87,7 @@ exports.postUser = (req, res, next) => {
         name: name, 
         surname: surname,
         email: email,
+        avatar: avatar,
         password: hashedPassword,
         position: position, 
         description: description,

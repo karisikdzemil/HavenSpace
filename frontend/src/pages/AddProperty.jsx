@@ -116,6 +116,14 @@ export default function AddProperty() {
               name="price"
             />
             {errors.price && <p className="text-red-500">{errors.price}</p>}
+            <div className="border flex flex-col w-6/9 gap-2 p-2 items-center justify-center">
+              <h4>Location</h4>
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="City" type="text"  name="city" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Address" type="text" name="address" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Latitude" type="number" name="lat" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Longitude" type="number" name="lng" id="" />
+            </div>
+
             <input
               className="p-2 w-2/3 rounded-md border border-gray-500 "
               type="text"
@@ -125,6 +133,16 @@ export default function AddProperty() {
             {errors.description && (
               <p className="text-red-500">{errors.description}</p>
             )}
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " type="file"  name="images" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Type" type="text"  name="type" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Bed Number" type="number"  name="bedNum" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Bath Number" type="number"  name="bathNum" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Area" type="number"  name="area" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Garage" type="number"  name="garage" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Status" type="text"  name="status" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="interiorFeatures" type="text"  name="interiorFeatures" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="exteriorFeatures" type="text"  name="exteriorFeatures" id="" />
+
             {errors.general && <p className="text-red-500">{errors.general}</p>}
             <button className="cursor-pointer font-light w-24 p-2 text-sm rounded-md bg-[#1E1E1E] text-white">
               {isLoading ? "Adding..." : " Add New"}

@@ -85,7 +85,7 @@ exports.postProperty = (req, res, next) => {
   const price = req.body.price;
   const location = req.body.location;
   const description = req.body.description;
-  // const images = req.body.images;
+  const images = req.files ? req.files.map(file => file.path) : [];
   const type = req.body.type;
   const bedNum = req.body.bedNum;
   const bathNum = req.body.bathNum;
@@ -100,6 +100,7 @@ exports.postProperty = (req, res, next) => {
     price: price,
     location: location,
     description: description,
+    images: images,
     owner: req.userId,
     type: type,
     bedNum: bedNum,
