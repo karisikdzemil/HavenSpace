@@ -13,10 +13,22 @@ const PropertySchema = new Schema(
       required: true,
     },
     location: {
-      city: { type: String, required: true },
-      address: { type: String },
-      lat: Number,
-      lng: Number,
+      city: {
+        type: String,
+        required: true,
+      },
+      address: {
+        type: String,
+        required: true,
+      },
+      lat: {
+        type: Number,
+        required: true,
+      },
+      lng: {
+        type: Number,
+        required: true,
+      },
     },
     description: {
       type: String,
@@ -48,6 +60,7 @@ const PropertySchema = new Schema(
     garage: {
       type: Number,
       required: true,
+      default: 0,
     },
     status: {
       type: String,
