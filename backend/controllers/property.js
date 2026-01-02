@@ -88,7 +88,7 @@ exports.postProperty = (req, res, next) => {
   const lat = req.body.lat;
   const lng = req.body.lng;
   const description = req.body.description;
-  const images = req.files ? req.files.map(file => file.path) : [];
+  const images = req.files ? req.files.map(file => file.path.replace("assets/", "")) : [];
   const type = req.body.type;
   const bedNum = req.body.bedNum;
   const bathNum = req.body.bathNum;
