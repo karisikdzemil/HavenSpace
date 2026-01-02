@@ -75,20 +75,20 @@ const postUserValidation = [
     .isURL()
     .withMessage("LinkedIn must be a valid URL."),
 
-  body("facebook")
-    .optional()
-    .isURL()
-    .withMessage("Facebook must be a valid URL."),
+  // body("facebook")
+  //   .optional()
+  //   .isURL()
+  //   .withMessage("Facebook must be a valid URL."),
 
-  body("instagram")
-    .optional()
-    .isURL()
-    .withMessage("Instagram must be a valid URL."),
+  // body("instagram")
+  //   .optional()
+  //   .isURL()
+  //   .withMessage("Instagram must be a valid URL."),
 
-  body("languages")
-    .optional()
-    .isArray()
-    .withMessage("Languages must be an array."),
+  // body("languages")
+  //   .optional()
+  //   .isArray()
+  //   .withMessage("Languages must be an array."),
 ];
 
 router.post(

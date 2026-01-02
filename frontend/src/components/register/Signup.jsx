@@ -27,19 +27,35 @@ export default function Signup() {
     return errs;
   };
 
-  const mapApiErrors = (apiErrors = []) => {
-    const errs = {};
+  // const mapApiErrors = (apiErrors = []) => {
+  //   const errs = {};
 
-    apiErrors.forEach((err) => {
-      if (err.field) {
-        errs[err.field] = err.msg;
-      } else {
-        errs.general = err.message;
-      }
-    });
+  //   apiErrors.forEach((err) => {
+  //     if (err.field) {
+  //       errs[err.field] = err.msg;
+  //     } else {
+  //       errs.general = err.message;
+  //     }
+  //   });
 
-    return errs;
-  };
+  //   return errs;
+  // };
+
+const mapApiErrors = (apiErrors = []) => {
+  const errs = {};
+
+  apiErrors.forEach((err) => {
+    if (err.path) {
+      errs[err.path] = err.msg;
+    } else {
+      errs.general = err.msg || "Something went wrong";
+    }
+  }); 
+  console.log(errs)
+
+  return errs;
+};
+
 
   const singupHandler = async (e) => {
     e.preventDefault();
@@ -60,14 +76,7 @@ export default function Signup() {
     try {
       const result = await fetch("http://localhost:8080/api/create-user", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-        }),
+        body: formData
       });
 
       const data = await result.json();
@@ -89,6 +98,20 @@ export default function Signup() {
       className="w-3/5 h-auto py-22 rounded-md border-2 border-gray-500 flex flex-col items-center justify-center gap-5"
       onSubmit={singupHandler}
     >
+      <div className="flex w-full items-center justify-center flex-row gap-5">
+         <input
+        className="p-2 w-1/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Name"
+        name="name"
+      />
+       <input
+        className="p-2 w-1/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Surname"
+        name="surname"
+      />
+      </div>
       <input
         className="p-2 w-2/3 rounded-md border border-gray-500 "
         type="email"
@@ -111,9 +134,65 @@ export default function Signup() {
         placeholder="Confirm Password"
         name="confirmPassword"
       />
+
       {errors.confirmPassword && (
         <p className="text-red-500">{errors.confirmPassword}</p>
       )}
+
+      <input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="file"
+        placeholder="Avatar"
+        name="avatar"
+      />
+      <input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Position"
+        name="position"
+      /><input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Description"
+        name="description"
+      /><input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="number"
+        placeholder="Phone"
+        name="phone"
+      />
+      <input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Location"
+        name="location"
+      />
+      <div className="flex w-10/12 p-2  flex-col items-center justify-center gap-5">
+        <h3>Links</h3>
+        <input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="linkedin"
+        name="linkedin"
+      /><input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="facebook"
+        name="facebook"
+      /><input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="instagram"
+        name="instagram"
+      />
+      </div>
+
+      <input
+        className="p-2 w-2/3 rounded-md border border-gray-500 "
+        type="text"
+        placeholder="Languages"
+        name="languages"
+      />
 
       <button
         type="submit"

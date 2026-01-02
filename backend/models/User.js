@@ -16,6 +16,10 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
     avatar: String,
     position: {
       type: String,
@@ -69,10 +73,6 @@ const UserSchema = new Schema(
       },
     ],
     languages: [String],
-    password: {
-      type: String,
-      required: true,
-    },
   },
   {
     timestamps: true,
