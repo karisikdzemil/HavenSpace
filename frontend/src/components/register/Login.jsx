@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Loading from "../loading/Loading";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Login() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
 
   // frontend minimal validation
   const validate = (email, password) => {
@@ -69,7 +71,8 @@ export default function Login() {
         return;
       }
 
-      localStorage.setItem("token", data.token);
+      login(data.userId, data.token);
+      // localStorage.setItem("token", data.token);
       setIsLoading(false);
     } catch (err) {
       console.log(err);
