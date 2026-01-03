@@ -30,6 +30,7 @@ export default function MyProperties() {
             },
           }
         );
+        console.log(result)
         if (!result.ok) {
           console.log("Something went wrong!");
           return;
