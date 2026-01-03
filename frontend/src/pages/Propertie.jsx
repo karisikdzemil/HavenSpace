@@ -52,6 +52,10 @@ export default function Propertie() {
     }
   };
 
+  const changeStatusHandler = async () => {
+      user, property 
+  }
+
   return (
     <section>
       {loading ? (
@@ -64,6 +68,11 @@ export default function Propertie() {
             {property && (
               <h1 className="text-4xl font-medium">{property.title}</h1>
             )}
+            <div className="flex gap-5">
+            {property && <p className="py-2 px-5 rounded-3xl bg-green-400 font-light text-white ">{property.status}</p>}
+            {property && property.owner === user && <button onClick={changeStatusHandler} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
+            </div>
+
             {property && (
               <p className="text-4xl font-light">${property.price}</p>
             )}

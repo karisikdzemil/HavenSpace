@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 const userRoutes = require("../controllers/user");
 const multer = require('multer');
 const { uploadAvatar } = require("../middleware/upload");
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
@@ -119,6 +120,8 @@ router.post(
   postUserValidation,
   userRoutes.postUser
 );
+
+router.get('/get-user/:id', isAuth, userRoutes.getUser);
 
 router.delete("/delete-user", userRoutes.deleteUser);
 
