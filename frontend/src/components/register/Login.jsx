@@ -69,8 +69,8 @@ export default function Login() {
         setIsLoading(false);
         return;
       }
-
-      login(data.userId, data.token);
+      console.log(data)
+      login(data.user, data.token);
       // localStorage.setItem("token", data.token);
       setIsLoading(false);
       navigate('/')

@@ -9,10 +9,11 @@ import { useAuth } from "../hooks/useAuth";
 export default function MyProperties() {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const { user } = useAuth();
+
+  console.log("Context user:", user);
 
     useEffect(() => {
         if(!token){
@@ -47,25 +48,7 @@ export default function MyProperties() {
     };
     fetchUserProperties();
 
-    const fetchUser = async () => {
-      try{
-        const result = await fetch(`http://localhost:8080/api/get-user/${user}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        console.log(result)
-        const data = await result.json();
-        setUserData(data);
-
-        console.log(data);
-      }catch(err){
-        console.log(err);
-      }
-    }
-    fetchUser();
-  }, [token, user]);
+  }, [token]);
   return (
     <section className="pt-36">
       <ContentWrapper>

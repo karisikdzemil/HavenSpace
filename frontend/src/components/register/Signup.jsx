@@ -78,7 +78,7 @@ const mapApiErrors = (apiErrors = []) => {
       }
 
       setIsLoading(false);
-      login(data.userId, data.token);
+      login(data.user, data.token);
       navigate('/');
     } catch (err) {
       console.log(err);
