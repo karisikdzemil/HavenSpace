@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
 import Loading from "../components/loading/Loading";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Propertie() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  {property && console.log(property.owner === user);}
 
   useEffect(() => {
     const getProperty = async () => {
@@ -91,7 +95,7 @@ export default function Propertie() {
               </div>
             </div>
           </div>
-          <button
+         { property && property.owner === user && <><button
             onClick={deletePropertyHandler}
             className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5"
           >
@@ -102,7 +106,8 @@ export default function Propertie() {
             className="text-xl text-white bg-gray-300 w-full rounded-md p-3 text-center cursor-pointer hover:bg-gray-400 hover:p-4 transition-all mt-5"
           >
             Edit Property
-          </a>
+          </a> 
+          </>}
         </ContentWrapper>
       )}
     </section>

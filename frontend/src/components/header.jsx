@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Header() {
+  const { isAuthenticated, logout } = useAuth();
+
   return (
     <header className="w-full h-[10vh] flex gap-22 px-12 bg-white absolute items-center">
       <img className="h-[9vh]" src="/HavenSpaceLogo.png" alt="Logo" />
@@ -31,7 +34,8 @@ export default function Header() {
                 PROPERTIES
               </NavLink>
             </li>
-            <li className="cursor-pointer">
+           {isAuthenticated && <>
+          <li className="cursor-pointer">
               <NavLink
                 to={"/new-listings"}
                 className={({ isActive }) =>
@@ -55,6 +59,7 @@ export default function Header() {
                 MY PROPERTIES
               </NavLink>
             </li>
+            </>}
             <li className="cursor-pointer">
               <NavLink
                 to={"/contact"}
@@ -70,7 +75,18 @@ export default function Header() {
           </div>
 
           <div className="flex gap-12 items-center">
-            <li className="cursor-pointer">
+           {isAuthenticated ? <li className="cursor-pointer">
+              <button
+                onClick={() => logout()}
+                className={({ isActive }) =>
+                  isActive
+                    ? "pb-0.5 transition-all border-b-2 border-black"
+                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                }
+              >
+                LOGOUT
+              </button>
+            </li> : <li className="cursor-pointer">
               <NavLink
                 to={"/register"}
                 className={({ isActive }) =>
@@ -81,7 +97,8 @@ export default function Header() {
               >
                 REGISTER
               </NavLink>
-            </li>
+            </li>}
+            
           </div>
         </ul>
       </nav>
