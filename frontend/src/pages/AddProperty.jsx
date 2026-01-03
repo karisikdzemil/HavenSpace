@@ -116,6 +116,7 @@ export default function AddProperty() {
 
       setIsLoading(false);
       alert("Property added!");
+      navigate('/')
     } catch (err) {
       console.log(err);
     }

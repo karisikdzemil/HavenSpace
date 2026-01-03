@@ -12,8 +12,6 @@ export default function Propertie() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  {property && console.log(property.owner === user);}
-
   useEffect(() => {
     const getProperty = async () => {
       try {

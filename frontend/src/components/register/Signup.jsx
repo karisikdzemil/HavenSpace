@@ -1,9 +1,13 @@
 import { useState } from "react";
 import Loading from "../loading/Loading";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const validate = (email, password, confirmPassword) => {
     const errs = {};
@@ -26,20 +30,6 @@ export default function Signup() {
 
     return errs;
   };
-
-  // const mapApiErrors = (apiErrors = []) => {
-  //   const errs = {};
-
-  //   apiErrors.forEach((err) => {
-  //     if (err.field) {
-  //       errs[err.field] = err.msg;
-  //     } else {
-  //       errs.general = err.message;
-  //     }
-  //   });
-
-  //   return errs;
-  // };
 
 const mapApiErrors = (apiErrors = []) => {
   const errs = {};
@@ -88,6 +78,8 @@ const mapApiErrors = (apiErrors = []) => {
       }
 
       setIsLoading(false);
+      login(data.userId, data.token);
+      navigate('/');
     } catch (err) {
       console.log(err);
     }

@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
         logout();
         return;
     }
-    console.log(token)
+
     const timeout = setTimeout(() => {
         logout();
     }, expiresIn);

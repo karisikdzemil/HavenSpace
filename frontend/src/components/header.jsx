@@ -34,32 +34,34 @@ export default function Header() {
                 PROPERTIES
               </NavLink>
             </li>
-           {isAuthenticated && <>
-          <li className="cursor-pointer">
-              <NavLink
-                to={"/new-listings"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "pb-0.5 transition-all border-b-2 border-black"
-                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
-                }
-              >
-                NEW LISTINGS
-              </NavLink>
-            </li>
-              <li className="cursor-pointer">
-              <NavLink
-                to={"/my-properties"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "pb-0.5 transition-all border-b-2 border-black"
-                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
-                }
-              >
-                MY PROPERTIES
-              </NavLink>
-            </li>
-            </>}
+            {isAuthenticated && (
+              <>
+                <li className="cursor-pointer">
+                  <NavLink
+                    to={"/new-listings"}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "pb-0.5 transition-all border-b-2 border-black"
+                        : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                    }
+                  >
+                    NEW LISTINGS
+                  </NavLink>
+                </li>
+                <li className="cursor-pointer">
+                  <NavLink
+                    to={"/my-properties"}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "pb-0.5 transition-all border-b-2 border-black"
+                        : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                    }
+                  >
+                    MY PROPERTIES
+                  </NavLink>
+                </li>
+              </>
+            )}
             <li className="cursor-pointer">
               <NavLink
                 to={"/contact"}
@@ -75,30 +77,29 @@ export default function Header() {
           </div>
 
           <div className="flex gap-12 items-center">
-           {isAuthenticated ? <li className="cursor-pointer">
-              <button
-                onClick={() => logout()}
-                className={({ isActive }) =>
-                  isActive
-                    ? "pb-0.5 transition-all border-b-2 border-black"
-                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
-                }
-              >
-                LOGOUT
-              </button>
-            </li> : <li className="cursor-pointer">
-              <NavLink
-                to={"/register"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "pb-0.5 transition-all border-b-2 border-black"
-                    : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
-                }
-              >
-                REGISTER
-              </NavLink>
-            </li>}
-            
+            {isAuthenticated ? (
+              <li className="cursor-pointer">
+                <button
+                  onClick={() => logout()}
+                  className="hover:pb-0 hover:transition-all cursor-pointer hover:border-b-2 border-black"
+                >
+                  LOGOUT
+                </button>
+              </li>
+            ) : (
+              <li className="cursor-pointer">
+                <NavLink
+                  to={"/register"}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "pb-0.5 transition-all border-b-2 border-black"
+                      : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
+                  }
+                >
+                  REGISTER
+                </NavLink>
+              </li>
+            )}
           </div>
         </ul>
       </nav>

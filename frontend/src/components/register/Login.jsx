@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Loading from "../loading/Loading";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
   const { login } = useAuth();
 
-  // frontend minimal validation
   const validate = (email, password) => {
     const errs = {};
 
@@ -26,7 +27,6 @@ export default function Login() {
     return errs;
   };
 
-  // normalize api errors -> { field: msg }
   const mapApiErrors = (apiErrors = []) => {
     const errs = {};
     apiErrors.forEach((err) => {
@@ -46,7 +46,6 @@ export default function Login() {
     const email = formData.get("email");
     const password = formData.get("password");
 
-    // frontend validation
     const frontendErrors = validate(email, password);
     if (Object.keys(frontendErrors).length > 0) {
       setErrors(frontendErrors);
@@ -74,6 +73,7 @@ export default function Login() {
       login(data.userId, data.token);
       // localStorage.setItem("token", data.token);
       setIsLoading(false);
+      navigate('/')
     } catch (err) {
       console.log(err);
       setIsLoading(false);

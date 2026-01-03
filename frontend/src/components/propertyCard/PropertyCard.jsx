@@ -2,10 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquare, faLocationDot, faBath, faBed } from "@fortawesome/free-solid-svg-icons";
 import SpecWrapper from "./components/SpecWrapper";
 
-
-
 export default function PropertyCard( {propertie} ) {
-  console.log(`url(http://localhost:8080/${propertie.images[0]})`)
   return (
     <li className="w-[30%] min-h-112 rounded-md shadow-gray-400 shadow-xs cursor-pointer transition-all hover:scale-x-102">
      <a href={`/propertie/${propertie._id}`}>

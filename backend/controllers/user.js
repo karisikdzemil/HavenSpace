@@ -85,12 +85,12 @@ exports.postUser = (req, res, next) => {
     })
     .then((hashedPassword) => {
       const user = new User({
-        name: name, 
+        name: name,
         surname: surname,
         email: email,
         avatar: avatar,
         password: hashedPassword,
-        position: position, 
+        position: position,
         description: description,
         yearsExperience: yearsExperience,
         phone: phone,
@@ -98,14 +98,18 @@ exports.postUser = (req, res, next) => {
         linkedin: linkedin,
         facebook: facebook,
         instagram: instagram,
-        languages: languages
+        languages: languages,
       });
       return user.save();
     })
     .then((result) => {
+      const token = jwt.sign({ email: result.email, userId: result._id }, process.env.JWT_SECRET, {
+        expiresIn: "2h",
+      });
       res.status(201).json({
         message: "User created successfully!",
         userId: result._id,
+        token: token
       });
     })
     .catch((err) => {
