@@ -20,6 +20,7 @@ app.use("/api", authRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "assets/images")));
 app.use("/images", express.static(path.join(__dirname, "assets/avatar")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.use((error, req, res, next) => {
   const message = error.message || "Something went wrong!";

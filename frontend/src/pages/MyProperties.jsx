@@ -5,6 +5,7 @@ import PropertyListingsSections from "../components/propertyListingsSection";
 import Loading from "../components/loading/Loading";
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
+import UserInfo from "../components/userInfo";
 
 export default function MyProperties() {
   const [properties, setProperties] = useState([]);
@@ -52,6 +53,7 @@ export default function MyProperties() {
   return (
     <section className="pt-36">
       <ContentWrapper>
+        <UserInfo />
         {isLoading ? <Loading loadingText={'Loading your properties'}/> : <PropertyListingsSections properties={properties} />}
       </ContentWrapper>
     </section>
