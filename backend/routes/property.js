@@ -76,7 +76,7 @@ const propertyValidation = [
 
 // router.get("/", propertyController.getHome);
 
-router.get("/properties", propertyController.getProperties);
+router.get("/properties?page=1&limit=6", propertyController.getProperties);
 
 router.get("/property/:id", propertyController.getProperty);
 

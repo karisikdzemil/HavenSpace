@@ -1,5 +1,5 @@
 const Property = require("../models/Property");
-const User = require('../models/User');
+const User = require("../models/User");
 const { validationResult } = require("express-validator");
 
 // exports.getHome = (req, res, next) => {
@@ -20,22 +20,53 @@ const { validationResult } = require("express-validator");
 //     });
 // };
 
-exports.getProperties = (req, res, next) => {
-  Property.find()
-    .then((properties) => {
-      if (!properties) {
-        const error = new Error("Property Not Found!");
-        error.statusCode = 500;
-        throw error;
-      }
-      res.status(200).json({ message: "Success!", properties: properties });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+// exports.getProperties = (req, res, next) => {
+//   Property.find()
+//     .then((properties) => {
+//       if (!properties) {
+//         const error = new Error("Property Not Found!");
+//         error.statusCode = 500;
+//         throw error;
+//       }
+//       res.status(200).json({ message: "Success!", properties: properties });
+//     })
+//     .catch((err) => {
+//       if (!err.statusCode) {
+//         err.statusCode = 500;
+//       }
+//       next(err);
+//     });
+// };
+
+exports.getProperties = async (req, res, next) => {
+  try {
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.max(1, Number(req.query.limit) || 6);
+    const skip = (page - 1) * limit;
+
+    const total = await Property.countDocuments({ status: "active" });
+
+    const properties = (
+      await Property.find({ status: "active" }).skip(skip).limit(limit)
+    ).sort({ createdAt: -1 });
+
+    res
+      .status(200)
+      .json({
+        properties,
+        pagination: {
+          totalItems: total,
+          currentPage: page,
+          totalPages: Math.ceil(total / limit),
+        },
+        limit,
+      });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
 exports.getProperty = (req, res, next) => {
@@ -89,7 +120,9 @@ exports.postProperty = (req, res, next) => {
   const lat = req.body.lat;
   const lng = req.body.lng;
   const description = req.body.description;
-  const images = req.files ? req.files.map(file => file.path.replace("assets/", "")) : [];
+  const images = req.files
+    ? req.files.map((file) => file.path.replace("assets/", ""))
+    : [];
   const type = req.body.type;
   const bedNum = req.body.bedNum;
   const bathNum = req.body.bathNum;
@@ -103,8 +136,8 @@ exports.postProperty = (req, res, next) => {
     city: city,
     address: address,
     lat: lat,
-    lng: lng
-  }
+    lng: lng,
+  };
 
   const property = new Property({
     title: title,
@@ -148,52 +181,61 @@ exports.soldProperty = async (req, res, next) => {
   const propertyId = req.params.id;
   const userId = req.userId;
 
-  const allowedStatuses = ['active', 'sold', 'rent'];
+  const allowedStatuses = ["active", "sold", "rent"];
 
-  if(!allowedStatuses.includes(status)){
+  if (!allowedStatuses.includes(status)) {
     const error = new Error("Invalid status!");
     error.statusCode = 422;
     throw error;
   }
 
-  try{
+  try {
     const property = await Property.findById(propertyId);
-    if(!property){
-      throw Object.assign(new Error("Property not found!"), {statusCode: 404});
+    if (!property) {
+      throw Object.assign(new Error("Property not found!"), {
+        statusCode: 404,
+      });
     }
 
-    if(property.owner.toString() !== userId){
-      throw Object.assign(new Error("Not authorized!"), {statusCode: 403});
+    if (property.owner.toString() !== userId) {
+      throw Object.assign(new Error("Not authorized!"), { statusCode: 403 });
     }
 
-    if(property.status === status){
-      return res.status(200).json({message: 'Status unchanged'});
+    if (property.status === status) {
+      return res.status(200).json({ message: "Status unchanged" });
     }
 
     const oldStatus = property.status;
     property.status = status;
     await property.save();
 
-
-    if(oldStatus !== 'sold' && status === 'sold'){
-      const user = await User.findByIdAndUpdate(userId, {
-        $inc: {
-          soldProperties: 1,
-          totalSales: property.price
-        }
-      }, 
-    {new: true}).select('-password');
-     return res.status(200).json({message: "Property status updated!", status: status, updatedUser: user});
+    if (oldStatus !== "sold" && status === "sold") {
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $inc: {
+            soldProperties: 1,
+            totalSales: property.price,
+          },
+        },
+        { new: true }
+      ).select("-password");
+      return res.status(200).json({
+        message: "Property status updated!",
+        status: status,
+        updatedUser: user,
+      });
     }
-      res.status(200).json({message: "Property status updated!", status: status});
-    
-  }catch(err){
-    if(!err.statusCode){
+    res
+      .status(200)
+      .json({ message: "Property status updated!", status: status });
+  } catch (err) {
+    if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
   }
-}
+};
 
 exports.editProperty = (req, res, next) => {
   const errors = validationResult(req);
