@@ -8,7 +8,7 @@ export default function Propertie() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const { user } = useAuth();
+  const { token, user, refreshUser } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -52,8 +52,24 @@ export default function Propertie() {
     }
   };
 
-  const changeStatusHandler = async () => {
-      user, property 
+  const changeStatusHandler = async (status = 'sold') => {
+      const result = await fetch(`http://localhost:8080/api/${property._id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({status: status})
+      });
+
+      if(!result.ok){
+        throw new Error('Something went wrong!');
+      }
+
+      const data = await result.json();
+      console.log(data)
+      // refreshUser(data.updatedUser);
+
   }
 
   return (
@@ -70,7 +86,7 @@ export default function Propertie() {
             )}
             <div className="flex gap-5">
             {property && <p className="py-2 px-5 rounded-3xl bg-green-400 font-light text-white ">{property.status}</p>}
-            {property && property.owner === user._id && <button onClick={changeStatusHandler} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
+            {property && property.owner === user._id && <button onClick={() => changeStatusHandler('sold')} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
             </div>
 
             {property && (

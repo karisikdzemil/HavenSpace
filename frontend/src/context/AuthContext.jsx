@@ -40,6 +40,12 @@ export const AuthProvider = ({ children }) => {
 
   }, [token]);
 
+  const refreshUser = (userData) => {
+      localStorage.removeItem('user');
+      localStorage.setItem('user', userData);
+      setUser(userData);
+  }
+
   const login = (userData, jwtToken) => {
     setUser(userData);
     setToken(jwtToken);
@@ -58,7 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, login, logout }}
+      value={{ user, token, isAuthenticated, login, logout, refreshUser }}
     >
       {children}
     </AuthContext.Provider>

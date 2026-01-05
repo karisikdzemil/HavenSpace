@@ -97,7 +97,7 @@ router.put(
   propertyController.editProperty
 );
 
-router.put("/:id/sold", propertyController.soldProperty);
+router.put("/:id/status", isAuth, propertyController.soldProperty);
 
 router.delete("/property/:id", isAuth, propertyController.deleteProperty);
 

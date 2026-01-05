@@ -148,7 +148,7 @@ exports.soldProperty = async (req, res, next) => {
   const propertyId = req.params.id;
   const userId = req.userId;
 
-  const allowedStatuses = ['active, sold, rent'];
+  const allowedStatuses = ['active', 'sold', 'rent'];
 
   if(!allowedStatuses.includes(status)){
     const error = new Error("Invalid status!");
@@ -176,15 +176,15 @@ exports.soldProperty = async (req, res, next) => {
 
 
     if(oldStatus !== 'sold' && status === 'sold'){
-      await User.findByIdAndUpdate(userId, {
+      const user = await User.findByIdAndUpdate(userId, {
         $inc: {
           soldProperties: 1,
           totalSales: property.price
         }
       });
+      res.status(200).json({message: "Property status updated!", status: status, updatedUser: user});
     }
-
-    res.status(200).json({message: "Property status updated!", status: status});
+      res.status(200).json({message: "Property status updated!", status: status});
     
   }catch(err){
     if(!err.statusCode){
