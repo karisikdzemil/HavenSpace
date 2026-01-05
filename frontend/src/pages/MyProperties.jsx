@@ -53,7 +53,7 @@ export default function MyProperties() {
   return (
     <section className="pt-36">
       <ContentWrapper>
-        <UserInfo />
+        <UserInfo agent={user}/>
         {isLoading ? <Loading loadingText={'Loading your properties'}/> : <PropertyListingsSections properties={properties} />}
       </ContentWrapper>
     </section>

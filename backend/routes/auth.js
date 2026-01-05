@@ -121,6 +121,8 @@ router.post(
   userRoutes.postUser
 );
 
+router.get('/agents', userRoutes.getAgents);
+
 router.get('/get-user/:id', isAuth, userRoutes.getUser);
 
 router.delete("/delete-user", userRoutes.deleteUser);

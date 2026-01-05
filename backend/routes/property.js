@@ -2,7 +2,6 @@ const express = require("express");
 const propertyController = require("../controllers/property");
 const { body } = require("express-validator");
 const isAuth = require("../middleware/is-auth");
-const multer = require("multer");
 const { uploadPropertyImages } = require("../middleware/upload");
 
 const router = express.Router();
@@ -73,8 +72,6 @@ const propertyValidation = [
     .isLength({ min: 3, max: 30 })
     .withMessage("Each exterior feature must be between 2-3 words!"),
 ];
-
-// router.get("/", propertyController.getHome);
 
 router.get("/properties", propertyController.getProperties);
 

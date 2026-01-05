@@ -9,27 +9,6 @@ export default function Properties() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
 
-  // useEffect(() => {
-  //   const getProperties = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const res = await fetch("http://localhost:8080/api/properties");
-
-  //       if (!res.ok) {
-  //         throw new Error(res.status);
-  //       }
-
-  //       const data = await res.json();
-  //       setProperties(data.properties);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Fetch error:", error);
-  //     }
-  //   };
-
-  //   getProperties();
-  // }, []);
-
   useEffect(() => {
      window.scrollTo({ top: 0, behavior: "smooth" });
   const fetchProperties = async () => {
