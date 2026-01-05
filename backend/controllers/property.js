@@ -47,8 +47,8 @@ exports.getProperties = async (req, res, next) => {
     const total = await Property.countDocuments({ status: "active" });
 
     const properties = (
-      await Property.find({ status: "active" }).skip(skip).limit(limit)
-    ).sort({ createdAt: -1 });
+      await Property.find({ status: "active" }).sort({ createdAt: -1 }).skip(skip).limit(limit)
+    );
 
     res
       .status(200)
@@ -58,8 +58,8 @@ exports.getProperties = async (req, res, next) => {
           totalItems: total,
           currentPage: page,
           totalPages: Math.ceil(total / limit),
+          limit,
         },
-        limit,
       });
   } catch (err) {
     if (!err.statusCode) {
