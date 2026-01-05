@@ -181,8 +181,9 @@ exports.soldProperty = async (req, res, next) => {
           soldProperties: 1,
           totalSales: property.price
         }
-      });
-      res.status(200).json({message: "Property status updated!", status: status, updatedUser: user});
+      }, 
+    {new: true}).select('-password');
+     return res.status(200).json({message: "Property status updated!", status: status, updatedUser: user});
     }
       res.status(200).json({message: "Property status updated!", status: status});
     

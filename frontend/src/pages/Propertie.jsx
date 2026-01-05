@@ -67,9 +67,11 @@ export default function Propertie() {
       }
 
       const data = await result.json();
-      console.log(data)
-      // refreshUser(data.updatedUser);
-
+      if(data.updatedUser){
+        refreshUser(data.updatedUser);
+      }
+      setProperty(prev => ({...prev, status}));
+      alert('Property marked as sold!');
   }
 
   return (
