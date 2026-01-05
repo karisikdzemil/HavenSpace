@@ -70,7 +70,7 @@ export default function Propertie() {
             )}
             <div className="flex gap-5">
             {property && <p className="py-2 px-5 rounded-3xl bg-green-400 font-light text-white ">{property.status}</p>}
-            {property && property.owner === user && <button onClick={changeStatusHandler} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
+            {property && property.owner === user._id && <button onClick={changeStatusHandler} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
             </div>
 
             {property && (
@@ -102,7 +102,7 @@ export default function Propertie() {
               </div>
             </div>
           </div>
-         { property && property.owner === user && <><button
+         { property && property.owner === user._id && <><button
             onClick={deletePropertyHandler}
             className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5"
           >
