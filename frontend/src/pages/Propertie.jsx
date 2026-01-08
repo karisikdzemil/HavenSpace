@@ -52,27 +52,30 @@ export default function Propertie() {
     }
   };
 
-  const changeStatusHandler = async (status = 'sold') => {
-      const result = await fetch(`http://localhost:8080/api/${property._id}/status`, {
-        method: 'PUT',
+  const changeStatusHandler = async (status = "sold") => {
+    const result = await fetch(
+      `http://localhost:8080/api/${property._id}/status`,
+      {
+        method: "PUT",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({status: status})
-      });
-
-      if(!result.ok){
-        throw new Error('Something went wrong!');
+        body: JSON.stringify({ status: status }),
       }
+    );
 
-      const data = await result.json();
-      if(data.updatedUser){
-        refreshUser(data.updatedUser);
-      }
-      setProperty(prev => ({...prev, status}));
-      alert('Property marked as sold!');
-  }
+    if (!result.ok) {
+      throw new Error("Something went wrong!");
+    }
+
+    const data = await result.json();
+    if (data.updatedUser) {
+      refreshUser(data.updatedUser);
+    }
+    setProperty((prev) => ({ ...prev, status }));
+    alert("Property marked as sold!");
+  };
 
   return (
     <section>
@@ -87,20 +90,33 @@ export default function Propertie() {
               <h1 className="text-4xl font-medium">{property.title}</h1>
             )}
             <div className="flex gap-5">
-            {property && <p className="py-2 px-5 rounded-3xl bg-green-400 font-light text-white ">{property.status}</p>}
-            {property && property.owner === user._id && <button onClick={() => changeStatusHandler('sold')} className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white">Mark As Sold</button>}
+              {property && (
+                <p className="py-2 px-5 rounded-3xl bg-green-400 font-light text-white ">
+                  {property.status}
+                </p>
+              )}
+              {property && user && property.owner === user._id && (
+                <button
+                  onClick={() => changeStatusHandler("sold")}
+                  className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white"
+                >
+                  Mark As Sold
+                </button>
+              )}
             </div>
 
             {property && (
               <p className="text-4xl font-light">${property.price}</p>
             )}
           </div>
-          {property && <div
-            style={{
-              backgroundImage: `url(http://localhost:8080/${property.images[0]})`,
-            }}
-            className="mt-12 w-full h-[70vh] bg-cover bg-center rounded-md "
-          ></div>}
+          {property && (
+            <div
+              style={{
+                backgroundImage: `url(http://localhost:8080/${property.images[0]})`,
+              }}
+              className="mt-12 w-full h-[70vh] bg-cover bg-center rounded-md "
+            ></div>
+          )}
           {/* images */}
 
           <div className="flex pt-12">
@@ -115,24 +131,51 @@ export default function Propertie() {
               </div>
             </div>
             <div className="w-1/3">
-              <div className="w-full h-60 rounded-md border-2 border-gray-600">
-                <p>Property Agent</p>
-              </div>
+              {property && property.owner && (
+                <div className="w-full h-60 flex flex-col items-center justify-center gap-2 rounded-md border-2 py-5 border-gray-600">
+                  <div className="flex items-center justify-center gap-5">
+                    <img
+                      className="w-22 h-22 rounded-[50%] object-cover"
+                      src={`http://localhost:8080/assets/${property.owner.avatar}`}
+                      alt="User photo"
+                    />
+                    <div>
+                      <p className="font-bold">
+                        {property.owner.name} {property.owner.surname}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {property.owner.position}
+                      </p>
+                    </div>
+                  </div>
+                  <p>{property.owner.phone}</p>
+                  <p>{property.owner.email}</p>
+                  <a
+                    className="mt-auto text-center bg-black text-white py-2 px-5 rounded-md hover:bg-gray-800 transition"
+                    href={`/agents/${property.owner._id}`}
+                  >
+                    View My Listings
+                  </a>
+                </div>
+              )}
             </div>
           </div>
-         { property && property.owner === user._id && <><button
-            onClick={deletePropertyHandler}
-            className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5"
-          >
-            {deleteLoading ? "Deleting..." : "Delete Property"}
-          </button>
-          <a
-            href={`/edit-property/${id}`}
-            className="text-xl text-white bg-gray-300 w-full rounded-md p-3 text-center cursor-pointer hover:bg-gray-400 hover:p-4 transition-all mt-5"
-          >
-            Edit Property
-          </a> 
-          </>}
+          {property && user && property.owner === user._id && (
+            <>
+              <button
+                onClick={deletePropertyHandler}
+                className="text-xl text-white bg-red-500 w-full rounded-md p-3 text-center cursor-pointer hover:bg-red-600 hover:p-4 transition-all mt-5"
+              >
+                {deleteLoading ? "Deleting..." : "Delete Property"}
+              </button>
+              <a
+                href={`/edit-property/${id}`}
+                className="text-xl text-white bg-gray-300 w-full rounded-md p-3 text-center cursor-pointer hover:bg-gray-400 hover:p-4 transition-all mt-5"
+              >
+                Edit Property
+              </a>
+            </>
+          )}
         </ContentWrapper>
       )}
     </section>

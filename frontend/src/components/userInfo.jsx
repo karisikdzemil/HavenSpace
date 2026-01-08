@@ -3,7 +3,7 @@ export default function UserInfo({ agent }) {
     return (
       <div className="w-12/12 mx-auto min-h-96 h-auto flex items-center gap-10 justify-start bg-gray-200 relative rounded-md p-5">
         <a
-          href="/"
+          href={`/agents/${agent._id}`}
           className="absolute top-5 right-10 bg-gray-600 p-3 hover:p-4 transition-all text-white rounded-md"
         >
           View More Iformations

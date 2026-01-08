@@ -37,6 +37,7 @@ exports.getProperty = (req, res, next) => {
   const propertyId = req.params.id;
 
   Property.findById(propertyId)
+    .populate("owner", "avatar name surname position email phone")
     .then((property) => {
       if (!property) {
         const error = new Error("Property Not Found!");
@@ -56,7 +57,6 @@ exports.getProperty = (req, res, next) => {
 exports.getUserProperties = (req, res, next) => {
   const id = req.params.id;
   Property.find({ owner: id })
-    .populate("owner", "-password")
     .then((properties) => {
       res.status(200).json({
         message: "User properties found successfully!",

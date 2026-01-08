@@ -20,6 +20,8 @@ export default function Properties() {
       const data = await res.json();
 
       setProperties(data.properties);
+  console.log(data)
+
       setPagination(data.pagination);
     } catch (err) {
       console.error(err);
