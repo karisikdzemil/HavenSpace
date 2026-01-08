@@ -33,7 +33,8 @@ export default function Properties() {
   fetchProperties();
 }, [page]);
   return (
-    <section className="pt-36">
+    <section className="pt-36 flex p-5">
+      <div>
       {loading ? (
         <Loading loadingText={"Loading properties"} />
       ) : (
@@ -62,6 +63,17 @@ export default function Properties() {
           </div>
         </>
       )}
+      </div>
+      <div className="w-lg bg-amber-500 ">
+        <form action="">
+          <input type="text" name="" id="" />
+          <input type="text" name="" id="" />
+          <input type="text" name="" id="" />
+          <input type="text" name="" id="" />
+          <input type="text" name="" id="" />
+          <input type="text" name="" id="" />
+        </form>
+      </div>
     </section>
   );
 }
