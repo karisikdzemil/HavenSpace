@@ -54,7 +54,8 @@ exports.getProperty = (req, res, next) => {
 };
 
 exports.getUserProperties = (req, res, next) => {
-  Property.find({ owner: req.userId })
+  const id = req.params.id;
+  Property.find({ owner: id })
     .populate("owner", "-password")
     .then((properties) => {
       res.status(200).json({

@@ -14,20 +14,16 @@ export default function MyProperties() {
   const token = localStorage.getItem('token');
   const { user } = useAuth();
 
-  console.log("Context user:", user);
-
-    useEffect(() => {
-        if(!token){
-          navigate('/');
-        }
-      }, [token, navigate]);
-
   useEffect(() => {
+    if(!token && !user){
+          return navigate('/');
+        }
+
     const fetchUserProperties = async () => {
       try {
         setIsLoading(true);
         const result = await fetch(
-          "http://localhost:8080/api/user-properties",
+          `http://localhost:8080/api/user-properties/${user._id}`,
           {
             method: "GET",
             headers: {
@@ -48,8 +44,7 @@ export default function MyProperties() {
       }
     };
     fetchUserProperties();
-
-  }, [token]);
+  }, [token, user, navigate]);
   return (
     <section className="pt-36">
       <ContentWrapper>
