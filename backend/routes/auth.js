@@ -123,7 +123,7 @@ router.post(
 
 router.get('/agents', userRoutes.getAgents);
 
-router.get('/get-user/:id', isAuth, userRoutes.getUser);
+router.get('/get-user/:id', userRoutes.getUser);
 
 router.delete("/delete-user", userRoutes.deleteUser);
 

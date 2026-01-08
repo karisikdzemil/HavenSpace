@@ -145,7 +145,7 @@ exports.getAgents = (req, res, next) => {
 }
 
 exports.getUser = (req, res, next) => {
-  const userId = req.params.userId; 
+  const userId = req.params.id; 
 
   User.findById(userId).then(user => {
     if(!user){

@@ -9,6 +9,7 @@ import EditProperty from "./pages/EditPropety";
 import Register from "./pages/Register";
 import MyProperties from "./pages/MyProperties";
 import Agents from "./pages/Agents";
+import AgentProfile from "./pages/AgentProfile";
 
 const router = createBrowserRouter([
   {
@@ -19,11 +20,12 @@ const router = createBrowserRouter([
       { path: "properties", element: <Properties /> },
       {path: 'new-listings', element: <AddProperty />},
       {path: "agents", element: <Agents />},
+      {path: "agents/:id", element: <AgentProfile />},
       {path: 'my-properties', element: <MyProperties />},
       { path: "contact", element: <Contact /> },
       {path: "propertie/:id", element: <Propertie />},
       {path: "edit-property/:id", element: <EditProperty />},
-      {path: "register", element: <Register />}
+      {path: "register", element: <Register />},
     ],
   },
 ]);
