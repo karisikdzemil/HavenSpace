@@ -37,7 +37,7 @@ const propertyValidation = [
   body("type")
     .notEmpty()
     .withMessage("Type is required!")
-    .isIn(["rent", "sale"])
+    .isIn(["house", "apartment"])
     .withMessage("Type must be either rent or sale"),
   body("bedNum")
     .notEmpty()

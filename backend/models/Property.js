@@ -42,7 +42,7 @@ const PropertySchema = new Schema(
     images: [String],
     type: {
       type: String,
-      enum: ["rent", "sale"],
+      enum: ["house", "apartment"],
       required: true,
     },
     bedNum: {
