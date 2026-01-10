@@ -5,9 +5,18 @@ import Loading from "../components/loading/Loading";
 export default function Properties() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [filters, setFilters] = useState({
+    type: "any",
+    minPrice: 0,
+    maxPrice: 0,
+    bedNum: "any",
+    bathNum: "any",
+    location: "",
+  });
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
+
+  const activeStyle = "bg-red-500";
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -32,6 +41,28 @@ export default function Properties() {
 
     fetchProperties();
   }, [page]);
+
+  const setFiltersValueHandler = (fieldName, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  const submitFiltersFormHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    const type = formData.body.types;
+    const minPrice = formData.body.minPrice;
+    const maxPrice = formData.body.maxPrice;
+    const location = formData.body.location;
+
+    setFilters((prev) => ({...prev, ['type']: type, ['minPrice']: minPrice, ['maxPrice']: maxPrice, ['location']: location}));
+
+    
+
+  }
+
   return (
     <section className="pt-36 flex p-5">
       <div>
@@ -68,14 +99,18 @@ export default function Properties() {
           </>
         )}
       </div>
+
+
+
+
+      {/* Filter baby */}
       <div className="w-lg bg-gray-400 p-5">
-        <form action="">
+        <form onSubmit={submitFiltersFormHandler}>
           <label htmlFor="propertyType">Property Type:</label>
           <select className="w-10/12 h-8 mt-2 bg-white" name="types">
+            <option value="fiat">Any</option>
             <option value="house">House</option>
             <option value="apartment">Apartment</option>
-            <option value="fiat">Fiat</option>
-            <option value="audi">Audi</option>
           </select>
           <div className="flex mt-2 flex-row gap-2">
             {/* <label htmlFor=""> Price Range</label> */}
@@ -97,27 +132,128 @@ export default function Properties() {
           <div className=" flex flex-col mt-2 gap-2">
             <label htmlFor="">Bed Rooms</label>
             <div className="flex gap-2">
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="any">Any</button>
-               <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="1">1</button>
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="2">2</button> 
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="3">3</button>
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="4">4</button>
+              <button
+                onClick={() => setFiltersValueHandler("bedNum", "any")}
+                type="button"
+                className={`${
+                  filters.bedNum === "any" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="any"
+              >
+                Any
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bedNum", "1")}
+                type="button"
+                className={`${
+                  filters.bedNum === "1" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="1"
+              >
+                1
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bedNum", "2")}
+                type="button"
+                className={`${
+                  filters.bedNum === "2" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="2"
+              >
+                2
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bedNum", "3")}
+                type="button"
+                className={`${
+                  filters.bedNum === "3" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="3"
+              >
+                3
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bedNum", "4")}
+                type="button"
+                className={`${
+                  filters.bedNum === "4" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="4"
+              >
+                4
+              </button>
             </div>
           </div>
-           <div className=" flex flex-col mt-2 gap-2">
+          <div className=" flex flex-col mt-2 gap-2">
             <label htmlFor="">Bath Rooms</label>
             <div className="flex gap-2">
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="any">Any</button>
-               <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="1">1</button>
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="2">2</button> 
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="3">3</button>
-              <button className="w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white" value="4">4</button>
+              <button
+                onClick={() => setFiltersValueHandler("bathNum", "any")}
+                type="button"
+                className={`${
+                  filters.bathNum === "any" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="any"
+              >
+                Any
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bathNum", "1")}
+                type="button"
+                className={`${
+                  filters.bathNum === "1" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="1"
+              >
+                1
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bathNum", "2")}
+                type="button"
+                className={`${
+                  filters.bathNum === "2" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="2"
+              >
+                2
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bathNum", "3")}
+                type="button"
+                className={`${
+                  filters.bathNum === "3" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="3"
+              >
+                3
+              </button>
+              <button
+                onClick={() => setFiltersValueHandler("bathNum", "4")}
+                type="button"
+                className={`${
+                  filters.bathNum === "4" && activeStyle
+                } w-10 h-10 rounded-sm bg-gray-700 cursor-pointer text-white`}
+                value="4"
+              >
+                4
+              </button>
             </div>
           </div>
 
-          <input className="w-full h-8 pl-2 bg-white mt-4" type="text" placeholder="Location" name="location" id="" />
+          <input
+            className="w-full h-8 pl-2 bg-white mt-4"
+            type="text"
+            placeholder="Location"
+            name="location"
+            id=""
+          />
 
-          <button type="submit" className="w-full h-12 font-bold cursor-pointer mt-8 text-md rounded-sm bg-amber-300">Apply Filters</button>
+          <button
+            type="submit"
+            className="w-full h-12 font-bold cursor-pointer mt-8 text-md rounded-sm bg-amber-300"
+          >
+            Apply Filters
+          </button>
         </form>
       </div>
     </section>
