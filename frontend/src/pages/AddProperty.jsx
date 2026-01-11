@@ -163,7 +163,7 @@ export default function AddProperty() {
             {errors.description && (
               <p className="text-red-500">{errors.description}</p>
             )}
-              <input className="p-2 w-2/3 rounded-md border border-gray-500 " type="file"  name="images" id="" />
+              <input className="p-2 w-2/3 rounded-md border border-gray-500 " type="file" multiple  name="images" id="" />
               <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Type" type="text"  name="type" id="" />
               <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Bed Number" type="number"  name="bedNum" id="" />
               <input className="p-2 w-2/3 rounded-md border border-gray-500 " placeholder="Bath Number" type="number"  name="bathNum" id="" />
