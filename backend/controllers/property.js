@@ -10,14 +10,7 @@ exports.getProperties = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     // 2. FILTERI IZ QUERY PARAMS
-    const {
-      type,
-      city,
-      minPrice,
-      maxPrice,
-      bedNum,
-      bathNum
-    } = req.query;
+    const { type, city, minPrice, maxPrice, bedNum, bathNum } = req.query;
 
     // 3. OSNOVNI FILTER (uvek aktivni oglasi)
     const filter = {
@@ -25,22 +18,24 @@ exports.getProperties = async (req, res, next) => {
     };
 
     // 4. DINAMIČKI DODAJ FILTERE
-    if (type && type !== 'any') {
+    if (type && type !== "any") {
       filter.type = type;
     }
 
-    if (city) {
-      filter.city = city;
+    if (city && city.trim() !== "") {
+      filter["location.city"] = {
+        $regex: city,
+        $options: "i",
+      };
     }
 
-    if (bedNum && bedNum !== 'any') {
+    if (bedNum && bedNum !== "any") {
       filter.bedNum = Number(bedNum);
     }
 
-     if (bathNum && bathNum !== 'any') {
+    if (bathNum && bathNum !== "any") {
       filter.bathNum = Number(bathNum);
     }
-
 
     if (minPrice || maxPrice) {
       filter.price = {};
@@ -52,7 +47,7 @@ exports.getProperties = async (req, res, next) => {
     const total = await Property.countDocuments(filter);
 
     // 6. DOHVAT PODATAKA
-    console.log(filter)
+    console.log(filter);
     const properties = await Property.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -68,7 +63,6 @@ exports.getProperties = async (req, res, next) => {
         limit,
       },
     });
-
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -76,7 +70,6 @@ exports.getProperties = async (req, res, next) => {
     next(err);
   }
 };
-
 
 exports.getProperty = (req, res, next) => {
   const propertyId = req.params.id;

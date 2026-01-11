@@ -8,7 +8,7 @@ const INITIAL_FILTERS = {
   maxPrice: "",
   bedNum: "any",
   bathNum: "any",
-  location: "",
+  city: "",
 };
 
 export default function Properties() {
@@ -162,9 +162,9 @@ export default function Properties() {
 
           <input
             type="text"
-            placeholder="Location"
-            value={draftFilters.location}
-            onChange={(e) => setDraftValue("location", e.target.value)}
+            placeholder="City"
+            value={draftFilters.city}
+            onChange={(e) => setDraftValue("city", e.target.value)}
             className="w-full h-8 pl-2 bg-white mt-4"
           />
 
