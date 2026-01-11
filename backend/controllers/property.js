@@ -15,7 +15,8 @@ exports.getProperties = async (req, res, next) => {
       city,
       minPrice,
       maxPrice,
-      bedrooms,
+      bedNum,
+      bathNum
     } = req.query;
 
     // 3. OSNOVNI FILTER (uvek aktivni oglasi)
@@ -24,7 +25,7 @@ exports.getProperties = async (req, res, next) => {
     };
 
     // 4. DINAMIČKI DODAJ FILTERE
-    if (type) {
+    if (type && type !== 'any') {
       filter.type = type;
     }
 
@@ -32,9 +33,14 @@ exports.getProperties = async (req, res, next) => {
       filter.city = city;
     }
 
-    if (bedrooms) {
-      filter.bedrooms = Number(bedrooms);
+    if (bedNum && bedNum !== 'any') {
+      filter.bedNum = Number(bedNum);
     }
+
+     if (bathNum && bathNum !== 'any') {
+      filter.bathNum = Number(bathNum);
+    }
+
 
     if (minPrice || maxPrice) {
       filter.price = {};
@@ -46,6 +52,7 @@ exports.getProperties = async (req, res, next) => {
     const total = await Property.countDocuments(filter);
 
     // 6. DOHVAT PODATAKA
+    console.log(filter)
     const properties = await Property.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)

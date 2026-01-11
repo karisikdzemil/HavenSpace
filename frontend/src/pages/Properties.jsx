@@ -37,6 +37,8 @@ export default function Properties() {
           ...appliedFilters,
         });
 
+        console.log(appliedFilters)
+
         const res = await fetch(
           `http://localhost:8080/api/properties?${params.toString()}`
         );
