@@ -95,7 +95,7 @@ export default function Propertie() {
                   {property.status}
                 </p>
               )}
-              {property && user && property.owner === user._id && (
+              {property && user && property.owner._id === user._id && (
                 <button
                   onClick={() => changeStatusHandler("sold")}
                   className="cursor-pointer font-light p-2 text-sm rounded-md bg-[#1E1E1E] text-white"
@@ -160,7 +160,7 @@ export default function Propertie() {
               )}
             </div>
           </div>
-          {property && user && property.owner === user._id && (
+          {property && user && property.owner._id === user._id && (
             <>
               <button
                 onClick={deletePropertyHandler}

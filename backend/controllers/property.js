@@ -1,23 +1,31 @@
 const Property = require("../models/Property");
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
+const fs = require('fs');
+const path = require('path');
+
+const deleteFile = (filePath) => {
+  const fullPath = path.join(__dirname, "..", filePath);
+
+  fs.unlink(fullPath, (err) => {
+    if (err) {
+      console.log("Failed to delete file:", err);
+    }
+  });
+};
 
 exports.getProperties = async (req, res, next) => {
   try {
-    // 1. PAGINACIJA
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.max(1, Number(req.query.limit) || 6);
     const skip = (page - 1) * limit;
 
-    // 2. FILTERI IZ QUERY PARAMS
     const { type, city, minPrice, maxPrice, bedNum, bathNum } = req.query;
 
-    // 3. OSNOVNI FILTER (uvek aktivni oglasi)
     const filter = {
       status: "active",
     };
 
-    // 4. DINAMIČKI DODAJ FILTERE
     if (type && type !== "any") {
       filter.type = type;
     }
@@ -43,17 +51,14 @@ exports.getProperties = async (req, res, next) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
-    // 5. UKUPAN BROJ REZULTATA (SA FILTERIMA!)
     const total = await Property.countDocuments(filter);
 
-    // 6. DOHVAT PODATAKA
     console.log(filter);
     const properties = await Property.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    // 7. RESPONSE
     res.status(200).json({
       properties,
       pagination: {
@@ -301,16 +306,22 @@ exports.editProperty = (req, res, next) => {
 exports.deleteProperty = (req, res, next) => {
   const propertyId = req.params.id;
 
-  Property.findByIdAndDelete(propertyId)
+  Property.findById(propertyId)
     .then((property) => {
       if (!property) {
         const error = new Error("Property Not Found!");
-        error.statusCode = 500;
+        error.statusCode = 404;
         throw error;
       }
-      res
-        .status(200)
-        .json({ message: "Property deleted!", property: property });
+
+      property.images.forEach((imgPath) => {
+        deleteFile(imgPath);
+      });
+
+      return Property.findByIdAndDelete(propertyId);
+    })
+    .then(() => {
+      res.status(200).json({ message: "Property deleted!" });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -319,3 +330,4 @@ exports.deleteProperty = (req, res, next) => {
       next(err);
     });
 };
+
