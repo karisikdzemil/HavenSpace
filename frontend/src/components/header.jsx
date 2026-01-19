@@ -5,17 +5,21 @@ export default function Header() {
   const { isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="w-full h-[10vh] flex gap-22 px-12 bg-white absolute items-center">
-      <img className="h-[9vh]" src="/HavenSpaceLogo.png" alt="Logo" />
+    <header className="bg-transparent w-full p-5 transition-all flex">
+
+      <div className="w-full rounded-[50px] shadow-xl py-[5px] px-[25px] flex items-center justify-center gap-5">
+
+      {/* <img className="h-[9vh]" src="/HavenSpaceLogo.png" alt="Logo" /> */}
+      <h1 className="text-[22px] font-bold text-[#163535]">HavenSpace</h1>
       <nav className="w-full">
         <ul className="flex justify-between">
-          <div className="flex gap-12 h-[10vh] items-center">
+          <div className="flex gap-12 items-center">
             <li className="cursor-pointer">
               <NavLink
                 to={"/"}
                 className={({ isActive }) =>
                   isActive
-                    ? "pb-0.5 transition-all border-b-2 border-black"
+                    ? "px-[15px] py-[18px] transition-all border-b-2 border-black"
                     : "hover:pb-0 hover:transition-all hover:border-b-2 border-black"
                 }
               >
@@ -115,6 +119,7 @@ export default function Header() {
           </div>
         </ul>
       </nav>
+      </div>
     </header>
   );
 }
