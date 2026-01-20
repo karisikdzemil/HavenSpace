@@ -1,5 +1,13 @@
-    @import "tailwindcss";
+@import "tailwindcss";
 
- *{
-        font-family: "Montserrat", sans-serif;
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+:root {
+  --default-color: #323b3b;
+  --heading-color: #163535;
+  --accent-color: #2c7a7b;
+  --surface-color: #ffffff;
+  --contrast-color: #ffffff;
 }
