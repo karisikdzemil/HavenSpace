@@ -44,7 +44,7 @@ export default function Header() {
         <NavLink
           to="/register"
           className={({ isActive }) =>
-            `text-white text-[14px] py-2 px-5 rounded-[50px] transition-all ${
+            `text-white text-[14px] py-2 px-5 rounded-[50px] duration-300 transition-all ${
               isActive
                 ? "bg-[#3d9ea0]"
                 : "bg-[#2c7a7b] hover:bg-[#3d9ea0]"

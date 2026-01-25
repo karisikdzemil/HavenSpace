@@ -23,7 +23,7 @@ export default function FooterContact(){
                 name="contact"
                 id=""
               />
-              <button className="w-2/12 bg-[#2c7a7b] text-xl py-2 transition-all cursor-pointer text-center hover:bg-[#3d9ea0] rounded-r-[100px] text-white">
+              <button className="w-2/12 bg-[#2c7a7b] text-xl py-2 transition-all duration-300 cursor-pointer text-center hover:bg-[#3d9ea0] rounded-r-[100px] text-white">
                 {">"}
               </button>
             </form>
