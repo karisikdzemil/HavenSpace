@@ -5,11 +5,11 @@ import {
   faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 import FooterContact from "./components/FooterContact";
-import FooterLinks from "./components/FooterLinks";
 import FooterIconWrapper from "./components/FooterIconWrapper";
-import { footerPageLinks } from "./data/data";
-import { footerLinks } from "./data/data";
-import { footerIconData } from "./data/data";
+import { footerPageLinks } from "../../data/data";
+import { footerLinks } from "../../data/data";
+import { footerIconData } from "../../data/data";
+import FooterLinks from "./components/FooterLinks";
 import FooterBottom from "./components/FooterBottom";
 
 export default function Footer() {

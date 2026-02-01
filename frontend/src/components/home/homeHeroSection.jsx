@@ -1,25 +1,19 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
 
 export default function HomeHeroSection() {
   return (
-    <section className="bg-[url(/heroBackground.png)] bg-cover bg-center">
+    <section className="bg-gray-50">
       <ContentWrapper>
-        <div className="flex justify-between items-end">
-          {/* wrapper */}
+        <div>
           <div>
-            <h1 className="text-7xl tracking-widset text-white">
-              Discover Your <span className="font-bold">Ideal</span>
-              <br /> Living Space <span className="font-bold">Here</span>
-            </h1>
+            <span className="text-white font-bold px-4 py-2 bg-[#2c7a7b]"><FontAwesomeIcon icon={faStar} color="white" /> Premium Properties</span>
           </div>
-          <div className="w-[200px] h-[350px] bg-amber-100">
-            {/* slider */}
-            <div className=""></div>
-            <div></div>
-            <div></div>
-          </div>
+          <div></div>
         </div>
-      </ContentWrapper>,
+      </ContentWrapper>
+      ,
     </section>
   );
 }
