@@ -7,8 +7,8 @@ export default function HomeHeroSection() {
   return (
     <section className="bg-gray-100">
       <ContentWrapper>
-        <div className="flex flex-row justify-center gap-5">
-          <div className="w-1/2">
+        <div className="flex flex-row justify-center gap-5 pt-10">
+          <div className="w-1/2 flex flex-col">
             <span className="text-white font-bold rounded-[50px] text-sm px-4 py-3 bg-[#2c7a7b]">
               <FontAwesomeIcon
                 icon={faStar}
