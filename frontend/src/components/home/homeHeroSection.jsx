@@ -57,10 +57,10 @@ export default function HomeHeroSection() {
               <button className="w-full px-2 py-4 font-bold leading-tight transition-all hover:bg-[#489fa1] cursor-pointer rounded-md bg-[#2c7a7b] text-white"><FontAwesomeIcon className="text-sm text-white" icon={faMagnifyingGlass} /> Search Properties</button>
             </form>
           </div>
-          <div className="w-1/2 p-4 pt-14 bg-red-400">
-            <div className="w-full rounded-md h-10/12 bg-cover bg-center bg-[url('/heroSectionSoldHouse.png')]">
-            <div className="rounded-md w-32 h-24 absoulute bg-cover bg-center bg-[url('/heroSectionSoldHouseInterior.png')]"></div>
-                
+          <div className="w-1/2 p-4 pt-14">
+            <div className="w-full rounded-md h-10/12 bg-cover relative bg-center bg-[url('/heroSectionSoldHouse.png')]">
+                  <img className="w-48 h-48 rounded-md absolute border-5 shadow-2xl border-white -left-8 -top-8" src="/heroSectionSoldHouoseInterior.png" alt="House interior" />
+
             </div>  
           </div>
         </div>
