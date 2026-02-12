@@ -9,7 +9,7 @@ export default function HomeHeroSection() {
       <ContentWrapper>
         <div className="flex flex-row justify-center gap-5 pt-10">
           <div className="w-1/2 flex flex-col">
-            <span className="text-white font-bold rounded-[50px] text-sm px-4 py-3 bg-[#2c7a7b]">
+            <span className="text-white font-bold rounded-[50px] w-50 text-sm px-4 py-3 bg-[#2c7a7b]">
               <FontAwesomeIcon
                 icon={faStar}
                 className="text-sm"
@@ -19,15 +19,15 @@ export default function HomeHeroSection() {
             </span>
             <Heading text={"Discover Your Perfect Home in the Heart of the City"}/>
             <p className="text-[#323b3b]/80 text-[1.1rem] leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Browse thousands of verified listings from trusted agents.</p>
-            <form action="" className="bg-white">
-              <input className="w-full px-2 py-4 rounded-md border border-[#323b3b] text-[14px] h-14 text-[#323b3b]" placeholder="Location" type="" name="location" id="" />
+            <form action="" className="bg-white p-4 rounded-md shadow-2xl mt-4 py-4 flex flex-col gap-2">
+              <input className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" placeholder="Location" type="" name="location" id="" />
               <div className="flex gap-2 md:flex-row flex-col">
-                <select className="w-full px-2 py-4 rounded-md border border-[#323b3b] text-[14px] h-14 text-[#323b3b]" name="" id="">
+                <select className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" name="" id="">
                   <option value="">Select type</option>
                   <option value="house">House</option>
                   <option value="apartment">Apartment</option>
                 </select>
-                <select className="w-full px-2 py-4 rounded-md border border-[#323b3b] text-[14px] h-14 text-[#323b3b]" name="" id="">
+                <select className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" name="" id="">
                   <option value="">Price Range</option>
                   <option value="under 200k">Under $200K</option>
                   <option value="200-500">$200K - $500K</option>
@@ -37,7 +37,7 @@ export default function HomeHeroSection() {
                 </select>
               </div>
                <div className="flex md:flex-row flex-col gap-2">
-                <select className="w-full px-2 py-4 rounded-md border border-[#323b3b] text-[14px] h-14 text-[#323b3b]" name="" id="">
+                <select className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" name="" id="">
                   <option value="">Bedrooms</option>
                   <option value="1">1 Bedroom</option>
                   <option value="2">2 Bedrooms</option>
@@ -45,7 +45,7 @@ export default function HomeHeroSection() {
                   <option value="4">4 Bedrooms</option>
                   <option value="5">5+ Bedrooms</option>
                 </select>
-                <select className="w-full px-2 py-4 rounded-md border border-[#323b3b] text-[14px] h-14 text-[#323b3b]" name="" id="">
+                <select className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" name="" id="">
                   <option value="">Bathrooms</option>
                   <option value="1">1 Bathroom</option>
                   <option value="2">2 Bathrooms</option>
@@ -54,7 +54,7 @@ export default function HomeHeroSection() {
                   <option value="5">5+ Bathrooms</option>
                 </select>
               </div>
-              <button className="w-full px-2 py-4 font-bold leading-tight rounded-md bg-[#2c7a7b] text-white"><FontAwesomeIcon className="text-sm text-white" icon={faMagnifyingGlass} /> Search Properties</button>
+              <button className="w-full px-2 py-4 font-bold leading-tight transition-all hover:bg-[#489fa1] cursor-pointer rounded-md bg-[#2c7a7b] text-white"><FontAwesomeIcon className="text-sm text-white" icon={faMagnifyingGlass} /> Search Properties</button>
             </form>
           </div>
           <div className="w-1/2 p-4 pt-14 bg-red-400">
