@@ -19,7 +19,7 @@ export default function HomeHeroSection() {
             </span>
             <Heading text={"Discover Your Perfect Home in the Heart of the City"}/>
             <p className="text-[#323b3b]/80 text-[1.1rem] leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Browse thousands of verified listings from trusted agents.</p>
-            <form action="" className="bg-white p-4 rounded-md shadow-2xl mt-4 py-4 flex flex-col gap-2">
+            <form action="" className="bg-white p-8 rounded-2xl shadow-2xl mt-4 flex flex-col gap-2">
               <input className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" placeholder="Location" type="" name="location" id="" />
               <div className="flex gap-2 md:flex-row flex-col">
                 <select className="w-full px-2 py-4 rounded-md border border-gray-300 text-[14px] h-14 text-[#323b3b]" name="" id="">
@@ -60,7 +60,11 @@ export default function HomeHeroSection() {
           <div className="w-1/2 p-4 pt-14">
             <div className="w-full rounded-md h-10/12 bg-cover relative bg-center bg-[url('/heroSectionSoldHouse.png')]">
                   <img className="w-48 h-48 rounded-md absolute border-5 shadow-2xl border-white -left-8 -top-8" src="/heroSectionSoldHouoseInterior.png" alt="House interior" />
-
+                  <div className="p-4 rounded-md flex flex-col gap-3 bg-white absolute right-3 bottom-2">
+                    <p className="text-[#2c7a7b] font-bold text-xl">$850,000</p>
+                    <p className="text-gray-500 uppercase text-xs">Featured</p>
+                  </div>
+                  <div></div>
             </div>  
           </div>
         </div>
