@@ -3,7 +3,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function FooterLinks({title, links}) {
   return (
-    <div className="flex min-w-46 flex-col gap-6">
+    <div className="flex w-46 max-w-full flex-col gap-6">
       <h3 className="text-[#163535]/75 text-2xl font-semibold">{title}</h3>
       <ul className="flex flex-col">
         {links.map((el) => (

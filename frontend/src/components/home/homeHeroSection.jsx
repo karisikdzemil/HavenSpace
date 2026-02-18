@@ -7,8 +7,8 @@ export default function HomeHeroSection() {
   return (
     <section className="bg-gray-100">
       <ContentWrapper>
-        <div className="flex flex-row justify-center gap-5 pt-10">
-          <div className="w-1/2 flex flex-col">
+        <div className="flex md:flex-row flex-col justify-center gap-5 pt-10">
+          <div className="md:w-1/2 w-full flex flex-col">
             <span className="text-white font-bold rounded-[50px] w-50 text-sm px-4 py-3 bg-[#2c7a7b]">
               <FontAwesomeIcon
                 icon={faStar}
@@ -57,9 +57,9 @@ export default function HomeHeroSection() {
               <button className="w-full px-2 py-4 font-bold leading-tight transition-all hover:bg-[#489fa1] cursor-pointer rounded-md bg-[#2c7a7b] text-white"><FontAwesomeIcon className="text-sm text-white" icon={faMagnifyingGlass} /> Search Properties</button>
             </form>
           </div>
-          <div className="w-1/2 p-4 pt-14">
-            <div className="w-full rounded-md h-10/12 bg-cover relative bg-center bg-[url('/heroSectionSoldHouse.png')]">
-                  <img className="w-48 h-48 rounded-md absolute border-5 shadow-2xl border-white -left-8 -top-8" src="/heroSectionSoldHouoseInterior.png" alt="House interior" />
+          <div className="md:w-1/2 w-full p-4 pt-14">
+            <div className="w-full rounded-md h-10/12 min-h-112 bg-cover relative bg-center bg-[url('/heroSectionSoldHouse.png')]">
+                  <img className="w-48 h-48 rounded-md absolute border-5 shadow-2xl border-white md:-left-8 -left-4 md:-top-8 -top-4" src="/heroSectionSoldHouoseInterior.png" alt="House interior" />
                   <div className="p-4 rounded-md flex flex-col gap-3 bg-white absolute right-3 bottom-2">
                     <p className="text-[#2c7a7b] font-bold text-xl">$850,000</p>
                     <p className="text-gray-500 uppercase text-xs">Featured</p>

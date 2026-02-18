@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import HomeDiscover from "../components/home/homeDiscover";
+// import HomeDiscover from "../components/home/homeDiscover"; da se izbrise 
 import HomeHeroSection from "../components/home/homeHeroSection";
-import AskedQeustions from "../components/home/questionsSections";
+// import AskedQeustions from "../components/home/questionsSections"; da se izbrise
 import PropertyListingsSection from "../components/propertyListingsSection";
 import Loading from "../components/loading/Loading";
 
@@ -33,13 +33,11 @@ export default function Home() {
   return (
     <>
       <HomeHeroSection />
-      <HomeDiscover />
       {isLoading ? <Loading loadingText={'Properties'}/> : <PropertyListingsSection
         title="Our Property Listings"
         text="Discover your dream property from our curated selection of hosues, apartments, and villas. Whether you're looking to buy or rent, we offer a variety of options to suit your lifestyle and budget."
         properties={properties}
       />}
-      <AskedQeustions />
     </>
   );
 }

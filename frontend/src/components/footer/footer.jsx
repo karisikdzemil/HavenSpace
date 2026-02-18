@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="text-[#323b3b] bg-white text-[14px] border-t border-[#2c7a7b]/25">
       <div className="max-w-[1440px] flex flex-col justify-between m-auto pt-4 lg:pt-20">
-        <div className="flex gap-8 lg:flex-row px-10 md:px-30 md:pt-20 pt-0 lg:pt-0 lg:px-10 pb-10 flex-col">
+        <div className="flex gap-8 lg:flex-row px-4 md:px-30 md:pt-20 pt-0 lg:pt-0 lg:px-10 pb-10 flex-col">
           <FooterContact />
 
           <div className="flex lg:w-1/3 w-full justify-evenly lg:items-center md:justify-start gap-5 lg:justify-evenly">

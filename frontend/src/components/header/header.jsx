@@ -8,7 +8,7 @@ export default function Header() {
   const { isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="w-full p-5 bg-transparent absolute">
+    <header className="w-full py-5 md:px-10 px-4 bg-transparent absolute">
       <div className="w-full bg-white rounded-[50px] shadow-xl py-2.5  px-[25px] flex items-center justify-between">
         <h1 className="text-[22px] font-bold text-[#163535]">HavenSpace</h1>
 
