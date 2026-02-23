@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PropertyListingsSections from "../components/propertyListingsSection";
+// import PropertyListingsSections from "../components/propertyListingsSection";
 import Loading from "../components/loading/Loading";
 
 const INITIAL_FILTERS = {
@@ -83,11 +83,11 @@ export default function Properties() {
           <Loading loadingText="Loading properties" />
         ) : (
           <>
-            <PropertyListingsSections
+            {/* <PropertyListingsSections
               title="Explore Our Property Listings"
               text="Discover our curated selection of properties that cater to various lifestyles and budgets."
               properties={properties}
-            />
+            /> */}
 
             <div className="flex gap-5 justify-center items-center pb-5">
               <button

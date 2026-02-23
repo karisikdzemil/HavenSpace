@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import ContentWrapper from "../components/contentWrapper";
 import { useState } from "react";
-import PropertyListingsSections from "../components/propertyListingsSection";
-import Loading from "../components/loading/Loading";
+// import PropertyListingsSections from "../components/propertyListingsSection";
+// import Loading from "../components/loading/Loading";
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
 import UserInfo from "../components/userInfo";
@@ -49,7 +49,7 @@ export default function MyProperties() {
     <section className="pt-36">
       <ContentWrapper>
         <UserInfo agent={user}/>
-        {isLoading ? <Loading loadingText={'Loading your properties'}/> : <PropertyListingsSections properties={properties} />}
+        {/* {isLoading ? <Loading loadingText={'Loading your properties'}/> : <PropertyListingsSections properties={properties} />} */}
       </ContentWrapper>
     </section>
   );

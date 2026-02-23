@@ -7,7 +7,7 @@ export default function FooterLinks({title, links}) {
       <h3 className="text-[#163535]/75 text-2xl font-semibold">{title}</h3>
       <ul className="flex flex-col">
         {links.map((el) => (
-        <li>
+        <li key={el.text}>
           <a
             className="text-[#323b3b]/75 py-2 decoration-0 flex items-center text-[14px] duration-300 hover:ml-3 transition-all"
             href={`${el.link}`}

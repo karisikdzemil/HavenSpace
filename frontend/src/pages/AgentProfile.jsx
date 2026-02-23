@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import ContentWrapper from "../components/contentWrapper";
 import { useEffect, useState } from "react";
-import PropertyListingsSections from "../components/propertyListingsSection";
+// import PropertyListingsSections from "../components/propertyListingsSection";
 
 export default function AgentProfile() {
   const [agent, setAgent] = useState(null);
@@ -53,7 +53,6 @@ export default function AgentProfile() {
       <ContentWrapper>
         <div className="flex gap-10 mt-22 items-start">
 
-          {/* Avatar */}
           <div className="w-48 shrink-0">
             <img
               src={`http://localhost:8080/assets/${agent.avatar}`}
@@ -62,7 +61,6 @@ export default function AgentProfile() {
             />
           </div>
 
-          {/* Info */}
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-1">
               {agent.name} {agent.surname}
@@ -76,7 +74,6 @@ export default function AgentProfile() {
               {agent.description}
             </p>
 
-            {/* Stats */}
             <div className="flex gap-8 mb-6">
               <div>
                 <p className="text-xl font-semibold">
@@ -100,7 +97,6 @@ export default function AgentProfile() {
               </div>
             </div>
 
-            {/* Contact */}
             <div className="space-y-2">
               <p>
                 <strong>Email:</strong> {agent.email}
@@ -113,7 +109,6 @@ export default function AgentProfile() {
               </p>
             </div>
 
-            {/* Socials */}
             <div className="flex gap-4 mt-6">
               {agent.linkedin && (
                 <a
@@ -149,7 +144,7 @@ export default function AgentProfile() {
           </div>
         </div>
             
-        <PropertyListingsSections properties={properties}/>    
+        {/* <PropertyListingsSections properties={properties}/>     */}
       </ContentWrapper>
     </section>
   );
