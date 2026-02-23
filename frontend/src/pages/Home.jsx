@@ -1,4 +1,5 @@
 // import { useEffect, useState } from "react";
+import AboutUs from "../components/home/homeAbout/AboutUs";
 import HomeHeroSection from "../components/home/homeHeroSection";
 import Loading from "../components/loading/Loading";
 
@@ -30,7 +31,7 @@ export default function Home() {
   return (
     <>
       <HomeHeroSection />
-
+      <AboutUs />
     </>
   );
 }
