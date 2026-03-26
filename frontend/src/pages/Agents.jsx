@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faPhone, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { 
+  faEnvelope, faPhone, faLocationDot, faGlobe, faCertificate, 
+  faArrowRight, faBriefcase, faCalendarCheck, faUserCheck, faAward
+} from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faFacebookF, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
 import Loading from "../components/loading/Loading";
@@ -22,130 +25,147 @@ export default function Agents() {
     fetchAgents();
   }, []);
 
-  if (loading) return <div className="pt-40"><Loading loadingText="Loading our team..." /></div>;
+  if (loading) return <div className="pt-40"><Loading loadingText="Refining the team..." /></div>;
   if (agents.length === 0) return null;
 
-  const topAgent = agents[0];
-  const expertTeam = agents.slice(1);
+  const topAgent = agents.find(a => a.isTopAgent) || agents[0];
+  const expertTeam = agents.filter(a => a._id !== topAgent._id);
 
   return (
-    <main className="bg-white min-h-screen pt-32 pb-24 font-sans">
+    <main className="bg-[#FBFCFC] min-h-screen pt-32 pb-24 font-sans text-slate-800">
       <ContentWrapper>
-        {/* FEATURED AGENT SECTION - EMILY STYLE */}
-        <section className="flex flex-col lg:flex-row gap-16 mb-32 items-center">
-          <div className="lg:w-1/2 relative">
-            <div className="rounded-[2rem] overflow-hidden shadow-2xl">
+        
+        {/* PREMIUM COMPACT HERO - CLEAN & INFO RICH */}
+        <section className="relative mb-24 overflow-hidden rounded-[2.5rem] bg-white border border-gray-100 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.05)] h-[420px] flex items-center">
+          <div className="absolute right-0 top-0 w-1/3 h-full bg-[#f0f7f7] skew-x-[-10deg] translate-x-16" />
+          
+          <div className="relative z-10 px-12 lg:px-20 flex items-center gap-16 w-full">
+            <div className="hidden lg:block w-72 h-72 rounded-3xl overflow-hidden shadow-2xl ring-8 ring-[#f0f7f7]">
               <img 
                 src={`http://localhost:8080/assets/${topAgent.avatar}`} 
-                className="w-full h-[600px] object-cover"
-                alt="Featured Agent"
+                className="w-full h-full object-cover"
+                alt={topAgent.name}
               />
             </div>
-            <div className="absolute top-6 left-6 bg-[#327878] text-white text-[10px] font-bold px-4 py-1.5 rounded-md uppercase tracking-wider">
-              Top Seller
-            </div>
-          </div>
-
-          <div className="lg:w-1/2 space-y-8">
-            <div>
-              <h1 className="text-5xl font-bold text-slate-800 mb-2">{topAgent.name} {topAgent.surname}</h1>
-              <p className="text-[#327878] text-lg font-semibold">{topAgent.position || "Senior Real Estate Advisor"}</p>
-            </div>
-
-            <div className="flex gap-3">
-              {["Luxury Homes", "Investment Properties", "First-Time Buyers"].map(tag => (
-                <span key={tag} className="bg-[#f0f7f7] text-[#327878] text-[11px] font-bold px-4 py-2 rounded-full border border-[#e0eeee]">
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <p className="text-gray-500 text-lg leading-relaxed italic border-l-4 border-[#327878]/20 pl-6">
-              "{topAgent.description}"
-            </p>
-
-            <div className="flex gap-12 py-4 border-y border-gray-100">
-              <div>
-                <p className="text-3xl font-bold text-slate-800">{topAgent.soldProperties}+</p>
-                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Properties Sold</p>
+            
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 bg-[#327878] text-white text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-6">
+                <FontAwesomeIcon icon={faAward} /> Lead Specialist
               </div>
-              <div>
-                <p className="text-3xl font-bold text-slate-800">${(topAgent.totalSales / 1000000).toFixed(0)}M</p>
-                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Total Sales</p>
+              <h1 className="text-5xl font-bold text-slate-900 mb-2 tracking-tight">
+                {topAgent.name} <span className="text-[#327878]">{topAgent.surname}</span>
+              </h1>
+              <p className="text-[#327878] text-sm font-bold uppercase tracking-widest mb-8">{topAgent.position}</p>
+              
+              <div className="grid grid-cols-4 gap-8 mb-8 border-l-2 border-gray-100 pl-8">
+                <div>
+                  <p className="text-xl font-black text-slate-900">{topAgent.soldProperties}</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Deals Closed</p>
+                </div>
+                <div>
+                  <p className="text-xl font-black text-slate-900">${(topAgent.totalSales / 1000).toFixed(0)}k</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Volume</p>
+                </div>
+                <div>
+                  <p className="text-xl font-black text-slate-900">10+</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Years Exp.</p>
+                </div>
+                <div>
+                  <p className="text-xl font-black text-slate-900">99%</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Rating</p>
+                </div>
               </div>
-              <div>
-                <p className="text-3xl font-bold text-slate-800">5</p>
-                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-1">Years Experience</p>
+              
+              <div className="flex items-center gap-4">
+                <button className="bg-[#327878] text-white px-10 py-4 rounded-2xl font-bold text-sm hover:bg-[#286161] transition-all shadow-lg shadow-[#327878]/20">
+                  Contact Now
+                </button>
+                <div className="flex gap-3 ml-4">
+                   {topAgent.linkedin && (
+                     <a href={topAgent.linkedin} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#327878] transition-all">
+                       <FontAwesomeIcon icon={faLinkedinIn} size="sm" />
+                     </a>
+                   )}
+                   <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-400 hover:text-[#327878] cursor-pointer transition-all">
+                      <FontAwesomeIcon icon={faInstagram} size="sm" />
+                   </div>
+                </div>
               </div>
-            </div>
-
-            <div className="space-y-3 text-gray-600">
-              <div className="flex items-center gap-4 text-sm font-medium">
-                <FontAwesomeIcon icon={faPhone} className="text-[#327878] w-4" /> {topAgent.phone}
-              </div>
-              <div className="flex items-center gap-4 text-sm font-medium">
-                <FontAwesomeIcon icon={faEnvelope} className="text-[#327878] w-4" /> {topAgent.email}
-              </div>
-              <div className="flex items-center gap-4 text-sm font-medium">
-                <FontAwesomeIcon icon={faLocationDot} className="text-[#327878] w-4" /> Downtown Miami Office
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 pt-4">
-              <div className="flex gap-3 mr-6">
-                {[faLinkedinIn, faFacebookF, faInstagram, faTwitter].map((icon, i) => (
-                  <button key={i} className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-[#327878] hover:border-[#327878] transition-all">
-                    <FontAwesomeIcon icon={icon} size="sm" />
-                  </button>
-                ))}
-              </div>
-              <button className="bg-[#327878] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#286161] transition shadow-lg shadow-[#327878]/20">View My Listings</button>
-              <button className="border-2 border-[#327878] text-[#327878] px-8 py-4 rounded-xl font-bold hover:bg-[#f0f7f7] transition">Schedule Consultation</button>
             </div>
           </div>
         </section>
 
-        {/* EXPERT TEAM GRID */}
-        <section className="text-center">
-          <h2 className="text-3xl font-bold text-slate-800 mb-2">Our Expert Team</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-16 leading-relaxed">
-            Meet our dedicated professionals who are committed to helping you find your perfect home or sell your property at the best value.
-          </p>
+        <div className="flex items-center justify-between mb-16 px-4">
+          <div>
+            <h2 className="text-4xl font-black text-slate-900 tracking-tighter">The Collective</h2>
+            <p className="text-slate-400 text-sm font-medium mt-1 uppercase tracking-widest">Our Top Performing Agents</p>
+          </div>
+          <div className="flex gap-2">
+            <span className="w-12 h-1.5 rounded-full bg-[#327878]" />
+            <span className="w-4 h-1.5 rounded-full bg-gray-200" />
+          </div>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {expertTeam.map((agent) => (
-              <div key={agent._id} className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden group">
-                <div className="h-80 overflow-hidden relative">
-                  <img src={`http://localhost:8080/assets/${agent.avatar}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Agent" />
-                  <div className="absolute top-4 right-4 bg-green-500 text-white text-[9px] font-bold px-3 py-1 rounded uppercase tracking-tighter shadow-lg">Verified</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {expertTeam.map((agent) => (
+            <div key={agent._id} className="group bg-white rounded-[2rem] border border-gray-100 p-4 transition-all duration-500 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.08)] hover:border-[#327878]/30">
+              <div className="h-64 relative overflow-hidden rounded-[1.5rem] mb-6 shadow-inner bg-gray-50">
+                <img 
+                  src={`http://localhost:8080/assets/${agent.avatar}`} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  alt={agent.name} 
+                />
+                <div className="absolute top-3 left-3 bg-white/80 backdrop-blur-md px-3 py-1 rounded-lg text-[9px] font-black text-[#327878] uppercase">
+                   <FontAwesomeIcon icon={faUserCheck} className="mr-1" /> Verified
                 </div>
-                
-                <div className="p-8 space-y-5">
+              </div>
+              
+              <div className="px-2 pb-2">
+                <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h4 className="text-xl font-bold text-slate-800 mb-1">{agent.name} {agent.surname}</h4>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">{agent.position || "Property Consultant"}</p>
+                    <h4 className="text-lg font-bold text-slate-900 group-hover:text-[#327878] transition-colors">
+                      {agent.name}
+                    </h4>
+                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-none mt-1">
+                      {agent.position?.split(' ')[0] || "Advisor"}
+                    </p>
                   </div>
-                  
-                  <div className="flex flex-col gap-2 text-gray-400 text-xs font-semibold">
-                    <div className="flex items-center justify-center gap-2">
-                      <FontAwesomeIcon icon={faLocationDot} className="text-[10px]" /> Brooklyn Heights
-                    </div>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-slate-900">${(agent.totalSales / 1000).toFixed(0)}k</p>
+                    <p className="text-[9px] text-gray-400 font-bold uppercase leading-none">Sales</p>
                   </div>
+                </div>
 
-                  <div className="flex justify-center gap-2 pt-2">
-                    {["English", "Mandarin"].map(lang => (
-                      <span key={lang} className="text-[10px] bg-[#f9fbfb] border border-[#f0f3f3] text-gray-500 px-3 py-1 rounded font-bold uppercase">{lang}</span>
-                    ))}
+                <div className="space-y-3 py-4 border-t border-gray-50">
+                  <div className="flex items-center gap-3 text-[11px] text-slate-500 font-bold uppercase tracking-tight">
+                    <FontAwesomeIcon icon={faLocationDot} className="text-[#327878] w-3" /> {agent.location}
                   </div>
+                  <div className="flex items-center gap-3 text-[11px] text-slate-500 font-bold uppercase tracking-tight">
+                    <FontAwesomeIcon icon={faGlobe} className="text-[#327878] w-3" /> {agent.languages?.join(', ') || 'English'}
+                  </div>
+                  <div className="flex items-center gap-3 text-[11px] text-slate-500 font-bold uppercase tracking-tight">
+                    <FontAwesomeIcon icon={faBriefcase} className="text-[#327878] w-3" /> {agent.soldProperties} Sold
+                  </div>
+                </div>
 
-                  <button className="w-full mt-4 border border-[#327878] text-[#327878] py-3 rounded-xl font-bold text-sm hover:bg-[#327878] hover:text-white transition-all duration-300">
-                    View Listings
-                  </button>
+                <div className="flex gap-2 mt-4 pt-4 border-t border-gray-50">
+                  <a 
+                    href={`/agents/${agent._id}`}
+                    className="flex-1 bg-slate-900 text-white text-center py-3.5 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#327878] transition-all"
+                  >
+                    Details
+                  </a>
+                  <a 
+                    href={`tel:${agent.phone}`}
+                    className="w-12 h-12 flex items-center justify-center rounded-xl bg-[#f0f7f7] text-[#327878] hover:bg-[#327878] hover:text-white transition-all"
+                  >
+                    <FontAwesomeIcon icon={faPhone} size="sm" />
+                  </a>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
       </ContentWrapper>
     </main>
   );
