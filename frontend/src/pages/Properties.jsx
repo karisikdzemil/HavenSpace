@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 // import PropertyListingsSections from "../components/propertyListingsSection";
 import Loading from "../components/loading/Loading";
+import PropertyCard from "../components/propertyCard/PropertyCard";
 
 const INITIAL_FILTERS = {
   type: "any",
@@ -88,6 +89,10 @@ export default function Properties() {
               text="Discover our curated selection of properties that cater to various lifestyles and budgets."
               properties={properties}
             /> */}
+            {properties.map(el => (
+              <PropertyCard property={el}/>
+            )
+          )}
 
             <div className="flex gap-5 justify-center items-center pb-5">
               <button
