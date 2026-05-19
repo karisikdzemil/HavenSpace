@@ -2,6 +2,7 @@
 import AboutUs from "../components/home/homeAbout/AboutUs";
 import HomeHeroSection from "../components/home/homeHeroSection";
 import Properties from "../components/home/properties/Properties";
+import WhyUs from "../components/home/why-us/WhyUs";
 import Loading from "../components/loading/Loading";
 import { useEffect, useState } from "react";
 
@@ -35,6 +36,7 @@ export default function Home() {
       <HomeHeroSection />
       <AboutUs />
       <Properties properties={properties}/>
+      <WhyUs />
     </>
   );
 }

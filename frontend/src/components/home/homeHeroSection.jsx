@@ -4,7 +4,7 @@ import ContentWrapper from "../contentWrapper";
 
 export default function HomeHeroSection() {
   return (
-    <section className="bg-[#FBFCFC] pt-32 pb-20 overflow-hidden">
+    <section className="bg-[#FBFCFC] pt-24 pb-4 overflow-hidden">
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row items-center gap-16">
           
