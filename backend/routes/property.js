@@ -6,7 +6,8 @@ const { uploadPropertyImages } = require("../middleware/upload");
 
 const router = express.Router();
 
-const propertyValidation = [
+
+const sharedValidation = [
   body("title")
     .trim()
     .isLength({ min: 5 })
@@ -16,21 +17,6 @@ const propertyValidation = [
     .withMessage("The value must be a number!")
     .isInt({ gt: 0 })
     .withMessage("The value must be greater than 0!"),
-  body("city").trim().notEmpty().withMessage("City is required!"),
-  body("address")
-    .trim()
-    .notEmpty()
-    .withMessage("Address is required!"),
-  body("lat")
-    .notEmpty()
-    .withMessage("Latitude is required!")
-    .isFloat({ min: -90, max: 90 })
-    .withMessage("Latitude must be between -90 and 90"),
-  body("lng")
-    .notEmpty()
-    .withMessage("Longitude is required!")
-    .isFloat({ min: -180, max: 180 })
-    .withMessage("Longitude must be between -180 and 180"),
   body("description")
     .isLength({ min: 25 })
     .withMessage("The description must be longer than 25 letters!"),
@@ -38,7 +24,7 @@ const propertyValidation = [
     .notEmpty()
     .withMessage("Type is required!")
     .isIn(["house", "apartment"])
-    .withMessage("Type must be either rent or sale"),
+    .withMessage("Type must be either house or apartment"),
   body("bedNum")
     .notEmpty()
     .withMessage("Bedroom number is required!")
@@ -65,32 +51,66 @@ const propertyValidation = [
   body("interiorFeatures.*")
     .trim()
     .isLength({ min: 3, max: 30 })
-    .withMessage("Each interior feature must be between 2-3 words!"),
+    .withMessage("Each interior feature must be between 3-30 characters!"),
   body("exteriorFeatures"),
   body("exteriorFeatures.*")
     .trim()
     .isLength({ min: 3, max: 30 })
-    .withMessage("Each exterior feature must be between 2-3 words!"),
+    .withMessage("Each exterior feature must be between 3-30 characters!"),
+];
+
+// Add — šalje FormData, city/lat/lng su na root nivou
+const addValidation = [
+  ...sharedValidation,
+  body("city").trim().notEmpty().withMessage("City is required!"),
+  body("address").trim().notEmpty().withMessage("Address is required!"),
+  body("lat")
+    .notEmpty()
+    .withMessage("Latitude is required!")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Latitude must be between -90 and 90"),
+  body("lng")
+    .notEmpty()
+    .withMessage("Longitude is required!")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Longitude must be between -180 and 180"),
+];
+
+// Edit — šalje JSON, city/lat/lng su unutar location objekta
+const editValidation = [
+  ...sharedValidation,
+  body("location.city").trim().notEmpty().withMessage("City is required!"),
+  body("location.address").trim().notEmpty().withMessage("Address is required!"),
+  body("location.lat")
+    .notEmpty()
+    .withMessage("Latitude is required!")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Latitude must be between -90 and 90"),
+  body("location.lng")
+    .notEmpty()
+    .withMessage("Longitude is required!")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Longitude must be between -180 and 180"),
 ];
 
 router.get("/properties", propertyController.getProperties);
 
 router.get("/property/:id", propertyController.getProperty);
 
-router.get("/user-properties/:id" , propertyController.getUserProperties);
+router.get("/user-properties/:id", propertyController.getUserProperties);
 
 router.post(
   "/property",
   isAuth,
   uploadPropertyImages,
-  propertyValidation,
+  addValidation,
   propertyController.postProperty
 );
 
 router.put(
   "/edit-property/:id",
   isAuth,
-  propertyValidation,
+  editValidation,
   propertyController.editProperty
 );
 
