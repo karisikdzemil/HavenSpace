@@ -59,7 +59,6 @@ const sharedValidation = [
     .withMessage("Each exterior feature must be between 3-30 characters!"),
 ];
 
-// Add — šalje FormData, city/lat/lng su na root nivou
 const addValidation = [
   ...sharedValidation,
   body("city").trim().notEmpty().withMessage("City is required!"),
@@ -76,7 +75,6 @@ const addValidation = [
     .withMessage("Longitude must be between -180 and 180"),
 ];
 
-// Edit — šalje JSON, city/lat/lng su unutar location objekta
 const editValidation = [
   ...sharedValidation,
   body("location.city").trim().notEmpty().withMessage("City is required!"),

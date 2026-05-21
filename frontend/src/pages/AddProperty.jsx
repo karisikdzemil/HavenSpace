@@ -29,7 +29,7 @@ const FormSection = ({ title, icon, children }) => (
   </div>
 );
 
-const Input = ({ label, field, type = "text", placeholder, icon, error, step, value, onChange }) => (
+const Input = ({ label, type = "text", placeholder, icon, error, step, value, onChange }) => (
   <div className="space-y-2">
     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">{label}</label>
     <div className="relative group">
@@ -49,7 +49,7 @@ const Input = ({ label, field, type = "text", placeholder, icon, error, step, va
   </div>
 );
 
-const Select = ({ label, field, icon, options, placeholder, error, value, onChange }) => (
+const Select = ({ label, icon, options, placeholder, error, value, onChange }) => (
   <div className="space-y-2">
     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">{label}</label>
     <div className="relative group">
@@ -71,7 +71,7 @@ const Select = ({ label, field, icon, options, placeholder, error, value, onChan
   </div>
 );
 
-const TagInput = ({ label, type, inputValue, onInputChange, onKeyDown, onAdd, tags, onRemove, error }) => (
+const TagInput = ({ label, inputValue, onInputChange, onKeyDown, onAdd, tags, onRemove, error }) => (
   <div className="col-span-2 space-y-2">
     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">{label}</label>
     <div className={`w-full bg-[#FBFCFC] border ${error ? "border-red-300" : "border-gray-50"} rounded-2xl p-4 focus-within:border-[#327878] focus-within:bg-white transition-all`}>
@@ -99,7 +99,7 @@ const TagInput = ({ label, type, inputValue, onInputChange, onKeyDown, onAdd, ta
         <button
           type="button"
           onClick={onAdd}
-          className="w-7 h-7 rounded-full bg-[#327878] text-white flex items-center justify-center hover:bg-slate-900 transition-colors flex-shrink-0"
+          className="w-7 h-7 rounded-full bg-[#327878] text-white flex items-center justify-center hover:bg-slate-900 transition-colors shrink-0"
         >
           <FontAwesomeIcon icon={faPlus} size="xs" />
         </button>
@@ -109,7 +109,6 @@ const TagInput = ({ label, type, inputValue, onInputChange, onKeyDown, onAdd, ta
   </div>
 );
 
-// ─── Glavna komponenta ────────────────────────────────────────────────────────
 
 export default function AddProperty() {
   const [isLoading, setIsLoading] = useState(false);
@@ -127,7 +126,6 @@ export default function AddProperty() {
   const set = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-  // ─── Validation ─────────────────────────────────────────────────────────────
   const validate = () => {
     const errs = {};
     const { title, price, city, address, lat, lng, description, type, bedNum, bathNum, area, garage } = form;
@@ -189,7 +187,6 @@ export default function AddProperty() {
     return errs;
   };
 
-  // ─── Tag helpers ─────────────────────────────────────────────────────────────
   const addTag = (type) => {
     const value = type === "interior" ? form.interiorInput.trim() : form.exteriorInput.trim();
     if (!value) return;
@@ -209,7 +206,6 @@ export default function AddProperty() {
       setExteriorFeatures((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // ─── Submit ──────────────────────────────────────────────────────────────────
   const addPropertyHandler = async (e) => {
     e.preventDefault();
 
@@ -261,7 +257,7 @@ export default function AddProperty() {
       setIsLoading(false);
       navigate("/");
     } catch (err) {
-      setErrors({ general: "Server connection failed." });
+      setErrors({ general: "Server connection failed." + err });
       setIsLoading(false);
     }
   };
@@ -291,7 +287,6 @@ export default function AddProperty() {
 
           <form onSubmit={addPropertyHandler} className="space-y-8">
 
-            {/* BASIC INFO */}
             <FormSection title="Basic Information" icon={faInfoCircle}>
               <div className="col-span-2">
                 <Input label="Property Title" value={form.title} onChange={set("title")} icon={faBuilding} placeholder="Modern Villa with Sea View" error={errors.title} />
@@ -312,7 +307,6 @@ export default function AddProperty() {
               />
             </FormSection>
 
-            {/* DETAILS */}
             <FormSection title="Property Details" icon={faBed}>
               <Select
                 label="Property Type"
@@ -340,7 +334,6 @@ export default function AddProperty() {
               </div>
             </FormSection>
 
-            {/* LOCATION */}
             <FormSection title="Location Tracking" icon={faMapPin}>
               <Input label="City" value={form.city} onChange={set("city")} icon={faLocationDot} placeholder="Chicago, IL" error={errors.city} />
               <Input label="Street Address" value={form.address} onChange={set("address")} icon={faLocationDot} placeholder="1234 Maple Street" error={errors.address} />
@@ -348,7 +341,6 @@ export default function AddProperty() {
               <Input label="Longitude" value={form.lng} onChange={set("lng")} type="number" step="any" icon={faMapPin} placeholder="-87.6298" error={errors.lng} />
             </FormSection>
 
-            {/* DESCRIPTION & FEATURES */}
             <FormSection title="Amenities & Content" icon={faCheckDouble}>
               <div className="col-span-2 space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Description</label>
@@ -395,7 +387,7 @@ export default function AddProperty() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-[#327878] transition-all duration-500 shadow-2xl shadow-slate-200 flex items-center justify-center gap-4 group"
+              className="w-full bg-slate-900 text-white py-6 rounded-4xl font-black text-xs uppercase tracking-[0.3em] hover:bg-[#327878] transition-all duration-500 shadow-2xl shadow-slate-200 flex items-center justify-center gap-4 group"
             >
               {isLoading ? <Loading /> : (
                 <>

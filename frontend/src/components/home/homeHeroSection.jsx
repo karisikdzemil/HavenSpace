@@ -92,7 +92,7 @@ export default function HomeHeroSection() {
           </div>
 
           <div className="w-full lg:w-1/2 relative mt-20 lg:mt-0">
-            <div className="relative rounded-[3rem] overflow-hidden shadow-2xl z-10 aspect-[4/3]">
+            <div className="relative rounded-[3rem] overflow-hidden shadow-2xl z-10 aspect-4/3">
                <img 
                  src="/heroSectionSoldHouse.png" 
                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
@@ -105,7 +105,7 @@ export default function HomeHeroSection() {
                </div>
             </div>
 
-            <div className="absolute -top-16 -left-12 w-64 h-64 rounded-[2rem] border-[12px] border-white shadow-2xl overflow-hidden z-20 hidden md:block">
+            <div className="absolute -top-16 -left-12 w-64 h-64 rounded-4xl border-12 border-white shadow-2xl overflow-hidden z-20 hidden md:block">
                <img 
                  src="/home-interior.png" 
                  className="w-full h-full object-cover"
@@ -113,7 +113,7 @@ export default function HomeHeroSection() {
                />
             </div>
 
-            <div className="absolute -bottom-10 left-10 bg-white p-5 rounded-[2rem] shadow-2xl z-30 flex items-center gap-4 border border-gray-50 min-w-[280px]">
+            <div className="absolute -bottom-10 left-10 bg-white p-5 rounded-4xl shadow-2xl z-30 flex items-center gap-4 border border-gray-50 min-w-[280px]">
                <img 
                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
                  className="w-14 h-14 rounded-2xl object-cover"
@@ -129,7 +129,7 @@ export default function HomeHeroSection() {
                </div>
             </div>
             
-            <div className="absolute -z-0 -bottom-20 -right-20 w-80 h-80 bg-[#327878]/5 rounded-full blur-3xl"></div>
+            <div className="absolute z-0 -bottom-20 -right-20 w-80 h-80 bg-[#327878]/5 rounded-full blur-3xl"></div>
           </div>
 
         </div>

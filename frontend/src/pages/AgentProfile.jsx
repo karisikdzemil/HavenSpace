@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faEnvelope, faPhone, faLocationDot, faGlobe, faAward, 
-  faCheckDouble, faChartLine, faCalendarDays, faShareNodes 
+  faCheckDouble, faChartLine, faCalendarDays 
 } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faInstagram, faFacebookF } from "@fortawesome/free-brands-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
@@ -59,7 +59,7 @@ export default function AgentProfile() {
           <div className="w-full lg:w-[400px] lg:sticky lg:top-32">
             <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
               <div className="relative mb-8">
-                <div className="aspect-square rounded-[2rem] overflow-hidden shadow-2xl">
+                <div className="aspect-square rounded-4xl overflow-hidden shadow-2xl">
                   <img
                     src={`http://localhost:8080/assets/${agent.avatar}`}
                     alt={`${agent.name} ${agent.surname}`}

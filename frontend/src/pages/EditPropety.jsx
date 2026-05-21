@@ -16,8 +16,6 @@ const INITIAL_FORM = {
   description: "", interiorInput: "", exteriorInput: "",
 };
 
-// ─── Sub-komponente (van glavne komponente) ───────────────────────────────────
-
 const FormSection = ({ title, icon, children }) => (
   <div className="bg-white rounded-4xl p-8 border border-gray-100 shadow-sm space-y-6">
     <div className="flex items-center gap-3 pb-4 border-b border-gray-50">
@@ -100,7 +98,7 @@ const TagInput = ({ label, inputValue, onInputChange, onKeyDown, onAdd, tags, on
         <button
           type="button"
           onClick={onAdd}
-          className="w-7 h-7 rounded-full bg-[#327878] text-white flex items-center justify-center hover:bg-slate-900 transition-colors flex-shrink-0"
+          className="w-7 h-7 rounded-full bg-[#327878] text-white flex items-center justify-center hover:bg-slate-900 transition-colors shrink-0"
         >
           <FontAwesomeIcon icon={faPlus} size="xs" />
         </button>
@@ -109,8 +107,6 @@ const TagInput = ({ label, inputValue, onInputChange, onKeyDown, onAdd, tags, on
     {error && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{error}</p>}
   </div>
 );
-
-// ─── Glavna komponenta ────────────────────────────────────────────────────────
 
 export default function EditProperty() {
   const [form, setForm] = useState(INITIAL_FORM);
@@ -131,7 +127,6 @@ export default function EditProperty() {
   const set = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-  // ─── Učitaj postojeći property ─────────────────────────────────────────────
   useEffect(() => {
     const fetchProperty = async () => {
       setIsLoadingPropertyData(true);
@@ -175,7 +170,6 @@ export default function EditProperty() {
     fetchProperty();
   }, [id, token]);
 
-  // ─── Validacija ────────────────────────────────────────────────────────────
   const validate = () => {
     const errs = {};
     const { title, price, city, address, lat, lng, description, type, bedNum, bathNum, area, garage } = form;
@@ -237,7 +231,6 @@ export default function EditProperty() {
     return errs;
   };
 
-  // ─── Tag helpers ───────────────────────────────────────────────────────────
   const addTag = (type) => {
     const value = type === "interior" ? form.interiorInput.trim() : form.exteriorInput.trim();
     if (!value) return;
@@ -277,7 +270,6 @@ export default function EditProperty() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        // Controller čita req.body.location kao objekat, pa šaljemo ovako
         body: JSON.stringify({
           title: form.title,
           price: Number(form.price),
@@ -362,7 +354,6 @@ export default function EditProperty() {
                 />
               </FormSection>
 
-              {/* DETAILS */}
               <FormSection title="Property Details" icon={faBed}>
                 <Select
                   label="Property Type"
@@ -382,7 +373,6 @@ export default function EditProperty() {
                 <Input label="Garage Slots" value={form.garage} onChange={set("garage")} type="number" icon={faCar} placeholder="0" error={errors.garage} />
               </FormSection>
 
-              {/* LOCATION */}
               <FormSection title="Location Tracking" icon={faMapPin}>
                 <Input label="City" value={form.city} onChange={set("city")} icon={faLocationDot} placeholder="Chicago, IL" error={errors.city} />
                 <Input label="Street Address" value={form.address} onChange={set("address")} icon={faLocationDot} placeholder="1234 Maple Street" error={errors.address} />
@@ -390,7 +380,6 @@ export default function EditProperty() {
                 <Input label="Longitude" value={form.lng} onChange={set("lng")} type="number" step="any" icon={faMapPin} placeholder="-87.6298" error={errors.lng} />
               </FormSection>
 
-              {/* DESCRIPTION & FEATURES */}
               <FormSection title="Amenities & Content" icon={faCheckDouble}>
                 <div className="col-span-2 space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Description</label>
@@ -435,7 +424,7 @@ export default function EditProperty() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-slate-900 text-white py-6 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] hover:bg-[#327878] transition-all duration-500 shadow-2xl shadow-slate-200 flex items-center justify-center gap-4 group"
+                className="w-full bg-slate-900 text-white py-6 rounded-4xl font-black text-xs uppercase tracking-[0.3em] hover:bg-[#327878] transition-all duration-500 shadow-2xl shadow-slate-200 flex items-center justify-center gap-4 group"
               >
                 {isLoading ? <Loading /> : (
                   <>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-  faEnvelope, faPhone, faLocationDot, faGlobe, faCertificate, 
-  faArrowRight, faBriefcase, faCalendarCheck, faUserCheck, faAward
+  faPhone, faLocationDot, faGlobe, 
+  faBriefcase, faUserCheck, faAward
 } from "@fortawesome/free-solid-svg-icons";
-import { faLinkedinIn, faFacebookF, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedinIn, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
 import Loading from "../components/loading/Loading";
 
@@ -35,7 +35,6 @@ export default function Agents() {
     <main className="bg-[#FBFCFC] min-h-screen pt-32 pb-24 font-sans text-slate-800">
       <ContentWrapper>
         
-        {/* PREMIUM COMPACT HERO - CLEAN & INFO RICH */}
         <section className="relative mb-24 overflow-hidden rounded-[2.5rem] bg-white border border-gray-100 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.05)] h-[420px] flex items-center">
           <div className="absolute right-0 top-0 w-1/3 h-full bg-[#f0f7f7] skew-x-[-10deg] translate-x-16" />
           
@@ -108,8 +107,8 @@ export default function Agents() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {expertTeam.map((agent) => (
-            <div key={agent._id} className="group bg-white rounded-[2rem] border border-gray-100 p-4 transition-all duration-500 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.08)] hover:border-[#327878]/30">
-              <div className="h-64 relative overflow-hidden rounded-[1.5rem] mb-6 shadow-inner bg-gray-50">
+            <div key={agent._id} className="group bg-white rounded-4xl border border-gray-100 p-4 transition-all duration-500 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.08)] hover:border-[#327878]/30">
+              <div className="h-64 relative overflow-hidden rounded-3xl mb-6 shadow-inner bg-gray-50">
                 <img 
                   src={`http://localhost:8080/assets/${agent.avatar}`} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 

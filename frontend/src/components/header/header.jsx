@@ -7,7 +7,6 @@ import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
   const { isAuthenticated, logout } = useAuth();
-  // State koji prati da li je mobilni meni otvoren
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -23,7 +22,6 @@ export default function Header() {
       <div className="w-full bg-white rounded-[50px] shadow-xl py-2.5 px-[25px] flex items-center justify-between relative z-50">
         <h1 className="text-[22px] font-bold text-[#163535]">HavenSpace</h1>
 
-        {/* DESKTOP NAV */}
         <nav className="hidden xl:block">
           <ul className="flex items-center gap-10">
             <HeaderLinks path="/" text="Home" />
@@ -40,7 +38,6 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* DESKTOP AUTH BUTTON */}
         <div className="hidden items-center xl:flex">
           {isAuthenticated ? (
             <button
@@ -63,7 +60,6 @@ export default function Header() {
           )}
         </div>
 
-        {/* HAMBURGER / ZATVORI DUGME (Zamenjuje ikonicu dinamički) */}
         <button onClick={toggleMenu} className="block xl:hidden cursor-pointer focus:outline-none">
           <FontAwesomeIcon
             className="text-xl transition-all hover:text-[#3d9ea0] text-[#163535]"
@@ -72,9 +68,8 @@ export default function Header() {
         </button>
       </div>
 
-      {/* MOBILNI MENI PADAJUĆI PANEL */}
       <div
-        className={`xl:hidden absolute left-4 right-4 bg-white mt-3 rounded-[2rem] shadow-2xl p-6 transition-all duration-300 ease-in-out border border-gray-50 z-40 ${
+        className={`xl:hidden absolute left-4 right-4 bg-white mt-3 rounded-4xl shadow-2xl p-6 transition-all duration-300 ease-in-out border border-gray-50 z-40 ${
           isOpen 
             ? "opacity-100 translate-y-0 visible" 
             : "opacity-0 -translate-y-4 invisible pointer-events-none"
@@ -82,7 +77,6 @@ export default function Header() {
       >
         <nav className="mb-6">
           <ul className="flex flex-col gap-2">
-            {/* Dodat onClick={closeMenu} da se meni sam zatvori kada korisnik klikne na link */}
             <div onClick={closeMenu}><HeaderLinks path="/" text="Home" /></div>
             <div onClick={closeMenu}><HeaderLinks path="/properties" text="Properties" /></div>
             <div onClick={closeMenu}><HeaderLinks path="/agents" text="Agents" /></div>

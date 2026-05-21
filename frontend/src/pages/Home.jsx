@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  console.log(isLoading);
 
   useEffect(() => {
     const getProperties = async () => {
