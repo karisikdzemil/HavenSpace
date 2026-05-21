@@ -311,7 +311,7 @@ export default function EditProperty() {
       }
 
       setIsLoading(false);
-      navigate(`/property/${id}`);
+      navigate(`/propertie/${id}`);
     } catch (err) {
       console.error(err);
       setErrors({ general: "Server connection failed." });
