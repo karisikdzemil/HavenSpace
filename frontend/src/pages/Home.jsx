@@ -1,6 +1,8 @@
 // import { useEffect, useState } from "react";
+import AgentsSection from "../components/home/AgentsSection";
 import AboutUs from "../components/home/homeAbout/AboutUs";
 import HomeHeroSection from "../components/home/homeHeroSection";
+import PerfectInvestment from "../components/home/PerfectInvestment";
 import Properties from "../components/home/properties/Properties";
 import WhyUs from "../components/home/why-us/WhyUs";
 import Loading from "../components/loading/Loading";
@@ -36,7 +38,9 @@ export default function Home() {
       <HomeHeroSection />
       <AboutUs />
       <Properties properties={properties}/>
-      <WhyUs />
+      <WhyUs />'
+      <AgentsSection />
+      <PerfectInvestment />
     </>
   );
 }
