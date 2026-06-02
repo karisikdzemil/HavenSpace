@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require('path');
@@ -7,11 +8,9 @@ const aiRoutes = require('./routes/ai');
 const cors = require("cors");
 const User = require("./models/User");
 
-require("dotenv").config();
 const db_key = process.env.MONGO_URI;
 
 const app = express();
-
 
 app.use(express.json());
 app.use(cors());

@@ -1,5 +1,7 @@
-import { GoogleGenAi } from '@google/genai';
+const { GoogleGenAI } = require("@google/genai");
 
-export const ai = new GoogleGenAi({
+const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
 });
+
+module.exports = { ai };
