@@ -4,17 +4,18 @@ const Property = require("../models/Property.js");
 
 const router = express.Router();
 
+const memory = {};
+
 async function callAI(prompt, retries = 3) {
   try {
-    const response = await ai.models.generateContent({
+    const res = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
     });
 
-    return response.text;
+    return res.text;
   } catch (err) {
     if (retries > 0) {
-      console.log("AI retrying...", retries);
       await new Promise((r) => setTimeout(r, 1000));
       return callAI(prompt, retries - 1);
     }
@@ -22,73 +23,97 @@ async function callAI(prompt, retries = 3) {
   }
 }
 
-function parseAI(text) {
-  const cleaned = text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+function safeJSON(text) {
+  return JSON.parse(
+    text.replace(/```json/g, "").replace(/```/g, "").trim()
+  );
+}
 
-  return JSON.parse(cleaned);
+function rankProperty(property, filters) {
+  let score = 0;
+
+  if (filters.city && property.location.city?.toLowerCase() === filters.city.toLowerCase()) {
+    score += 40;
+  }
+
+  if (filters.propertyType && property.type === filters.propertyType) {
+    score += 20;
+  }
+
+  if (filters.bedNum && property.bedNum >= filters.bedNum) {
+    score += 15;
+  }
+
+  if (filters.maxPrice && property.price <= filters.maxPrice) {
+    score += 15;
+  }
+
+  if (filters.bathNum && property.bathNum >= filters.bathNum) {
+    score += 10;
+  }
+
+  return { ...property._doc, score };
 }
 
 router.post("/test", async (req, res, next) => {
   try {
-    const { message } = req.body;
+    const { message, sessionId = "default" } = req.body;
+
+    const previousContext = memory[sessionId] || "";
 
     const prompt = `
-You are a REAL ESTATE AI ASSISTANT for HavenSpace.
+You are a REAL ESTATE AI AGENT for HavenSpace.
 
-You have 3 jobs:
+You remember previous conversation:
+${previousContext}
 
-1. Detect user intent
-2. Extract search filters (if applicable)
-3. Decide response type
-
-IMPORTANT RULES:
-- Return ONLY valid JSON
-- Do NOT hallucinate data
-- Do NOT invent cities or properties
-- If request is NOT real estate related → intent = "invalid"
+TASK:
+- Extract intent
+- Extract filters
+- Detect if user is refining previous search ("cheaper", "more rooms", etc.)
 
 INTENTS:
-- "search" → user is looking for properties
-- "recommend" → no exact match but suggest similar
-- "invalid" → not related to real estate
+- search
+- refine
+- recommend
+- invalid
 
-OUTPUT FORMAT:
+RULES:
+- Return ONLY valid JSON
+- Never hallucinate
+- Never invent cities
+
+OUTPUT:
 
 {
-  "intent": "search" | "recommend" | "invalid",
+  "intent": "",
   "message": "",
+  "refinement": true,
   "filters": {
     "city": null,
     "propertyType": null,
     "minPrice": null,
     "maxPrice": null,
     "bedNum": null,
-    "bathNum": null,
-    "minArea": null,
-    "maxArea": null,
-    "garage": null,
-    "status": "active"
+    "bathNum": null
   }
 }
 
-User input:
+User:
 ${message}
 `;
 
     const aiText = await callAI(prompt);
-    const aiResponse = parseAI(aiText);
+    const parsed = safeJSON(aiText);
 
-    const { intent, filters, message: aiMessage } = aiResponse;
+    const { intent, filters, message: aiMessage } = parsed;
 
     if (intent === "invalid") {
       return res.json({
         success: true,
         intent,
         message:
-          "Ja sam AI asistent za nekretnine. Mogu da vam pomognem da pronađete stanove i kuće.",
+          "Ja sam AI asistent za nekretnine. Mogu da pomognem oko pretrage stanova i kuća.",
         properties: [],
       });
     }
@@ -103,54 +128,47 @@ ${message}
       query.type = filters.propertyType;
     }
 
-    if (filters.bedNum) {
-      query.bedNum = { $gte: filters.bedNum };
-    }
-
-    if (filters.maxPrice) {
-      query.price = { $lte: filters.maxPrice };
-    }
-
     let properties = await Property.find(query);
 
-    if (properties.length === 0 && intent !== "invalid") {
-      const fallback = await Property.find({
-        status: "active",
-      }).limit(3);
+    properties = properties
+      .map((p) => rankProperty(p, filters))
+      .sort((a, b) => b.score - a.score);
 
-      const fallbackMessage = `Nemamo tačne nekretnine za vaš zahtev, ali evo nekoliko sličnih preporuka.`;
+    if (properties.length === 0) {
+      properties = await Property.find({
+        status: "active",
+        $or: [
+          { title: { $regex: message, $options: "i" } },
+          { description: { $regex: message, $options: "i" } },
+        ],
+      });
 
       return res.json({
         success: true,
         intent: "recommend",
-        message: fallbackMessage,
-        filters,
-        properties: fallback,
+        message: "Nema tačnih rezultata, ali evo sličnih nekretnina.",
+        properties,
       });
     }
 
     const responsePrompt = `
 You are a real estate assistant.
 
-User query: ${message}
+User asked: ${message}
+We found: ${properties.length} properties.
 
-We found ${properties.length} properties.
-
-Write a SHORT natural response (1-3 sentences):
-- mention how many properties found
-- be helpful
-- do NOT exaggerate
-- if 0 results, politely say no matches
-
-Return ONLY text.
+Write a short helpful response (max 2 sentences).
+Be natural, like Airbnb assistant.
 `;
 
-    const aiMessageFinal = await callAI(responsePrompt);
+    const aiResponse = await callAI(responsePrompt);
+
+    memory[sessionId] = `${message} → ${JSON.stringify(filters)}`;
 
     return res.json({
       success: true,
       intent,
-      message: aiMessageFinal,
+      message: aiResponse,
       count: properties.length,
       properties,
       filters,
