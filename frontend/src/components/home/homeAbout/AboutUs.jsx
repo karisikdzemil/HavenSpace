@@ -21,7 +21,6 @@ export default function AboutUs() {
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row items-center gap-20">
           
-          {/* LEVA STRANA: Sadržaj i Brojevi */}
           <div className="w-full lg:w-1/2 space-y-10">
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#327878]/10 text-[#327878] px-5 py-2.5 rounded-full">
@@ -38,17 +37,15 @@ export default function AboutUs() {
               </p>
             </div>
 
-            {/* STATS GRID (Tvoj Numbers komponent) */}
             <div className="grid grid-cols-3 gap-4">
               {stats.map((stat, index) => (
-                <div key={index} className="bg-[#FBFCFC] border border-gray-50 rounded-[2rem] p-8 text-center shadow-sm">
+                <div key={index} className="bg-[#FBFCFC] border border-gray-50 rounded-4xl p-8 text-center shadow-sm">
                   <h4 className="text-3xl font-black text-slate-900 mb-1">{stat.value}</h4>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300">{stat.label}</p>
                 </div>
               ))}
             </div>
 
-            {/* BENEFITS LIST */}
             <div className="space-y-4">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center gap-4 text-slate-700 font-bold text-sm">
@@ -58,7 +55,6 @@ export default function AboutUs() {
               ))}
             </div>
 
-            {/* CTA & SUPPORT */}
             <div className="flex flex-wrap items-center gap-8 pt-4">
               <button className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center gap-3 group">
                 Learn More About Us
@@ -77,11 +73,9 @@ export default function AboutUs() {
             </div>
           </div>
 
-          {/* DESNA STRANA: Image Collage */}
           <div className="w-full lg:w-1/2 relative">
             <div className="grid grid-cols-2 gap-6">
               
-              {/* Velika slika (Gore) */}
               <div className="col-span-2 relative">
                 <img 
                   src="/property-exterior-pool.webp" 
@@ -89,8 +83,7 @@ export default function AboutUs() {
                   alt="Modern Mansion"
                 />
                 
-                {/* Awards Badge */}
-                <div className="absolute bottom-10 right-10 bg-white p-6 rounded-[2rem] shadow-2xl border border-gray-50 flex items-center gap-4 z-20">
+                <div className="absolute bottom-10 right-10 bg-white p-6 rounded-4xl shadow-2xl border border-gray-50 flex items-center gap-4 z-20">
                   <div className="w-12 h-12 rounded-2xl bg-[#327878] flex items-center justify-center text-white">
                     <FontAwesomeIcon icon={faAward} size="lg" />
                   </div>
@@ -101,7 +94,6 @@ export default function AboutUs() {
                 </div>
               </div>
 
-              {/* Mala slika 1 (Unutrašnjost) */}
               <div className="relative h-60">
                 <img 
                   src="/property-interior-8.webp" 
@@ -110,7 +102,6 @@ export default function AboutUs() {
                 />
               </div>
 
-              {/* Mala slika 2 (Agent/Consultation) */}
               <div className="relative h-60">
                 <img 
                   src="/agent-3.webp" 
@@ -121,7 +112,6 @@ export default function AboutUs() {
 
             </div>
 
-            {/* Dekorativni element u pozadini */}
             <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-[#327878]/5 rounded-full blur-3xl"></div>
           </div>
 

@@ -105,7 +105,7 @@ export default function Properties({ properties }) {
   };
 
   return (
-    <section className="py-24 bg-[#FBFCFC]">
+    <section className="pt-8 bg-[#FBFCFC]">
       <ContentWrapper>
         <div className="text-center mb-20 space-y-4">
           <h2 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">

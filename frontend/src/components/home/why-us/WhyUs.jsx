@@ -34,9 +34,8 @@ export default function WhyUs() {
   ];
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section className="pt-8 bg-white overflow-hidden">
       <ContentWrapper>
-        {/* Section Header */}
         <div className="text-center mb-20 space-y-4">
           <h2 className="text-5xl font-black text-slate-900 tracking-tighter italic">Why Us</h2>
           <div className="w-20 h-1 bg-[#327878] mx-auto rounded-full"></div>
@@ -47,7 +46,6 @@ export default function WhyUs() {
 
         <div className="flex flex-col lg:flex-row items-center gap-20">
           
-          {/* LEVA STRANA: Video Thumbnail & Badges */}
           <div className="w-full lg:w-1/2 relative">
             <div className="relative rounded-[3rem] overflow-hidden shadow-2xl group cursor-pointer">
               <img 
@@ -65,18 +63,17 @@ export default function WhyUs() {
               </div>
             </div>
 
-            {/* Floating Badges */}
-            <div className="absolute -top-10 -right-10 bg-[#327878] text-white p-8 rounded-[2rem] shadow-2xl z-20 text-center min-w-[160px]">
+            <div className="absolute -top-10 -right-10 bg-[#327878] text-white p-8 rounded-4xl shadow-2xl z-20 text-center min-w-40">
               <h4 className="text-3xl font-black tracking-tighter">15+</h4>
               <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Years Excellence</p>
             </div>
 
-            <div className="absolute top-20 -right-10 bg-white text-slate-900 p-8 rounded-[2rem] shadow-2xl z-10 text-center min-w-[160px] border border-gray-50">
+            <div className="absolute top-20 -right-10 bg-white text-slate-900 p-8 rounded-4xl shadow-2xl z-10 text-center min-w-40 border border-gray-50">
               <h4 className="text-3xl font-black tracking-tighter">3.2K</h4>
               <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Happy Clients</p>
             </div>
 
-            <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-[2rem] shadow-2xl z-20 flex items-center gap-4 border border-gray-50 max-w-[280px]">
+            <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-4xl shadow-2xl z-20 flex items-center gap-4 border border-gray-50 max-w-[280px]">
               <div className="w-12 h-12 rounded-xl bg-[#327878]/10 flex items-center justify-center text-[#327878]">
                 <FontAwesomeIcon icon={faGem} />
               </div>
@@ -87,7 +84,6 @@ export default function WhyUs() {
             </div>
           </div>
 
-          {/* DESNA STRANA: Features & Stats */}
           <div className="w-full lg:w-1/2 space-y-12">
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#327878]/10 text-[#327878] px-5 py-2.5 rounded-full">
@@ -101,7 +97,6 @@ export default function WhyUs() {
               </p>
             </div>
 
-            {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
               {features.map((f, i) => (
                 <div key={i} className="flex gap-5">
@@ -116,7 +111,6 @@ export default function WhyUs() {
               ))}
             </div>
 
-            {/* Statistics Bottom Row */}
             <div className="bg-[#FBFCFC] border border-gray-100 rounded-[2.5rem] p-10 flex flex-wrap justify-between items-center gap-8 shadow-sm">
               <div className="text-center space-y-1">
                 <h4 className="text-3xl font-black text-slate-900 tracking-tighter">94</h4>
@@ -134,7 +128,6 @@ export default function WhyUs() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-6 pt-4">
               <button className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20">
                 Explore Properties

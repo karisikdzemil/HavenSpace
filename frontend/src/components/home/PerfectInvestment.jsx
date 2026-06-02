@@ -76,7 +76,7 @@ export default function PerfectInvestment() {
             </div>
           </div>
 
-          <div className="absolute -bottom-4 right-12 md:right-20 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.12)] border border-slate-50 w-52 transform translate-y-20">
+          <div className="absolute bottom-36 right-12 md:right-20 bg-white rounded-2xl p-4 flex items-center gap-4 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.12)] border border-slate-50 w-52 transform translate-y-20">
             <div className="w-12 h-12 rounded-xl bg-[#e6f2f2] text-[#327878] flex items-center justify-center text-lg">
               <FontAwesomeIcon icon={faHome} />
             </div>
