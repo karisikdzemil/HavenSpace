@@ -153,7 +153,6 @@ exports.getUser = (req, res, next) => {
       error.statusCode = 500;
       throw error;
     }
-    console.log(user);
     res.status(200).json({message: 'User found!', user: user});
   }).catch(err => {
     if(!err.statusCode){

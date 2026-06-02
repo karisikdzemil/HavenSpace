@@ -53,7 +53,6 @@ exports.getProperties = async (req, res, next) => {
 
     const total = await Property.countDocuments(filter);
 
-    console.log(filter);
     const properties = await Property.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)

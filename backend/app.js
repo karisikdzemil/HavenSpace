@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require('path');
 const propertyRoutes = require("./routes/property");
 const authRoutes = require("./routes/auth");
+const aiRoutes = require('./routes/ai');
 const cors = require("cors");
 const User = require("./models/User");
 
@@ -17,6 +18,7 @@ app.use(cors());
 
 app.use("/api", propertyRoutes);
 app.use("/api", authRoutes);
+app.use("/api", aiRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "assets/images")));
 app.use("/images", express.static(path.join(__dirname, "assets/avatar")));
