@@ -1,6 +1,6 @@
 const express = require("express");
-const { ai } = require("../config/gemini.js");
-const Property = require("../models/Property.js");
+const { ai } = require("../config/gemini");
+const Property = require("../models/Property");
 
 const router = express.Router();
 
@@ -19,83 +19,116 @@ async function callAI(prompt, retries = 3) {
       await new Promise((r) => setTimeout(r, 1000));
       return callAI(prompt, retries - 1);
     }
+
     throw err;
   }
 }
 
 function safeJSON(text) {
-  return JSON.parse(
-    text.replace(/```json/g, "").replace(/```/g, "").trim()
-  );
+  try {
+    return JSON.parse(
+      text.replace(/```json/g, "").replace(/```/g, "").trim()
+    );
+  } catch {
+    return {
+      intent: "search",
+      refinement: false,
+      filters: {
+        city: null,
+        propertyType: null,
+        minPrice: null,
+        maxPrice: null,
+        bedNum: null,
+        bathNum: null,
+      },
+    };
+  }
 }
 
 function rankProperty(property, filters) {
   let score = 0;
 
-  if (filters.city && property.location.city?.toLowerCase() === filters.city.toLowerCase()) {
+  if (
+    filters.city &&
+    property.location?.city?.toLowerCase() === filters.city.toLowerCase()
+  ) {
     score += 40;
   }
 
-  if (filters.propertyType && property.type === filters.propertyType) {
+  if (
+    filters.propertyType &&
+    property.type === filters.propertyType
+  ) {
     score += 20;
   }
 
-  if (filters.bedNum && property.bedNum >= filters.bedNum) {
+  if (
+    filters.bedNum &&
+    property.bedNum >= filters.bedNum
+  ) {
     score += 15;
   }
 
-  if (filters.maxPrice && property.price <= filters.maxPrice) {
-    score += 15;
-  }
-
-  if (filters.bathNum && property.bathNum >= filters.bathNum) {
+  if (
+    filters.bathNum &&
+    property.bathNum >= filters.bathNum
+  ) {
     score += 10;
   }
 
-  return { ...property._doc, score };
+  if (
+    filters.maxPrice &&
+    property.price <= filters.maxPrice
+  ) {
+    score += 15;
+  }
+
+  return {
+    ...property._doc,
+    score,
+  };
 }
 
-router.post("/test", async (req, res, next) => {
+router.post("/ai-search", async (req, res, next) => {
   try {
-    const { message, sessionId = "default" } = req.body;
+    const {
+      message,
+      sessionId = "default",
+    } = req.body;
 
-    const previousContext = memory[sessionId] || "";
+    if (!message) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required",
+      });
+    }
+
+    const previousContext = memory[sessionId] || [];
 
     const prompt = `
-You are a REAL ESTATE AI AGENT for HavenSpace.
+You are a REAL ESTATE AI AGENT.
 
-You remember previous conversation:
-${previousContext}
+Conversation history:
+${JSON.stringify(previousContext)}
 
-TASK:
-- Extract intent
-- Extract filters
-- Detect if user is refining previous search ("cheaper", "more rooms", etc.)
+Extract filters from user message.
 
-INTENTS:
-- search
-- refine
-- recommend
-- invalid
+Allowed property types:
+- house
+- apartment
 
-RULES:
-- Return ONLY valid JSON
-- Never hallucinate
-- Never invent cities
-
-OUTPUT:
+Return ONLY JSON.
 
 {
-  "intent": "",
-  "message": "",
-  "refinement": true,
-  "filters": {
-    "city": null,
-    "propertyType": null,
-    "minPrice": null,
-    "maxPrice": null,
-    "bedNum": null,
-    "bathNum": null
+  "intent":"search",
+  "refinement":false,
+  "filters":{
+    "city":null,
+    "propertyType":null,
+    "minPrice":null,
+    "maxPrice":null,
+    "bedNum":null,
+    "bathNum":null
   }
 }
 
@@ -104,78 +137,116 @@ ${message}
 `;
 
     const aiText = await callAI(prompt);
+
     const parsed = safeJSON(aiText);
 
-    const { intent, filters, message: aiMessage } = parsed;
+    const filters =
+      parsed.filters || {};
 
-    if (intent === "invalid") {
-      return res.json({
-        success: true,
-        intent,
-        message:
-          "Ja sam AI asistent za nekretnine. Mogu da pomognem oko pretrage stanova i kuća.",
-        properties: [],
-      });
-    }
-
-    const query = { status: "active" };
+    const query = {
+      status: "active",
+    };
 
     if (filters.city) {
-      query["location.city"] = new RegExp(filters.city, "i");
+      query["location.city"] = {
+        $regex: filters.city,
+        $options: "i",
+      };
     }
 
     if (filters.propertyType) {
       query.type = filters.propertyType;
     }
 
-    let properties = await Property.find(query);
+    if (
+      filters.minPrice ||
+      filters.maxPrice
+    ) {
+      query.price = {};
+
+      if (filters.minPrice) {
+        query.price.$gte =
+          Number(filters.minPrice);
+      }
+
+      if (filters.maxPrice) {
+        query.price.$lte =
+          Number(filters.maxPrice);
+      }
+    }
+
+    if (filters.bedNum) {
+      query.bedNum = {
+        $gte: Number(filters.bedNum),
+      };
+    }
+
+    if (filters.bathNum) {
+      query.bathNum = {
+        $gte: Number(filters.bathNum),
+      };
+    }
+
+    let properties =
+      await Property.find(query);
 
     properties = properties
-      .map((p) => rankProperty(p, filters))
-      .sort((a, b) => b.score - a.score);
+      .map((p) =>
+        rankProperty(p, filters)
+      )
+      .sort(
+        (a, b) => b.score - a.score
+      );
+
+    if (!memory[sessionId]) {
+      memory[sessionId] = [];
+    }
+
+    memory[sessionId].push({
+      user: message,
+      filters,
+    });
+
+    memory[sessionId] =
+      memory[sessionId].slice(-5);
 
     if (properties.length === 0) {
-      properties = await Property.find({
-        status: "active",
-        $or: [
-          { title: { $regex: message, $options: "i" } },
-          { description: { $regex: message, $options: "i" } },
-        ],
-      });
-
       return res.json({
         success: true,
         intent: "recommend",
-        message: "Nema tačnih rezultata, ali evo sličnih nekretnina.",
-        properties,
+        message:
+          "No exact matches found. Try broadening your search criteria.",
+        count: 0,
+        properties: [],
+        filters,
       });
     }
 
     const responsePrompt = `
-You are a real estate assistant.
+User searched:
+${message}
 
-User asked: ${message}
-We found: ${properties.length} properties.
+Properties found:
+${properties.length}
 
-Write a short helpful response (max 2 sentences).
-Be natural, like Airbnb assistant.
+Write a short real estate assistant response.
+Maximum 2 sentences.
 `;
 
-    const aiResponse = await callAI(responsePrompt);
-
-    memory[sessionId] = `${message} → ${JSON.stringify(filters)}`;
+    const aiResponse =
+      await callAI(responsePrompt);
 
     return res.json({
       success: true,
-      intent,
+      intent: parsed.intent || "search",
       message: aiResponse,
       count: properties.length,
       properties,
       filters,
     });
-  } catch (error) {
-    console.error(error);
-    next(error);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 });
 
