@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-  faLocationDot, faPhone, faEnvelope, faTrash, faEdit, 
-  faCheckCircle, faBed, faBath, faMaximize, faWarehouse,
-  faCalendarDays, faCheck, faShieldHeart, faTree, faBolt, faWater,
-  faShareNodes, faPrint, faHeart
+  faLocationDot, faPhone, faEnvelope, 
+  faBed, faBath, faMaximize, faWarehouse,
+  faCalendarDays, faShieldHeart, faTree, faBolt, faWater,
+  faShareNodes, faPrint, faHeart, faXmark, faChevronLeft, faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
 import Loading from "../components/loading/Loading";
@@ -15,7 +15,11 @@ export default function Propertie() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
-  const { token, user, refreshUser } = useAuth();
+  
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,15 +36,46 @@ export default function Propertie() {
     getProperty();
   }, [id]);
 
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLightboxOpen, currentImgIndex, property]);
+
   if (loading) return <div className="pt-36"><Loading loadingText="Opening the doors..." /></div>;
   if (!property) return null;
 
   const isOwner = user && property.owner._id === user._id;
 
+  const openLightbox = (index) => {
+    setCurrentImgIndex(index);
+    setIsLightboxOpen(true);
+    document.body.style.overflow = "hidden"; 
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+    document.body.style.overflow = "unset"; 
+  };
+
+  const nextImage = () => {
+    setCurrentImgIndex((prev) => (prev + 1) % property.images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImgIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
+  };
+
   return (
     <main className="bg-white min-h-screen pb-20 pt-24">
       <ContentWrapper>
-        {/* TOP UTILS BAR */}
         <div className="flex justify-between items-center mb-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-4 text-sm font-medium text-gray-500">
             <Link to="/" className="hover:text-[#327878] transition">Properties</Link>
@@ -54,26 +89,38 @@ export default function Propertie() {
           </div>
         </div>
 
-        {/* MAIN LAYOUT */}
         <div className="flex flex-col lg:flex-row gap-12">
           
           <div className="flex-1 max-w-[850px]">
-            {/* GALLERY GRID */}
+            
             <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[500px] mb-10">
-              <div className="col-span-3 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group">
+              
+              <div 
+                onClick={() => openLightbox(0)} 
+                className="col-span-3 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
+              >
                 <img src={`http://localhost:8080/${property.images[0]}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1 rounded text-[10px] font-black uppercase tracking-widest text-[#327878]">Featured</div>
               </div>
-              <div className="col-span-1 rounded-2xl overflow-hidden shadow-md">
-                <img src={`http://localhost:8080/${property.images[1] || property.images[0]}`} className="w-full h-full object-cover" />
+
+              <div 
+                onClick={() => openLightbox(1)} 
+                className="col-span-1 rounded-2xl overflow-hidden shadow-md cursor-pointer group"
+              >
+                <img src={`http://localhost:8080/${property.images[1] || property.images[0]}`} className="w-full h-full object-cover transition duration-300 group-hover:brightness-90" />
               </div>
-              <div className="col-span-1 relative rounded-2xl overflow-hidden shadow-md group cursor-pointer">
-                <img src={`http://localhost:8080/${property.images[2] || property.images[0]}`} className="w-full h-full object-cover brightness-50" />
-                <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg">+{property.images.length} Photos</div>
+
+              <div 
+                onClick={() => openLightbox(2)} 
+                className="col-span-1 relative rounded-2xl overflow-hidden shadow-md group cursor-pointer"
+              >
+                <img src={`http://localhost:8080/${property.images[2] || property.images[0]}`} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white font-bold text-lg transition group-hover:bg-black/60">
+                  <span>+{property.images.length} Photos</span>
+                </div>
               </div>
             </div>
 
-            {/* QUICK INFO BAR */}
             <div className="flex flex-wrap gap-8 py-8 border-y border-gray-100 mb-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-[#327878]"><FontAwesomeIcon icon={faBed} /></div>
@@ -97,7 +144,6 @@ export default function Propertie() {
               </div>
             </div>
 
-            {/* DESCRIPTION TABS */}
             <div className="mb-12">
               <div className="flex gap-8 border-b border-gray-100 mb-8">
                 {["description", "features", "neighborhood"].map((tab) => (
@@ -147,7 +193,6 @@ export default function Propertie() {
               </div>
             </div>
 
-            {/* HIGHLIGHTS CARDS */}
             <div className="grid grid-cols-3 gap-4 mb-12">
               <div className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
                 <FontAwesomeIcon icon={faShieldHeart} className="text-[#327878] mb-3 text-xl" />
@@ -167,7 +212,6 @@ export default function Propertie() {
             </div>
           </div>
 
-          {/* SIDEBAR STICKY */}
           <aside className="w-full lg:w-[380px]">
             <div className="sticky top-28 space-y-6">
               <div className="bg-white p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-2xl relative overflow-hidden">
@@ -219,6 +263,63 @@ export default function Propertie() {
           </aside>
         </div>
       </ContentWrapper>
+
+      {isLightboxOpen && (
+        <div className="fixed inset-0 bg-black/95 z-9999 flex flex-col justify-between p-4 backdrop-blur-sm select-none animate-fadeIn">
+          
+          <div className="flex justify-between items-center text-white w-full max-w-7xl mx-auto py-2">
+            <span className="text-sm font-semibold tracking-wider bg-white/10 px-4 py-1.5 rounded-full">
+              {currentImgIndex + 1} / {property.images.length}
+            </span>
+            <button 
+              onClick={closeLightbox} 
+              className="w-11 h-11 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 text-white transition-all text-xl"
+            >
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between w-full max-w-7xl mx-auto h-[75vh] relative px-4">
+            
+            <button 
+              onClick={prevImage} 
+              className="absolute left-6 z-50 w-12 h-12 bg-black/40 hover:bg-white/20 border border-white/20 text-white rounded-full flex items-center justify-center transition-all"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+
+            <div className="w-full h-full flex items-center justify-center p-2">
+              <img 
+                src={`http://localhost:8080/${property.images[currentImgIndex]}`} 
+                alt={`Property view ${currentImgIndex + 1}`}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300"
+              />
+            </div>
+
+            <button 
+              onClick={nextImage} 
+              className="absolute right-6 z-50 w-12 h-12 bg-black/40 hover:bg-white/20 border border-white/20 text-white rounded-full flex items-center justify-center transition-all"
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+
+          <div className="w-full max-w-4xl mx-auto overflow-x-auto flex items-center gap-3 py-4 justify-center">
+            {property.images.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImgIndex(index)}
+                className={`w-20 h-14 rounded-lg overflow-hidden transition-all duration-200 border-2 shrink-0 ${
+                  currentImgIndex === index ? "border-[#327878] scale-105 opacity-100 shadow-md" : "border-transparent opacity-40 hover:opacity-70"
+                }`}
+              >
+                <img src={`http://localhost:8080/${img}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+
+        </div>
+      )}
     </main>
   );
 }

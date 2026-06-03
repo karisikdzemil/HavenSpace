@@ -9,7 +9,6 @@ export default function Header() {
   const { isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   
-  // Stanja za praćenje skrola i vidljivosti
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -27,14 +26,12 @@ export default function Header() {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // 1. Ako smo na samom vrhu, header mora biti vidljiv
       if (currentScrollY < 10) {
         setIsVisible(true);
         setLastScrollY(currentScrollY);
         return;
       }
 
-      // 2. Kada skrolaš na dolje - sakrij ga. Kada skrolaš na gore - prikaži ga.
       if (currentScrollY > lastScrollY) {
         setIsVisible(false); // Skrola na dolje
       } else {
@@ -43,17 +40,15 @@ export default function Header() {
 
       setLastScrollY(currentScrollY);
 
-      // 3. Logika za prepoznavanje prestanka skrolovanja (Pojavi se kad staneš)
       if (timeoutId) clearTimeout(timeoutId);
       
       timeoutId = setTimeout(() => {
         setIsVisible(true);
-      }, 150); // Nakon 150ms mirovanja se ponovo pojavljuje
+      }, 150); 
     };
 
     window.addEventListener("scroll", handleScroll);
 
-    // Čišćenje event listenera i tajmauta kada se komponent unmount-uje
     return () => {
       window.removeEventListener("scroll", handleScroll);
       if (timeoutId) clearTimeout(timeoutId);
@@ -115,7 +110,6 @@ export default function Header() {
         </button>
       </div>
 
-      {/* MOBILNI MENI */}
       <div
         className={`xl:hidden absolute left-4 right-4 bg-white mt-3 rounded-4xl shadow-2xl p-6 transition-all duration-300 ease-in-out border border-gray-50 z-40 ${
           isOpen 

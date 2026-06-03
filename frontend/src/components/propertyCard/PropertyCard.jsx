@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBath, faBed, faLocationDot, faMaximize, faWarehouse } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const SpecItem = ({ icon, text }) => (
   <div className="flex items-center gap-1.5">
@@ -9,7 +10,6 @@ const SpecItem = ({ icon, text }) => (
 );
 
 export default function PropertyCard({ property }) {
-  // Formatiranje cene sa zarezima (npr. 300,000)
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -17,9 +17,9 @@ export default function PropertyCard({ property }) {
   }).format(property.price);
 
   return (
-    <div className="w-[400px]">
+    <div className="w-full">
     <div className="group w-full bg-white rounded-4xl p-4 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_50px_-15px_rgba(50,120,120,0.2)] transition-all duration-500 cursor-pointer border border-gray-50">
-      <a href={`/propertie/${property._id}`} className="block">
+      <Link to={`/propertie/${property._id}`} className="block">
         
         <div className="relative w-full h-64 overflow-hidden rounded-3xl">
           <div 
@@ -57,7 +57,7 @@ export default function PropertyCard({ property }) {
             <SpecItem icon={faWarehouse} text={`${property.garage} Garage`} />
           </div>
         </div>
-      </a>
+      </Link>
     </div>
     </div>
   );

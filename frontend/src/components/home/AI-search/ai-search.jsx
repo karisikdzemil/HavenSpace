@@ -79,7 +79,6 @@ export default function AiSearch() {
             </p>
           </div>
 
-          {/* INPUT */}
           <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow p-6">
 
             <textarea
