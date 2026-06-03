@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import HeaderLinks from "./components/HeaderLinks";
@@ -8,6 +8,10 @@ import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 export default function Header() {
   const { isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Stanja za praćenje skrola i vidljivosti
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -17,8 +21,51 @@ export default function Header() {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    let timeoutId = null;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // 1. Ako smo na samom vrhu, header mora biti vidljiv
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+
+      // 2. Kada skrolaš na dolje - sakrij ga. Kada skrolaš na gore - prikaži ga.
+      if (currentScrollY > lastScrollY) {
+        setIsVisible(false); // Skrola na dolje
+      } else {
+        setIsVisible(true);  // Skrola na gore
+      }
+
+      setLastScrollY(currentScrollY);
+
+      // 3. Logika za prepoznavanje prestanka skrolovanja (Pojavi se kad staneš)
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      timeoutId = setTimeout(() => {
+        setIsVisible(true);
+      }, 150); // Nakon 150ms mirovanja se ponovo pojavljuje
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Čišćenje event listenera i tajmauta kada se komponent unmount-uje
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [lastScrollY]);
+
   return (
-    <header className="w-full py-5 z-50 md:px-10 px-4 bg-transparent absolute">
+    <header 
+      className={`w-full py-5 z-50 md:px-10 px-4 fixed top-0 left-0 transition-transform duration-300 ease-in-out ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="w-full bg-white rounded-[50px] shadow-xl py-2.5 px-[25px] flex items-center justify-between relative z-50">
         <h1 className="text-[22px] font-bold text-[#163535]">HavenSpace</h1>
 
@@ -68,6 +115,7 @@ export default function Header() {
         </button>
       </div>
 
+      {/* MOBILNI MENI */}
       <div
         className={`xl:hidden absolute left-4 right-4 bg-white mt-3 rounded-4xl shadow-2xl p-6 transition-all duration-300 ease-in-out border border-gray-50 z-40 ${
           isOpen 
@@ -91,7 +139,6 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* MOBILNI AUTH BUTTON */}
         <div className="pt-4 border-t border-gray-100 flex justify-center">
           {isAuthenticated ? (
             <button

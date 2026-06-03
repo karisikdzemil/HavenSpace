@@ -69,9 +69,8 @@ export default function Properties() {
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row gap-10">
           
-          {/* LEFT SIDE: FILTERS STICKY */}
           <aside className="w-full lg:w-[350px]">
-            <div className="sticky top-32 bg-white p-8 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-50">
+            <div className="sticky top-32 bg-white p-8 rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-50">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-black text-gray-900 flex items-center gap-2">
                   <FontAwesomeIcon icon={faSliders} className="text-[#327878] text-sm" />
@@ -86,7 +85,6 @@ export default function Properties() {
               </div>
 
               <form onSubmit={submitFiltersFormHandler} className="space-y-8">
-                {/* Property Type Icons */}
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-widest text-gray-400">Property Type</label>
                   <div className="grid grid-cols-3 gap-2">
@@ -112,7 +110,6 @@ export default function Properties() {
                   </div>
                 </div>
 
-                {/* Price Range */}
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-widest text-gray-400">Price Range ($)</label>
                   <div className="flex gap-2">
@@ -133,7 +130,6 @@ export default function Properties() {
                   </div>
                 </div>
 
-                {/* City Search */}
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-widest text-gray-400">Location</label>
                   <div className="relative">
@@ -161,7 +157,6 @@ export default function Properties() {
             </div>
           </aside>
 
-          {/* RIGHT SIDE: LISTINGS */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-10">
               <div>
@@ -184,7 +179,6 @@ export default function Properties() {
                   {properties.map(el => <PropertyCard key={el._id} property={el}/>)}
                 </div>
 
-                {/* PAGINATION */}
                 {pagination?.totalPages > 1 && (
                   <div className="flex justify-center items-center gap-4">
                     <button

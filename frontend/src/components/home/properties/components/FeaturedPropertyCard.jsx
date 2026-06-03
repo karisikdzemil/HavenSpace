@@ -6,7 +6,6 @@ export default function FeaturedPropertyCard({ item }) {
 
   return (
     <div className="bg-white rounded-[3rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] border border-gray-50 group">
-      {/* IMAGE SECTION */}
       <div className="relative h-[500px] overflow-hidden">
         <img
           src={`http://localhost:8080/assets/${item.images[0]}`}
@@ -14,7 +13,6 @@ export default function FeaturedPropertyCard({ item }) {
           alt={item.title}
         />
         
-        {/* Top Badges */}
         <div className="absolute top-8 left-8 flex gap-3">
           <span className="bg-[#327878] text-white text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2.5 rounded-full shadow-lg">
             Featured
@@ -24,7 +22,6 @@ export default function FeaturedPropertyCard({ item }) {
           </span>
         </div>
 
-        {/* Bottom Stats Overlay */}
         <div className="absolute bottom-8 left-8 flex gap-3">
           <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 px-5 py-3 rounded-2xl flex items-center gap-3 text-white">
             <FontAwesomeIcon icon={faBed} className="text-[#327878]" />
@@ -41,7 +38,6 @@ export default function FeaturedPropertyCard({ item }) {
         </div>
       </div>
 
-      {/* CONTENT SECTION */}
       <div className="p-12 space-y-8">
         <div className="flex flex-col md:flex-row justify-between items-start gap-6">
           <div className="space-y-3">
@@ -54,7 +50,7 @@ export default function FeaturedPropertyCard({ item }) {
             </div>
           </div>
           
-          <div className="bg-[#327878] text-white px-8 py-4 rounded-[2rem] shadow-xl shadow-[#327878]/20">
+          <div className="bg-[#327878] text-white px-8 py-4 rounded-4xl shadow-xl shadow-[#327878]/20">
             <span className="text-3xl font-black tracking-tighter">
               ${item.price?.toLocaleString()}
             </span>
