@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import UserInfo from "../components/userInfo";
 import { useEffect } from "react";
 import Loading from "../components/loading/Loading";
+import PropertyCard from "../components/propertyCard/PropertyCard";
 // import PropertyListingsSections from "../components/propertyListingsSection"; 
 
 export default function MyProperties() {
@@ -51,7 +52,6 @@ export default function MyProperties() {
       <ContentWrapper>
         <div className="flex flex-col gap-16">
           
-          {/* TOP SECTION: User Info Card */}
           <div className="space-y-6">
             <div className="flex items-center justify-between px-4">
               <h2 className="text-sm font-black uppercase tracking-[0.3em] text-gray-400">Agent Dashboard</h2>
@@ -65,7 +65,6 @@ export default function MyProperties() {
             <UserInfo agent={user} />
           </div>
 
-          {/* BOTTOM SECTION: Properties Grid */}
           <div className="space-y-10">
             <div className="text-center lg:text-left px-4">
               <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Your Active Listings</h2>
@@ -77,18 +76,16 @@ export default function MyProperties() {
                 <Loading loadingText="Retrieving your properties..." />
               </div>
             ) : properties.length > 0 ? (
-                // Ovde otkomentariši kada budeš spreman da renderuješ listu
-                // <PropertyListingsSections properties={properties} />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {/* Mapiranje kroz properties ako nemaš posebnu komponentu */}
                   {properties.map(prop => (
-                    <div key={prop._id} className="bg-white p-4 rounded-[2rem] shadow-sm border border-gray-100 italic text-xs text-gray-400">
-                      Listing: {prop.title} - ${prop.price.toLocaleString()}
-                    </div>
+                      <PropertyCard property={prop}/>
+                    // <div key={prop._id} className="bg-white p-4 rounded-4xl shadow-sm border border-gray-100 italic text-xs text-gray-400">
+                    //   Listing: {prop.title} - ${prop.price.toLocaleString()}
+                    // </div>
                   ))}
                 </div>
             ) : (
-              <div className="bg-white rounded-[2rem] p-20 border border-dashed border-gray-200 text-center space-y-4">
+              <div className="bg-white rounded-4xl p-20 border border-dashed border-gray-200 text-center space-y-4">
                 <p className="text-gray-400 font-medium">No properties found in your portfolio.</p>
                 <button 
                   onClick={() => navigate('/add-property')}

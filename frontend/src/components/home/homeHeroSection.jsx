@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faMagnifyingGlass, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faStar} from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
 
 export default function HomeHeroSection() {
@@ -8,7 +8,7 @@ export default function HomeHeroSection() {
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row items-center gap-16">
           
-          <div className="w-full lg:w-1/2 space-y-8">
+          {/* <div className="w-full lg:w-1/2 space-y-8">
             <div className="inline-flex items-center gap-2 bg-[#327878] text-white px-5 py-2.5 rounded-full shadow-lg shadow-[#327878]/20">
               <FontAwesomeIcon icon={faStar} className="text-[10px]" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Premium Properties</span>
@@ -24,8 +24,8 @@ export default function HomeHeroSection() {
               Browse thousands of verified luxury listings from our network of elite agents. Your dream residence is just one search away.
             </p>
 
-            <form className="bg-white p-8 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] border border-gray-100 space-y-5 max-w-xl">
-              <div className="space-y-2">
+            {/* <form className="bg-white p-8 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] border border-gray-100 space-y-5 max-w-xl"> */}
+              {/* <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Location</label>
                 <input 
                   type="text" 
@@ -88,8 +88,94 @@ export default function HomeHeroSection() {
                 <FontAwesomeIcon icon={faMagnifyingGlass} className="group-hover:scale-110 transition-transform" />
                 Search Properties
               </button>
-            </form>
-          </div>
+            </form> */}
+          {/* </div> */} 
+          <div className="w-full lg:w-1/2 space-y-8">
+  <div className="inline-flex items-center gap-2 bg-[#327878] text-white px-5 py-2.5 rounded-full shadow-lg shadow-[#327878]/20">
+    <FontAwesomeIcon icon={faStar} className="text-[10px]" />
+    <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+      Premium Properties
+    </span>
+  </div>
+
+  <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+    Discover Your <br />
+    <span className="text-[#327878]">Perfect Home</span> <br />
+    in the City.
+  </h1>
+
+  <p className="text-gray-400 text-lg font-medium max-w-lg leading-relaxed">
+    Browse thousands of verified luxury listings from our network of elite
+    agents. Your dream residence is just one search away.
+  </p>
+
+  <div className="flex flex-wrap gap-10 pt-4">
+    <div>
+      <h3 className="text-4xl font-black text-slate-900">12K+</h3>
+      <p className="text-gray-400 text-sm font-medium mt-1">
+        Properties Listed
+      </p>
+    </div>
+
+    <div>
+      <h3 className="text-4xl font-black text-slate-900">4.9★</h3>
+      <p className="text-gray-400 text-sm font-medium mt-1">
+        Client Rating
+      </p>
+    </div>
+
+    <div>
+      <h3 className="text-4xl font-black text-slate-900">850+</h3>
+      <p className="text-gray-400 text-sm font-medium mt-1">
+        Expert Agents
+      </p>
+    </div>
+  </div>
+
+  <div className="flex flex-wrap gap-4 pt-2">
+    <button className="bg-[#327878] text-white px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all duration-300 shadow-xl shadow-[#327878]/20">
+      Explore Properties
+    </button>
+
+    <button className="bg-white border border-gray-200 text-slate-900 px-8 py-4 rounded-2xl font-black text-sm hover:border-[#327878] hover:text-[#327878] transition-all duration-300">
+      View Listings
+    </button>
+  </div>
+
+  <div className="flex items-center gap-5 pt-4">
+    <div className="flex -space-x-3">
+      <img
+        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80"
+        className="w-12 h-12 rounded-full border-3 border-white object-cover"
+        alt=""
+      />
+      <img
+        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80"
+        className="w-12 h-12 rounded-full border-3 border-white object-cover"
+        alt=""
+      />
+      <img
+        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80"
+        className="w-12 h-12 rounded-full border-3 border-white object-cover"
+        alt=""
+      />
+      <img
+        src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80"
+        className="w-12 h-12 rounded-full border-3 border-white object-cover"
+        alt=""
+      />
+    </div>
+
+    <div>
+      <p className="font-black text-slate-900">
+        Trusted by 15,000+ happy homeowners
+      </p>
+      <p className="text-gray-400 text-sm">
+        Find your next dream property today
+      </p>
+    </div>
+  </div>
+</div>
 
           <div className="w-full lg:w-1/2 relative mt-20 lg:mt-0">
             <div className="relative rounded-[3rem] overflow-hidden shadow-2xl z-10 aspect-4/3">

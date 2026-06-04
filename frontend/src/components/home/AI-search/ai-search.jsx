@@ -57,11 +57,10 @@ export default function AiSearch() {
   };
 
   return (
-    <section className="bg-[#FBFCFC] py-24">
+    <section className="bg-[#FBFCFC]">
       <ContentWrapper>
         <div className="max-w-5xl mx-auto">
 
-          {/* HEADER */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-[#327878] text-white px-5 py-2 rounded-full mb-6">
               <FontAwesomeIcon icon={faHandSparkles} />
