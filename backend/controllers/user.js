@@ -74,7 +74,7 @@ exports.postUser = (req, res, next) => {
     instagram,
     languages,
   } = req.body;
-  const avatar = req.file ? req.file.path.replace("assets/", "") : null;
+  const avatar = req.file ? req.file.path : null;
 
   if (password !== confirmPassword) {
     const error = new Error("Passwords don't match!");
@@ -203,7 +203,7 @@ exports.editUser = async (req, res, next) => {
 
     if (req.file) {
       if (user.avatar) deleteFile(user.avatar);
-      user.avatar = req.file.path.replace("assets/", "");
+      user.avatar = req.file.path;
     }
 
     const result = await user.save();

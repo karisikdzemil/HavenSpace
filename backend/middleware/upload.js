@@ -1,23 +1,7 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require("../config/cloudinary");
 
-const storage = (folder) =>
-  multer.diskStorage({
-    destination: (req, file, cb) => {
-      const dest = path.join("assets", folder);
-      fs.mkdirSync(dest, { recursive: true });
-      cb(null, dest);
-    },
-    filename: (req, file, cb) => {
-      cb(
-        null,
-        new Date().toISOString().replace(/:/g, "-") +
-          "-" +
-          file.originalname
-      );
-    },
-  });
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   if (
@@ -31,12 +15,53 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-exports.uploadAvatar = multer({
-  storage: storage("avatar"),
-  fileFilter,
-}).single("avatar");
+const uploadAvatarMulter = multer({ storage, fileFilter }).single("avatar");
+const uploadPropertyImagesMulter = multer({ storage, fileFilter }).array("images", 5);
 
-exports.uploadPropertyImages = multer({
-  storage: storage("images"),
-  fileFilter,
-}).array("images", 5);
+const uploadToCloudinary = (file, folder) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: `havenspace/${folder}` },
+      (err, result) => {
+        if (err) return reject(err);
+        resolve({ path: result.secure_url, filename: result.public_id });
+      }
+    );
+    stream.end(file.buffer);
+  });
+
+exports.uploadAvatar = (req, res, next) => {
+  uploadAvatarMulter(req, res, async (err) => {
+    if (err) return next(err);
+    if (!req.file) return next();
+
+    try {
+      const result = await uploadToCloudinary(req.file, "avatars");
+      req.file.path = result.path;
+      req.file.filename = result.filename;
+      next();
+    } catch (uploadErr) {
+      next(uploadErr);
+    }
+  });
+};
+
+exports.uploadPropertyImages = (req, res, next) => {
+  uploadPropertyImagesMulter(req, res, async (err) => {
+    if (err) return next(err);
+    if (!req.files || !req.files.length) return next();
+
+    try {
+      const uploaded = await Promise.all(
+        req.files.map((file) => uploadToCloudinary(file, "properties"))
+      );
+      req.files.forEach((file, i) => {
+        file.path = uploaded[i].path;
+        file.filename = uploaded[i].filename;
+      });
+      next();
+    } catch (uploadErr) {
+      next(uploadErr);
+    }
+  });
+};
