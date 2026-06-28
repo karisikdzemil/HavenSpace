@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { API_BASE_URL } from "../../../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHandSparkles,
@@ -34,7 +35,7 @@ export default function AiSearch() {
     try {
       setAiLoading(true);
 
-      const res = await fetch("http://localhost:8080/api/ai-search", {
+      const res = await fetch(`${API_BASE_URL}/api/ai-search`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,14 +1,20 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faBed, 
-  faBath, 
-  faRulerCombined, 
-  faLocationDot, 
-  faArrowRight 
+import { API_BASE_URL } from "../../../config/api";
+import {
+  faBed,
+  faBath,
+  faRulerCombined,
+  faLocationDot,
+  faArrowRight
 } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../../contentWrapper";
+import InquiryModal from "../../inquiry/InquiryModal";
 
 export default function Properties({ properties }) {
+  const [inquiryProperty, setInquiryProperty] = useState(null);
+
   if (!properties || properties.length === 0) return null;
 
   const getBadge = (index, price) => {
@@ -24,17 +30,17 @@ export default function Properties({ properties }) {
 
   const PropertyCard = ({ item, isHorizontal, index }) => {
     const badge = getBadge(index, item.price);
-    
+
     return (
       <div className={`group bg-white rounded-[2.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-2xl transition-all duration-500 ${isHorizontal ? 'flex flex-col h-full' : 'flex flex-col h-full'}`}>
-        
-        <div className="relative overflow-hidden aspect-video md:aspect-auto md:h-[450px]">
-          <img 
-            src={`http://localhost:8080/assets/${item.images[0]}`} 
+
+        <Link to={`/propertie/${item._id}`} className="relative overflow-hidden aspect-video md:aspect-auto md:h-[450px] block">
+          <img
+            src={`${API_BASE_URL}/assets/${item.images[0]}`}
             alt={item.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
           />
-          
+
           <div className="absolute top-6 left-6 flex gap-2">
             <span className={`${badge.color} text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg`}>
               {badge.text}
@@ -45,7 +51,7 @@ export default function Properties({ properties }) {
               </span>
             )}
           </div>
-          
+
           <div className="absolute bottom-6 left-6 flex gap-3">
             <div className="bg-slate-900/30 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-2xl flex items-center gap-2 text-white text-xs font-bold">
               <FontAwesomeIcon icon={faBed} className="text-[#327878]" /> {item.bedNum} Beds
@@ -57,11 +63,11 @@ export default function Properties({ properties }) {
               <FontAwesomeIcon icon={faRulerCombined} className="text-[#327878]" /> {item.area} sq ft
             </div>
           </div>
-        </div>
+        </Link>
 
         <div className="p-10 flex flex-col justify-between flex-1">
           <div className="space-y-6">
-            <div className="flex justify-between items-start gap-4">
+            <Link to={`/propertie/${item._id}`} className="flex justify-between items-start gap-4">
               <div className="space-y-2">
                 <h3 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter leading-tight group-hover:text-[#327878] transition-colors">
                   {item.title}
@@ -74,7 +80,7 @@ export default function Properties({ properties }) {
               <div className="bg-[#327878] text-white px-6 py-3 rounded-2xl text-2xl font-black tracking-tighter shadow-lg shadow-[#327878]/20">
                 ${item.price.toLocaleString()}
               </div>
-            </div>
+            </Link>
 
             <p className="text-gray-400 text-base leading-relaxed line-clamp-2">
               {item.description}
@@ -83,12 +89,12 @@ export default function Properties({ properties }) {
 
           <div className="flex flex-col sm:flex-row items-center justify-between mt-10 pt-8 border-t border-gray-50 gap-6">
             <div className="flex gap-3 w-full sm:w-auto">
-              <button className="flex-1 sm:flex-none bg-[#327878] text-white px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all shadow-md">
+              <button onClick={() => setInquiryProperty(item)} className="flex-1 sm:flex-none bg-[#327878] text-white px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all shadow-md">
                 Arrange Visit
               </button>
-              <button className="flex-1 sm:flex-none border-2 border-[#327878]/20 text-[#327878] px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:border-[#327878] transition-all">
+              <Link to={`/propertie/${item._id}`} className="flex-1 sm:flex-none border-2 border-[#327878]/20 text-[#327878] px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:border-[#327878] transition-all text-center">
                 More Photos
-              </button>
+              </Link>
             </div>
             <div className="flex items-center gap-4 ml-auto">
               <span className="bg-slate-100 text-slate-500 text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg">
@@ -105,7 +111,7 @@ export default function Properties({ properties }) {
   };
 
   return (
-    <section className="pt-8 bg-[#FBFCFC]">
+    <section id="featured-properties" className="pt-8 bg-[#FBFCFC]">
       <ContentWrapper>
         <div className="text-center mb-20 space-y-4">
           <h2 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">
@@ -118,16 +124,16 @@ export default function Properties({ properties }) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          
+
           <div className="lg:col-span-2">
             <PropertyCard item={featured} isHorizontal={true} index={0} />
           </div>
 
           <div className="flex flex-col gap-6">
             {sideStack.map((item) => (
-              <div key={item._id} className="bg-white rounded-[2.5rem] p-5 flex gap-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all group cursor-pointer h-full">
+              <Link to={`/propertie/${item._id}`} key={item._id} className="bg-white rounded-[2.5rem] p-5 flex gap-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all group cursor-pointer h-full">
                  <div className="w-32 h-32 rounded-3xl overflow-hidden shrink-0 relative">
-                    <img src={`http://localhost:8080/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={`${API_BASE_URL}/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     <span className="absolute top-2 left-2 bg-orange-500 text-white text-[7px] font-black uppercase px-2 py-1 rounded-md">Hot</span>
                  </div>
                  <div className="flex flex-col justify-center space-y-2">
@@ -137,18 +143,18 @@ export default function Properties({ properties }) {
                        {item.location.city}
                     </div>
                     <p className="text-xl font-black text-slate-900 tracking-tighter">${item.price.toLocaleString()}</p>
-                    <button className="bg-slate-900 text-white text-[8px] font-black uppercase tracking-[0.2em] px-4 py-2.5 rounded-xl self-start hover:bg-[#327878] transition-colors">Details</button>
+                    <span className="bg-slate-900 text-white text-[8px] font-black uppercase tracking-[0.2em] px-4 py-2.5 rounded-xl self-start group-hover:bg-[#327878] transition-colors">Details</span>
                  </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
            {bottomGrid.map((item) => (
-             <div key={item._id} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-xl transition-all flex flex-col">
+             <Link to={`/propertie/${item._id}`} key={item._id} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-xl transition-all flex flex-col">
                 <div className="relative h-64 overflow-hidden">
-                   <img src={`http://localhost:8080/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                   <img src={`${API_BASE_URL}/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                    <span className="absolute top-4 left-4 bg-[#327878] text-white text-[8px] font-black uppercase px-3 py-1.5 rounded-full">New</span>
                 </div>
                 <div className="p-8 space-y-4 flex-1 flex flex-col">
@@ -162,17 +168,25 @@ export default function Properties({ properties }) {
                       <span>{item.area} SQFT</span>
                    </div>
                    <div className="pt-6 mt-auto border-t border-gray-50 flex justify-between items-center">
-                      <button className="text-[#327878] font-black text-[9px] uppercase tracking-[0.2em] flex items-center gap-2 group/btn">
+                      <span className="text-[#327878] font-black text-[9px] uppercase tracking-[0.2em] flex items-center gap-2 group/btn">
                         View Details <FontAwesomeIcon icon={faArrowRight} className="group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      </span>
                       <span className="bg-slate-50 text-slate-400 text-[8px] font-bold px-2 py-1 rounded">Exclusive</span>
                    </div>
                 </div>
-             </div>
+             </Link>
            ))}
         </div>
 
       </ContentWrapper>
+
+      <InquiryModal
+        open={!!inquiryProperty}
+        type="tour"
+        propertyId={inquiryProperty?._id}
+        ownerId={inquiryProperty?.owner?._id || inquiryProperty?.owner}
+        onClose={() => setInquiryProperty(null)}
+      />
     </section>
   );
 }

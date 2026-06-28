@@ -1,4 +1,4 @@
-// import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config/api";
 import AgentsSection from "../components/home/AgentsSection";
 import AiSearch from "../components/home/AI-search/ai-search";
 import AboutUs from "../components/home/homeAbout/AboutUs";
@@ -6,19 +6,20 @@ import HomeHeroSection from "../components/home/homeHeroSection";
 import PerfectInvestment from "../components/home/PerfectInvestment";
 import Properties from "../components/home/properties/Properties";
 import WhyUs from "../components/home/why-us/WhyUs";
-import Loading from "../components/loading/Loading";
+import ContentWrapper from "../components/contentWrapper";
+import { PropertyCardSkeletonGrid } from "../components/loading/PropertyCardSkeleton";
+import Reveal from "../components/motion/Reveal";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [properties, setProperties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(isLoading);
 
   useEffect(() => {
     const getProperties = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch("http://localhost:8080/api/properties");
+        const res = await fetch(`${API_BASE_URL}/api/properties`);
 
         if (!res.ok) {
           throw new Error(res.status);
@@ -26,9 +27,10 @@ export default function Home() {
 
         const data = await res.json();
         setProperties(data.properties);
-        setIsLoading(false);
       } catch (error) {
         console.error("Fetch error:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -38,12 +40,20 @@ export default function Home() {
   return (
     <>
       <HomeHeroSection />
-      <AiSearch />
-      <AboutUs />
-      <Properties properties={properties}/>
-      <WhyUs />'
-      <AgentsSection />
-      <PerfectInvestment />
+      <Reveal><AiSearch /></Reveal>
+      <Reveal><AboutUs /></Reveal>
+      {isLoading ? (
+        <section id="featured-properties" className="pt-8 bg-[#FBFCFC]">
+          <ContentWrapper>
+            <PropertyCardSkeletonGrid count={3} className="grid grid-cols-1 lg:grid-cols-3 gap-10" />
+          </ContentWrapper>
+        </section>
+      ) : (
+        <Reveal><Properties properties={properties} /></Reveal>
+      )}
+      <Reveal><WhyUs /></Reveal>
+      <Reveal><AgentsSection /></Reveal>
+      <Reveal><PerfectInvestment /></Reveal>
     </>
   );
 }

@@ -1,19 +1,70 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone, faLocationDot, faClock, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faFacebookF, faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
+import Loading from "../components/loading/Loading";
+import { API_BASE_URL } from "../config/api";
+import { useToast } from "../hooks/useToast";
+
+const INITIAL_FORM = { name: "", email: "", subject: "Inquiry about property", message: "" };
 
 export default function Contact() {
-  const contactHandler = (e) => {
+  const toast = useToast();
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const set = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const contactHandler = async (e) => {
     e.preventDefault();
-    alert("Message sent! Our agents will contact you shortly.");
+
+    const errs = {};
+    if (!form.name.trim()) errs.name = "Name is required.";
+    if (!form.email || !/\S+@\S+\.\S+/.test(form.email)) errs.email = "Valid email is required.";
+    if (!form.message || form.message.trim().length < 5) errs.message = "Message must be at least 5 characters.";
+
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+
+    setErrors({});
+    setIsLoading(true);
+
+    try {
+      const result = await fetch(`${API_BASE_URL}/api/inquiries`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: `[${form.subject}] ${form.message}`,
+          type: "contact",
+        }),
+      });
+      const data = await result.json();
+
+      if (!result.ok) {
+        toast.error(data.message || "Could not send your message.");
+        return;
+      }
+
+      toast.success("Message sent! Our agents will contact you shortly.");
+      setForm(INITIAL_FORM);
+    } catch {
+      toast.error("Server connection failed.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <section className="min-h-screen bg-[#FBFCFC] pt-36 pb-20">
       <ContentWrapper>
         <div className="max-w-6xl mx-auto">
-          
+
           {/* HEADER SEKCIJA */}
           <div className="text-center mb-16 space-y-4 flex flex-col">
             <span className="bg-[#327878] w-[180px] mx-auto text-white text-[10px] font-black uppercase tracking-[0.3em] px-5 py-2.5 rounded-full">
@@ -28,7 +79,7 @@ export default function Contact() {
           </div>
 
           <div className="flex flex-col lg:flex-row bg-white rounded-[3rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,0.06)] border border-gray-50 overflow-hidden">
-            
+
             {/* LEVA STRANA: INFO PANEL */}
             <div className="w-full lg:w-5/12 bg-[#327878] p-12 md:p-16 text-white flex flex-col justify-between">
               <div className="space-y-12">
@@ -88,25 +139,35 @@ export default function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Full Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={set("name")}
                       placeholder="John Doe"
-                      className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all"
+                      className={`w-full bg-[#FBFCFC] border ${errors.name ? "border-red-300" : "border-gray-100"} rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all`}
                     />
+                    {errors.name && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={set("email")}
                       placeholder="john@example.com"
-                      className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all"
+                      className={`w-full bg-[#FBFCFC] border ${errors.email ? "border-red-300" : "border-gray-100"} rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all`}
                     />
+                    {errors.email && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Subject</label>
-                  <select className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all appearance-none cursor-pointer text-gray-500">
+                  <select
+                    value={form.subject}
+                    onChange={set("subject")}
+                    className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all appearance-none cursor-pointer text-gray-500"
+                  >
                     <option>Inquiry about property</option>
                     <option>Selling my property</option>
                     <option>Consultation</option>
@@ -116,19 +177,27 @@ export default function Contact() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Message</label>
-                  <textarea 
-                    rows="6" 
+                  <textarea
+                    rows="6"
+                    value={form.message}
+                    onChange={set("message")}
                     placeholder="Tell us how we can help..."
-                    className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all resize-none"
+                    className={`w-full bg-[#FBFCFC] border ${errors.message ? "border-red-300" : "border-gray-100"} rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all resize-none`}
                   ></textarea>
+                  {errors.message && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.message}</p>}
                 </div>
 
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-[#327878] transition-all duration-300 shadow-xl shadow-slate-100 flex items-center justify-center gap-4 group"
                 >
-                  Send Message
-                  <FontAwesomeIcon icon={faPaperPlane} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  {isLoading ? <Loading /> : (
+                    <>
+                      Send Message
+                      <FontAwesomeIcon icon={faPaperPlane} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               </form>
             </div>

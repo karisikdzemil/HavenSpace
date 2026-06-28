@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar} from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
@@ -8,88 +9,6 @@ export default function HomeHeroSection() {
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row items-center gap-16">
           
-          {/* <div className="w-full lg:w-1/2 space-y-8">
-            <div className="inline-flex items-center gap-2 bg-[#327878] text-white px-5 py-2.5 rounded-full shadow-lg shadow-[#327878]/20">
-              <FontAwesomeIcon icon={faStar} className="text-[10px]" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Premium Properties</span>
-            </div>
-
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.1] tracking-tighter">
-              Discover Your <br /> 
-              <span className="text-[#327878]">Perfect Home</span> <br /> 
-              in the City.
-            </h1>
-
-            <p className="text-gray-400 text-lg font-medium max-w-lg leading-relaxed">
-              Browse thousands of verified luxury listings from our network of elite agents. Your dream residence is just one search away.
-            </p>
-
-            {/* <form className="bg-white p-8 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] border border-gray-100 space-y-5 max-w-xl"> */}
-              {/* <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Location</label>
-                <input 
-                  type="text" 
-                  placeholder="Enter city, neighborhood or zip..."
-                  className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:border-[#327878] transition-all"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Property Type</label>
-                  <div className="relative">
-                    <select className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-6 py-4 text-sm appearance-none focus:outline-none focus:border-[#327878] cursor-pointer">
-                      <option>Select Type</option>
-                      <option>Modern Villa</option>
-                      <option>Penthouse</option>
-                    </select>
-                    <FontAwesomeIcon icon={faChevronDown} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Price Range</label>
-                  <div className="relative">
-                    <select className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-6 py-4 text-sm appearance-none focus:outline-none focus:border-[#327878] cursor-pointer">
-                      <option>Price Range</option>
-                      <option>$500k - $1M</option>
-                      <option>$1M - $5M</option>
-                    </select>
-                    <FontAwesomeIcon icon={faChevronDown} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Bedrooms</label>
-                  <div className="relative">
-                    <select className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-6 py-4 text-sm appearance-none focus:outline-none focus:border-[#327878] cursor-pointer">
-                      <option>Bedrooms</option>
-                      <option>3+</option>
-                      <option>5+</option>
-                    </select>
-                    <FontAwesomeIcon icon={faChevronDown} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-300 ml-1">Bathrooms</label>
-                  <div className="relative">
-                    <select className="w-full bg-[#FBFCFC] border border-gray-100 rounded-2xl px-6 py-4 text-sm appearance-none focus:outline-none focus:border-[#327878] cursor-pointer">
-                      <option>Bathrooms</option>
-                      <option>2+</option>
-                      <option>4+</option>
-                    </select>
-                    <FontAwesomeIcon icon={faChevronDown} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 text-[10px] pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-
-              <button className="w-full bg-[#327878] text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center justify-center gap-3 group">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="group-hover:scale-110 transition-transform" />
-                Search Properties
-              </button>
-            </form> */}
-          {/* </div> */} 
           <div className="w-full lg:w-1/2 space-y-8">
   <div className="inline-flex items-center gap-2 bg-[#327878] text-white px-5 py-2.5 rounded-full shadow-lg shadow-[#327878]/20">
     <FontAwesomeIcon icon={faStar} className="text-[10px]" />
@@ -133,11 +52,14 @@ export default function HomeHeroSection() {
   </div>
 
   <div className="flex flex-wrap gap-4 pt-2">
-    <button className="bg-[#327878] text-white px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all duration-300 shadow-xl shadow-[#327878]/20">
+    <Link to="/properties" className="bg-[#327878] text-white px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-all duration-300 shadow-xl shadow-[#327878]/20">
       Explore Properties
-    </button>
+    </Link>
 
-    <button className="bg-white border border-gray-200 text-slate-900 px-8 py-4 rounded-2xl font-black text-sm hover:border-[#327878] hover:text-[#327878] transition-all duration-300">
+    <button
+      onClick={() => document.getElementById("featured-properties")?.scrollIntoView({ behavior: "smooth" })}
+      className="bg-white border border-gray-200 text-slate-900 px-8 py-4 rounded-2xl font-black text-sm hover:border-[#327878] hover:text-[#327878] transition-all duration-300"
+    >
       View Listings
     </button>
   </div>

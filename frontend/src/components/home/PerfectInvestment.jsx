@@ -1,13 +1,17 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faUserCheck, faCircleCheck, faHome, faTrophy, faStar } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
+import InquiryModal from "../inquiry/InquiryModal";
 
 export default function PerfectInvestment() {
+  const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+
   return (
     <section className="bg-[#f0f7f7]">
         <ContentWrapper>
       <div className=" mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        
+
         <div className="flex flex-col justify-center">
           <span className="inline-block self-start bg-[#d7ebeb] text-[#286161] text-xs font-bold px-4 py-1.5 rounded-md tracking-wide mb-6">
             Your Property Journey Starts Here
@@ -19,8 +23,8 @@ export default function PerfectInvestment() {
           </h2>
 
           <p className="text-slate-500 text-sm md:text-base leading-relaxed mb-8 max-w-xl">
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere 
-            cubilia curae; Mauris viverra veniam sit amet lacus cursus. Sed ut perspiciatis 
+            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+            cubilia curae; Mauris viverra veniam sit amet lacus cursus. Sed ut perspiciatis
             unde omnis iste natus error sit voluptatem.
           </p>
 
@@ -46,12 +50,15 @@ export default function PerfectInvestment() {
           </div>
 
           <div className="flex flex-wrap gap-4 items-center">
-            <button className="inline-flex items-center gap-2 bg-[#327878] hover:bg-[#286161] text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md shadow-[#327878]/10">
+            <button
+              onClick={() => setIsInquiryOpen(true)}
+              className="inline-flex items-center gap-2 bg-[#327878] hover:bg-[#286161] text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md shadow-[#327878]/10"
+            >
               <FontAwesomeIcon icon={faUserCheck} />
               Get Free Consultation
             </button>
-            <a 
-              href="tel:5551234567" 
+            <a
+              href="tel:5551234567"
               className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-[#327878] text-[#327878] px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
             >
               <FontAwesomeIcon icon={faPhone} />
@@ -62,8 +69,8 @@ export default function PerfectInvestment() {
 
         <div className="relative flex justify-center lg:justify-end">
           <div className="relative w-full max-w-[540px] aspect-4/3 rounded-[2.5rem] overflow-hidden shadow-xl">
-            <img 
-              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800" 
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
               alt="Perfect Investment House"
               className="w-full h-full object-cover"
             />
@@ -100,6 +107,8 @@ export default function PerfectInvestment() {
 
       </div>
       </ContentWrapper>
+
+      <InquiryModal open={isInquiryOpen} type="consultation" onClose={() => setIsInquiryOpen(false)} />
     </section>
   );
 }

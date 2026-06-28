@@ -7,6 +7,7 @@ import {
   faUsers, 
   faGem 
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 import ContentWrapper from "../../contentWrapper";
 
 export default function WhyUs() {
@@ -63,17 +64,17 @@ export default function WhyUs() {
               </div>
             </div>
 
-            <div className="absolute -top-10 -right-10 bg-[#327878] text-white p-8 rounded-4xl shadow-2xl z-20 text-center min-w-40">
+            <div className="absolute -top-10 md:-right-10 right-0 bg-[#327878] text-white p-8 rounded-4xl shadow-2xl z-20 text-center min-w-40">
               <h4 className="text-3xl font-black tracking-tighter">15+</h4>
               <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Years Excellence</p>
             </div>
 
-            <div className="absolute top-20 -right-10 bg-white text-slate-900 p-8 rounded-4xl shadow-2xl z-10 text-center min-w-40 border border-gray-50">
+            <div className="absolute top-20 md:-right-10 right-0 bg-white text-slate-900 p-8 rounded-4xl shadow-2xl z-10 text-center min-w-40 border border-gray-50">
               <h4 className="text-3xl font-black tracking-tighter">3.2K</h4>
               <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Happy Clients</p>
             </div>
 
-            <div className="absolute -bottom-10 -left-10 bg-white p-6 rounded-4xl shadow-2xl z-20 flex items-center gap-4 border border-gray-50 max-w-[280px]">
+            <div className="absolute -bottom-10 md:-left-10 left-0 bg-white p-6 rounded-4xl shadow-2xl z-20 flex items-center gap-4 border border-gray-50 max-w-[280px]">
               <div className="w-12 h-12 rounded-xl bg-[#327878]/10 flex items-center justify-center text-[#327878]">
                 <FontAwesomeIcon icon={faGem} />
               </div>
@@ -129,12 +130,12 @@ export default function WhyUs() {
             </div>
 
             <div className="flex flex-wrap items-center gap-6 pt-4">
-              <button className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20">
+              <Link to="/properties" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20">
                 Explore Properties
-              </button>
-              <button className="border-2 border-gray-200 text-slate-900 px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-[#327878] transition-all duration-500">
+              </Link>
+              <Link to="/contact" className="border-2 border-gray-200 text-slate-900 px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-[#327878] transition-all duration-500">
                 Schedule Consultation
-              </button>
+              </Link>
             </div>
           </div>
 

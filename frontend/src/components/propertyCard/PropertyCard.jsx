@@ -1,6 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBath, faBed, faLocationDot, faMaximize, faWarehouse } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../../config/api";
+import { faBath, faBed, faLocationDot, faMaximize, faWarehouse, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
+import { useFavorites } from "../../hooks/useFavorites";
+import { useToast } from "../../hooks/useToast";
 
 const SpecItem = ({ icon, text }) => (
   <div className="flex items-center gap-1.5">
@@ -10,28 +13,59 @@ const SpecItem = ({ icon, text }) => (
 );
 
 export default function PropertyCard({ property }) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const toast = useToast();
+  const navigate = useNavigate();
+  const favorited = isFavorite(property._id);
+
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(property.price);
 
+  const favoriteHandler = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const result = await toggleFavorite(property._id);
+
+    if (result.requiresAuth) {
+      toast.info("Please log in to save properties.");
+      navigate("/register");
+      return;
+    }
+    if (!result.ok) {
+      toast.error(result.message || "Could not update favorites.");
+      return;
+    }
+    toast.success(result.isFavorite ? "Added to saved properties." : "Removed from saved properties.");
+  };
+
   return (
     <div className="w-full">
     <div className="group w-full bg-white rounded-4xl p-4 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_50px_-15px_rgba(50,120,120,0.2)] transition-all duration-500 cursor-pointer border border-gray-50">
       <Link to={`/propertie/${property._id}`} className="block">
-        
+
         <div className="relative w-full h-64 overflow-hidden rounded-3xl">
-          <div 
-            style={{ backgroundImage: `url(http://localhost:8080/${property.images[0]})` }} 
+          <div
+            style={{ backgroundImage: `url(${API_BASE_URL}/${property.images[0]})` }}
             className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
           />
-        
+
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
             <span className="text-[#327878] text-xs font-bold uppercase tracking-wider">
               {property.status}
             </span>
           </div>
+          <button
+            onClick={favoriteHandler}
+            className={`absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md shadow-sm transition-all hover:scale-110 ${
+              favorited ? "bg-red-500 text-white" : "bg-white/90 text-gray-400 hover:text-red-500"
+            }`}
+          >
+            <FontAwesomeIcon icon={faHeart} size="sm" />
+          </button>
           <div className="absolute bottom-4 right-4 bg-[#327878] text-white px-5 py-2 rounded-2xl shadow-lg">
             <p className="text-lg font-bold">{formattedPrice}</p>
           </div>

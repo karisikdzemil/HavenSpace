@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faSliders, faSearch, faArrowRotateLeft, faChevronLeft, 
   faChevronRight, faHouse, faBuilding, faLayerGroup 
 } from "@fortawesome/free-solid-svg-icons";
-import Loading from "../components/loading/Loading";
+import { PropertyCardSkeletonGrid } from "../components/loading/PropertyCardSkeleton";
 import PropertyCard from "../components/propertyCard/PropertyCard";
+import PropertiesMap from "../components/map/PropertiesMap";
 import ContentWrapper from "../components/contentWrapper";
+import { RevealGroup, RevealItem } from "../components/motion/Reveal";
 
 const INITIAL_FILTERS = {
   type: "any",
@@ -24,6 +27,7 @@ export default function Properties() {
   const [appliedFilters, setAppliedFilters] = useState(INITIAL_FILTERS);
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState(null);
+  const [viewMode, setViewMode] = useState("grid");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -35,7 +39,7 @@ export default function Properties() {
           limit: 6,
           ...appliedFilters,
         });
-        const res = await fetch(`http://localhost:8080/api/properties?${params.toString()}`);
+        const res = await fetch(`${API_BASE_URL}/api/properties?${params.toString()}`);
         const data = await res.json();
         setProperties(data.properties);
         setPagination(data.pagination);
@@ -164,20 +168,36 @@ export default function Properties() {
                 <p className="text-gray-400 mt-1">Found {properties.length} results for your search</p>
               </div>
               <div className="hidden md:flex bg-white p-1 rounded-xl border border-gray-100">
-                <button className="px-6 py-2 bg-[#f0f5f5] text-[#327878] rounded-lg text-xs font-black uppercase tracking-widest">Grid View</button>
-                <button className="px-6 py-2 text-gray-400 rounded-lg text-xs font-black uppercase tracking-widest">Map View</button>
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`px-6 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${viewMode === "grid" ? "bg-[#f0f5f5] text-[#327878]" : "text-gray-400 hover:text-gray-600"}`}
+                >
+                  Grid View
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`px-6 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${viewMode === "map" ? "bg-[#f0f5f5] text-[#327878]" : "text-gray-400 hover:text-gray-600"}`}
+                >
+                  Map View
+                </button>
               </div>
             </div>
 
             {loading ? (
-              <div className="h-[400px] flex items-center justify-center">
-                <Loading loadingText="Refreshing results..." />
+              <PropertyCardSkeletonGrid count={6} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16" />
+            ) : viewMode === "map" ? (
+              <div className="mb-16">
+                <PropertiesMap properties={properties} />
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                  {properties.map(el => <PropertyCard key={el._id} property={el}/>)}
-                </div>
+                <RevealGroup className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                  {properties.map(el => (
+                    <RevealItem key={el._id}>
+                      <PropertyCard property={el} />
+                    </RevealItem>
+                  ))}
+                </RevealGroup>
 
                 {pagination?.totalPages > 1 && (
                   <div className="flex justify-center items-center gap-4">

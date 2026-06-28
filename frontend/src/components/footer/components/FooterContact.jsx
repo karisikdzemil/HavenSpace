@@ -1,5 +1,19 @@
+import { useState } from "react";
+import { useToast } from "../../../hooks/useToast";
 
 export default function FooterContact(){
+    const toast = useToast();
+    const [email, setEmail] = useState("");
+
+    const subscribeHandler = (e) => {
+        e.preventDefault();
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+        toast.success("Thanks for subscribing to HavenSpace updates!");
+        setEmail("");
+    };
 
     return (
         <div className="lg:w-1/3 w-full flex flex-col lg:items-start gap-5 ">
@@ -15,15 +29,17 @@ export default function FooterContact(){
             >
               Stay Updated
             </label>
-            <form className="w-full flex lg:justify-start" action="" method="">
+            <form className="w-full flex lg:justify-start" onSubmit={subscribeHandler}>
               <input
                 className="lg:w-10/12 w-full bg-white pl-4 py-2 rounded-l-[100px] shadow-2xl "
                 placeholder="Enter your email"
                 type="email"
                 name="contact"
-                id=""
+                id="contact"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <button className="w-2/12 bg-[#2c7a7b] text-xl py-2 transition-all duration-300 cursor-pointer text-center hover:bg-[#3d9ea0] rounded-r-[100px] text-white">
+              <button type="submit" className="w-2/12 bg-[#2c7a7b] text-xl py-2 transition-all duration-300 cursor-pointer text-center hover:bg-[#3d9ea0] rounded-r-[100px] text-white">
                 {">"}
               </button>
             </form>

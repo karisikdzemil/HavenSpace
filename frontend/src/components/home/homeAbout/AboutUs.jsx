@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ContentWrapper from "../../contentWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuilding, faCheckCircle, faArrowRight, faHeadset, faAward } from "@fortawesome/free-solid-svg-icons";
@@ -56,10 +57,10 @@ export default function AboutUs() {
             </div>
 
             <div className="flex flex-wrap items-center gap-8 pt-4">
-              <button className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center gap-3 group">
+              <Link to="/contact" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center gap-3 group">
                 Learn More About Us
                 <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
 
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[#FBFCFC] border border-gray-100 flex items-center justify-center text-[#327878] shadow-sm">

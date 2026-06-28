@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
+import { AgentCardSkeletonGrid } from "../loading/AgentCardSkeleton";
 
 export default function AgentsSection() {
   const [agents, setAgents] = useState([]);
@@ -10,7 +12,7 @@ export default function AgentsSection() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/agents");
+        const res = await fetch(`${API_BASE_URL}/api/agents`);
         const data = await res.json();
         
         if (data.agents) {
@@ -27,9 +29,11 @@ export default function AgentsSection() {
 
   if (loading) {
     return (
-      <div className="text-center py-20 text-sm font-bold uppercase tracking-widest text-slate-400">
-        Loading Featured Agents...
-      </div>
+      <section className="bg-white mx-auto font-sans">
+        <ContentWrapper>
+          <AgentCardSkeletonGrid count={3} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" />
+        </ContentWrapper>
+      </section>
     );
   }
 
@@ -59,7 +63,7 @@ export default function AgentsSection() {
             >
               <div className="relative h-80 w-full bg-slate-50 overflow-hidden">
                 <img 
-                  src={`http://localhost:8080/assets/${agent.avatar}`} 
+                  src={`${API_BASE_URL}/assets/${agent.avatar}`} 
                   alt={`${agent.name} ${agent.surname}`} 
                   className="w-full h-full object-cover object-center"
                 />
