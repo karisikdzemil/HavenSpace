@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/loading/Loading";
@@ -232,8 +233,8 @@ export default function AddProperty() {
     formData.append("lat", form.lat);
     formData.append("lng", form.lng);
     formData.append("description", form.description);
-    interiorFeatures.forEach((f) => formData.append("interiorFeatures[]", f));
-    exteriorFeatures.forEach((f) => formData.append("exteriorFeatures[]", f));
+    interiorFeatures.forEach((f) => formData.append("interiorFeatures", f));
+    exteriorFeatures.forEach((f) => formData.append("exteriorFeatures", f));
 
     const fileInput = document.querySelector('input[name="images"]');
     if (fileInput?.files?.length) {
@@ -241,7 +242,7 @@ export default function AddProperty() {
     }
 
     try {
-      const result = await fetch("http://localhost:8080/api/property", {
+      const result = await fetch(`${API_BASE_URL}/api/property`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

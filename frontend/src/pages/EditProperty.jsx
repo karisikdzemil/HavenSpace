@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
 import { useEffect, useState } from "react";
 import Loading from "../components/loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuilding, faTag, faLocationDot, faInfoCircle,
-  faBed, faBath, faRulerCombined, faCar,
+  faBed, faBath, faRulerCombined, faCar, faImages,
   faCheckDouble, faMapPin, faArrowRight, faXmark, faPlus
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -115,6 +116,9 @@ export default function EditProperty() {
   const [isLoadingPropertyData, setIsLoadingPropertyData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [existingImages, setExistingImages] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [newImageFiles, setNewImageFiles] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -131,7 +135,7 @@ export default function EditProperty() {
     const fetchProperty = async () => {
       setIsLoadingPropertyData(true);
       try {
-        const result = await fetch(`http://localhost:8080/api/property/${id}`, {
+        const result = await fetch(`${API_BASE_URL}/api/property/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -160,6 +164,7 @@ export default function EditProperty() {
 
         setInteriorFeatures(p.interiorFeatures ?? []);
         setExteriorFeatures(p.exteriorFeatures ?? []);
+        setExistingImages(p.images ?? []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -250,6 +255,20 @@ export default function EditProperty() {
       setExteriorFeatures((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const removeExistingImage = (imgPath) => {
+    setExistingImages((prev) => prev.filter((img) => img !== imgPath));
+    setRemovedImages((prev) => [...prev, imgPath]);
+  };
+
+  const addNewImageFiles = (e) => {
+    const files = Array.from(e.target.files || []);
+    setNewImageFiles((prev) => [...prev, ...files]);
+  };
+
+  const removeNewImageFile = (index) => {
+    setNewImageFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   // ─── Submit ────────────────────────────────────────────────────────────────
   const saveChangesHandler = async (e) => {
     e.preventDefault();
@@ -263,32 +282,32 @@ export default function EditProperty() {
     setErrors({});
     setIsLoading(true);
 
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("price", form.price);
+    formData.append("status", form.status);
+    formData.append("type", form.type);
+    formData.append("area", form.area);
+    formData.append("bedNum", form.bedNum);
+    formData.append("bathNum", form.bathNum);
+    formData.append("garage", form.garage || "0");
+    formData.append("city", form.city);
+    formData.append("address", form.address);
+    formData.append("lat", form.lat);
+    formData.append("lng", form.lng);
+    formData.append("description", form.description);
+    interiorFeatures.forEach((f) => formData.append("interiorFeatures", f));
+    exteriorFeatures.forEach((f) => formData.append("exteriorFeatures", f));
+    removedImages.forEach((img) => formData.append("removedImages", img));
+    newImageFiles.forEach((file) => formData.append("images", file));
+
     try {
-      const result = await fetch(`http://localhost:8080/api/edit-property/${id}`, {
+      const result = await fetch(`${API_BASE_URL}/api/edit-property/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title: form.title,
-          price: Number(form.price),
-          status: form.status,
-          type: form.type,
-          area: Number(form.area),
-          bedNum: Number(form.bedNum),
-          bathNum: Number(form.bathNum),
-          garage: Number(form.garage) || 0,
-          location: {
-            city: form.city,
-            address: form.address,
-            lat: Number(form.lat),
-            lng: Number(form.lng),
-          },
-          description: form.description,
-          interiorFeatures,
-          exteriorFeatures,
-        }),
+        body: formData,
       });
 
       const data = await result.json();
@@ -371,6 +390,50 @@ export default function EditProperty() {
                 <Input label="Bedrooms" value={form.bedNum} onChange={set("bedNum")} type="number" icon={faBed} placeholder="4" error={errors.bedNum} />
                 <Input label="Bathrooms" value={form.bathNum} onChange={set("bathNum")} type="number" icon={faBath} placeholder="3" error={errors.bathNum} />
                 <Input label="Garage Slots" value={form.garage} onChange={set("garage")} type="number" icon={faCar} placeholder="0" error={errors.garage} />
+              </FormSection>
+
+              <FormSection title="Property Images" icon={faImages}>
+                <div className="col-span-2 space-y-4">
+                  {existingImages.length > 0 && (
+                    <div className="flex flex-wrap gap-4">
+                      {existingImages.map((img) => (
+                        <div key={img} className="relative w-28 h-28 rounded-2xl overflow-hidden border border-gray-100 group">
+                          <img src={`${API_BASE_URL}/${img}`} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(img)}
+                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <FontAwesomeIcon icon={faXmark} size="xs" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {newImageFiles.length > 0 && (
+                    <div className="flex flex-wrap gap-4">
+                      {newImageFiles.map((file, i) => (
+                        <div key={i} className="relative w-28 h-28 rounded-2xl overflow-hidden border border-[#327878]/30 group">
+                          <img src={URL.createObjectURL(file)} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => removeNewImageFile(i)}
+                            className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <FontAwesomeIcon icon={faXmark} size="xs" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <label className="flex items-center gap-3 w-full bg-[#f0f7f7] border border-dashed border-[#327878]/30 rounded-2xl px-5 py-4 cursor-pointer hover:bg-[#e8f2f2] transition-colors">
+                    <FontAwesomeIcon icon={faImages} className="text-[#327878]" />
+                    <span className="text-xs font-bold text-[#327878]">Add More Photos (Multiple)</span>
+                    <input type="file" multiple accept="image/png,image/jpg,image/jpeg" className="hidden" onChange={addNewImageFiles} />
+                  </label>
+                </div>
               </FormSection>
 
               <FormSection title="Location Tracking" icon={faMapPin}>
