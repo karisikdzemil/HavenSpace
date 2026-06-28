@@ -12,7 +12,7 @@ export default function FooterBottom() {
         <div className="flex gap-3">
           <span className="text-white/70 font-light ">Privacy Policy</span>
           <span className="text-white/70 font-light ">Terms of Service</span>
-          <span className="text-white/70 font-light ">Cokiee Policy</span>
+          <span className="text-white/70 font-light ">Cookie Policy</span>
         </div>
         <p className="text-white/70 font-light text-center md:text-right">
           Design by <span className="font-bold text-white">Dzemil Karisik</span>
