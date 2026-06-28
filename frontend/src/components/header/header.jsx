@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { API_BASE_URL } from "../../config/api";
+import { avatarUrl } from "../../config/api";
 import HeaderLinks from "./components/HeaderLinks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark, faChevronDown, faUserPen, faHeart, faBuildingUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -102,7 +102,7 @@ export default function Header() {
                 className="flex items-center gap-3 pl-2 pr-4 py-1.5 rounded-full hover:bg-gray-50 transition-all"
               >
                 <img
-                  src={`${API_BASE_URL}/assets/${user?.avatar}`}
+                  src={avatarUrl(user?.avatar)}
                   alt={user?.name}
                   className="w-9 h-9 rounded-full object-cover ring-2 ring-[#f0f5f5]"
                 />

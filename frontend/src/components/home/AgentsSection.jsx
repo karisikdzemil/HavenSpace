@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../../config/api";
+import { Link } from "react-router-dom";
+import { API_BASE_URL, avatarUrl } from "../../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
 import { AgentCardSkeletonGrid } from "../loading/AgentCardSkeleton";
+import Reveal, { RevealGroup, RevealItem } from "../motion/Reveal";
 
 export default function AgentsSection() {
   const [agents, setAgents] = useState([]);
@@ -42,7 +44,7 @@ export default function AgentsSection() {
   return (
     <section className="bg-white mx-auto font-sans">
         <ContentWrapper>
-      <div className="text-center mb-16">
+      <Reveal className="text-center mb-16">
         <h2 className="text-4xl font-black text-slate-900 relative inline-block pb-4 tracking-tight">
           Featured Agents
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-[3px] bg-[#327878]"></span>
@@ -50,20 +52,21 @@ export default function AgentsSection() {
         <p className="text-slate-400 mt-4 max-w-2xl mx-auto text-sm font-medium tracking-wide">
           Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit
         </p>
-      </div>
+      </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      <RevealGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16" staggerDelay={0.12}>
         {agents.map((agent) => {
           const badgeText = agent.isTopAgent ? "TOP AGENT" : "CERTIFIED";
 
           return (
-            <div 
-              key={agent._id} 
-              className="bg-white rounded-4xl overflow-hidden shadow-[0_15px_50px_-20px_rgba(0,0,0,0.05)] border border-gray-100 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col"
+            <RevealItem
+              key={agent._id}
+              direction="scale"
+              className="bg-white rounded-4xl overflow-hidden shadow-[0_15px_50px_-20px_rgba(0,0,0,0.05)] border border-gray-100 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
             >
               <div className="relative h-80 w-full bg-slate-50 overflow-hidden">
                 <img 
-                  src={`${API_BASE_URL}/assets/${agent.avatar}`} 
+                  src={avatarUrl(agent.avatar)}
                   alt={`${agent.name} ${agent.surname}`} 
                   className="w-full h-full object-cover object-center"
                 />
@@ -116,27 +119,27 @@ export default function AgentsSection() {
                   </span>
                 </div>
 
-                <a 
-                  href={`/agents/${agent._id}`}
-                  className="w-full mt-auto bg-[#327878] hover:bg-[#286161] text-white text-center font-bold py-4 px-4 rounded-xl transition-all duration-200 text-xs uppercase tracking-widest shadow-md shadow-[#327878]/10"
+                <Link
+                  to={`/agents/${agent._id}`}
+                  className="w-full mt-auto bg-[#327878] hover:bg-[#286161] hover:scale-105 text-white text-center font-bold py-4 px-4 rounded-xl transition-all duration-200 text-xs uppercase tracking-widest shadow-md shadow-[#327878]/10"
                 >
                   View Full Profile
-                </a>
+                </Link>
               </div>
-            </div>
+            </RevealItem>
           );
         })}
-      </div>
+      </RevealGroup>
 
-      <div className="text-center">
-        <a 
-          href="/agents"
-          className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#327878] text-[#327878] font-bold rounded-full hover:bg-[#327878] hover:text-white transition-all duration-300 text-xs uppercase tracking-widest"
+      <Reveal className="text-center">
+        <Link
+          to="/agents"
+          className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#327878] text-[#327878] font-bold rounded-full hover:bg-[#327878] hover:text-white hover:scale-105 transition-all duration-300 text-xs uppercase tracking-widest"
         >
           Explore All Our Agents
           <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-        </a>
-      </div>
+        </Link>
+      </Reveal>
 </ContentWrapper>
     </section>
   );

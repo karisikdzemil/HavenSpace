@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { API_BASE_URL } from "../../../config/api";
+import { propertyImageUrl } from "../../../config/api";
 import {
   faBed,
   faBath,
@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../../contentWrapper";
 import InquiryModal from "../../inquiry/InquiryModal";
+import Reveal, { RevealGroup, RevealItem } from "../../motion/Reveal";
 
 export default function Properties({ properties }) {
   const [inquiryProperty, setInquiryProperty] = useState(null);
@@ -36,7 +37,7 @@ export default function Properties({ properties }) {
 
         <Link to={`/propertie/${item._id}`} className="relative overflow-hidden aspect-video md:aspect-auto md:h-[450px] block">
           <img
-            src={`${API_BASE_URL}/assets/${item.images[0]}`}
+            src={propertyImageUrl(item.images[0])}
             alt={item.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
           />
@@ -113,7 +114,7 @@ export default function Properties({ properties }) {
   return (
     <section id="featured-properties" className="pt-8 bg-[#FBFCFC]">
       <ContentWrapper>
-        <div className="text-center mb-20 space-y-4">
+        <Reveal className="text-center mb-20 space-y-4">
           <h2 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">
             Featured Properties
           </h2>
@@ -121,19 +122,20 @@ export default function Properties({ properties }) {
           <p className="text-gray-400 font-medium max-w-lg mx-auto italic">
             Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-          <div className="lg:col-span-2">
+          <Reveal direction="left" duration={0.6} className="lg:col-span-2">
             <PropertyCard item={featured} isHorizontal={true} index={0} />
-          </div>
+          </Reveal>
 
-          <div className="flex flex-col gap-6">
+          <RevealGroup className="flex flex-col gap-6" staggerDelay={0.1}>
             {sideStack.map((item) => (
-              <Link to={`/propertie/${item._id}`} key={item._id} className="bg-white rounded-[2.5rem] p-5 flex gap-6 border border-gray-50 shadow-sm hover:shadow-xl transition-all group cursor-pointer h-full">
+              <RevealItem key={item._id} direction="right">
+              <Link to={`/propertie/${item._id}`} className="bg-white rounded-[2.5rem] p-5 flex gap-6 border border-gray-50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group cursor-pointer h-full">
                  <div className="w-32 h-32 rounded-3xl overflow-hidden shrink-0 relative">
-                    <img src={`${API_BASE_URL}/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={propertyImageUrl(item.images[0])} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     <span className="absolute top-2 left-2 bg-orange-500 text-white text-[7px] font-black uppercase px-2 py-1 rounded-md">Hot</span>
                  </div>
                  <div className="flex flex-col justify-center space-y-2">
@@ -146,15 +148,17 @@ export default function Properties({ properties }) {
                     <span className="bg-slate-900 text-white text-[8px] font-black uppercase tracking-[0.2em] px-4 py-2.5 rounded-xl self-start group-hover:bg-[#327878] transition-colors">Details</span>
                  </div>
               </Link>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
+        <RevealGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-10" staggerDelay={0.1}>
            {bottomGrid.map((item) => (
-             <Link to={`/propertie/${item._id}`} key={item._id} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-xl transition-all flex flex-col">
+             <RevealItem key={item._id} direction="scale">
+             <Link to={`/propertie/${item._id}`} className="group bg-white rounded-[2.5rem] overflow-hidden border border-gray-50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col">
                 <div className="relative h-64 overflow-hidden">
-                   <img src={`${API_BASE_URL}/assets/${item.images[0]}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                   <img src={propertyImageUrl(item.images[0])} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                    <span className="absolute top-4 left-4 bg-[#327878] text-white text-[8px] font-black uppercase px-3 py-1.5 rounded-full">New</span>
                 </div>
                 <div className="p-8 space-y-4 flex-1 flex flex-col">
@@ -175,8 +179,9 @@ export default function Properties({ properties }) {
                    </div>
                 </div>
              </Link>
+             </RevealItem>
            ))}
-        </div>
+        </RevealGroup>
 
       </ContentWrapper>
 

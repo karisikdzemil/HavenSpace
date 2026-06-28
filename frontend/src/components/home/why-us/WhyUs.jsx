@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faPlay, 
-  faLocationDot, 
-//   faShieldCheck, 
-  faClock, 
-  faUsers, 
-  faGem 
+import {
+  faPlay,
+  faLocationDot,
+  faClock,
+  faUsers,
+  faGem
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import ContentWrapper from "../../contentWrapper";
+import Reveal, { RevealGroup, RevealItem } from "../../motion/Reveal";
 
 export default function WhyUs() {
   const features = [
@@ -37,20 +37,20 @@ export default function WhyUs() {
   return (
     <section className="pt-8 bg-white overflow-hidden">
       <ContentWrapper>
-        <div className="text-center mb-20 space-y-4">
+        <Reveal className="text-center mb-20 space-y-4">
           <h2 className="text-5xl font-black text-slate-900 tracking-tighter italic">Why Us</h2>
           <div className="w-20 h-1 bg-[#327878] mx-auto rounded-full"></div>
           <p className="text-gray-400 font-medium max-w-lg mx-auto">
             Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit.
           </p>
-        </div>
+        </Reveal>
 
         <div className="flex flex-col lg:flex-row items-center gap-20">
-          
-          <div className="w-full lg:w-1/2 relative">
+
+          <Reveal direction="left" duration={0.7} className="w-full lg:w-1/2 relative">
             <div className="relative rounded-[3rem] overflow-hidden shadow-2xl group cursor-pointer">
-              <img 
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" 
+              <img
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
                 className="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700"
                 alt="Luxury Property Video"
               />
@@ -83,10 +83,10 @@ export default function WhyUs() {
                 <p className="text-gray-400 text-[10px] font-medium">Luxury real estate expertise since 2009</p>
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="w-full lg:w-1/2 space-y-12">
-            <div className="space-y-6">
+          <RevealGroup className="w-full lg:w-1/2 space-y-12">
+            <RevealItem direction="right" className="space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#327878]/10 text-[#327878] px-5 py-2.5 rounded-full">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">★ Why Elite Properties</span>
               </div>
@@ -96,11 +96,11 @@ export default function WhyUs() {
               <p className="text-gray-400 text-lg font-medium leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
               </p>
-            </div>
+            </RevealItem>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            <RevealGroup className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10" staggerDelay={0.1}>
               {features.map((f, i) => (
-                <div key={i} className="flex gap-5">
+                <RevealItem key={i} className="flex gap-5">
                   <div className="shrink-0 w-12 h-12 bg-[#327878]/10 rounded-xl flex items-center justify-center text-[#327878]">
                     <FontAwesomeIcon icon={f.icon} />
                   </div>
@@ -108,11 +108,11 @@ export default function WhyUs() {
                     <h4 className="font-black text-slate-900 text-base">{f.title}</h4>
                     <p className="text-gray-400 text-xs leading-relaxed font-medium">{f.desc}</p>
                   </div>
-                </div>
+                </RevealItem>
               ))}
-            </div>
+            </RevealGroup>
 
-            <div className="bg-[#FBFCFC] border border-gray-100 rounded-[2.5rem] p-10 flex flex-wrap justify-between items-center gap-8 shadow-sm">
+            <RevealItem direction="scale" className="bg-[#FBFCFC] border border-gray-100 rounded-[2.5rem] p-10 flex flex-wrap justify-between items-center gap-8 shadow-sm">
               <div className="text-center space-y-1">
                 <h4 className="text-3xl font-black text-slate-900 tracking-tighter">94</h4>
                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">% Success Rate</p>
@@ -127,17 +127,17 @@ export default function WhyUs() {
                 <h4 className="text-3xl font-black text-slate-900 tracking-tighter">24</h4>
                 <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">/7 Support Available</p>
               </div>
-            </div>
+            </RevealItem>
 
-            <div className="flex flex-wrap items-center gap-6 pt-4">
-              <Link to="/properties" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20">
+            <RevealItem className="flex flex-wrap items-center gap-6 pt-4">
+              <Link to="/properties" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 hover:scale-105 transition-all duration-500 shadow-xl shadow-[#327878]/20">
                 Explore Properties
               </Link>
-              <Link to="/contact" className="border-2 border-gray-200 text-slate-900 px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-[#327878] transition-all duration-500">
+              <Link to="/contact" className="border-2 border-gray-200 text-slate-900 px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-[#327878] hover:scale-105 transition-all duration-500">
                 Schedule Consultation
               </Link>
-            </div>
-          </div>
+            </RevealItem>
+          </RevealGroup>
 
         </div>
       </ContentWrapper>

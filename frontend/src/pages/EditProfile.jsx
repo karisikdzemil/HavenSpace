@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL, avatarUrl } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
+import Reveal, { RevealGroup, RevealItem } from "../components/motion/Reveal";
 import Loading from "../components/loading/Loading";
 import ConfirmDialog from "../components/modal/ConfirmDialog";
 import { useAuth } from "../hooks/useAuth";
@@ -210,7 +211,7 @@ export default function EditProfile() {
       <ContentWrapper>
         <div className="max-w-4xl mx-auto space-y-10">
 
-          <div className="text-center space-y-4 flex flex-col">
+          <Reveal className="text-center space-y-4 flex flex-col">
             <span className="bg-[#327878] mx-auto w-[180px] text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full">
               Account Settings
             </span>
@@ -218,12 +219,15 @@ export default function EditProfile() {
             <p className="text-gray-400 font-medium max-w-lg mx-auto">
               Update your public agent profile, contact details, and account security.
             </p>
-          </div>
+          </Reveal>
 
+          <RevealGroup className="space-y-10" staggerDelay={0.12}>
+
+          <RevealItem>
           <form onSubmit={saveProfileHandler} className="bg-white rounded-4xl p-8 md:p-10 border border-gray-100 shadow-sm space-y-8">
             <div className="flex flex-col sm:flex-row items-center gap-6 pb-8 border-b border-gray-50">
               <img
-                src={avatarPreview || `${API_BASE_URL}/assets/${user.avatar}`}
+                src={avatarPreview || avatarUrl(user.avatar)}
                 alt={user.name}
                 className="w-24 h-24 rounded-3xl object-cover shadow-lg ring-2 ring-[#f0f5f5]"
               />
@@ -287,7 +291,9 @@ export default function EditProfile() {
               )}
             </button>
           </form>
+          </RevealItem>
 
+          <RevealItem>
           <form onSubmit={changePasswordHandler} className="bg-white rounded-4xl p-8 md:p-10 border border-gray-100 shadow-sm space-y-6">
             <div className="flex items-center gap-3 pb-4 border-b border-gray-50">
               <div className="w-10 h-10 rounded-full bg-[#327878]/10 flex items-center justify-center text-[#327878]">
@@ -331,7 +337,9 @@ export default function EditProfile() {
               {isPasswordLoading ? "..." : "Update Password"}
             </button>
           </form>
+          </RevealItem>
 
+          <RevealItem>
           <div className="bg-white rounded-4xl p-8 md:p-10 border border-red-100 shadow-sm space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-500">
@@ -349,6 +357,9 @@ export default function EditProfile() {
               Delete Account
             </button>
           </div>
+          </RevealItem>
+
+          </RevealGroup>
 
         </div>
       </ContentWrapper>

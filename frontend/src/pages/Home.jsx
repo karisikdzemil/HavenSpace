@@ -8,7 +8,6 @@ import Properties from "../components/home/properties/Properties";
 import WhyUs from "../components/home/why-us/WhyUs";
 import ContentWrapper from "../components/contentWrapper";
 import { PropertyCardSkeletonGrid } from "../components/loading/PropertyCardSkeleton";
-import Reveal from "../components/motion/Reveal";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -40,8 +39,8 @@ export default function Home() {
   return (
     <>
       <HomeHeroSection />
-      <Reveal><AiSearch /></Reveal>
-      <Reveal><AboutUs /></Reveal>
+      <AiSearch />
+      <AboutUs />
       {isLoading ? (
         <section id="featured-properties" className="pt-8 bg-[#FBFCFC]">
           <ContentWrapper>
@@ -49,11 +48,11 @@ export default function Home() {
           </ContentWrapper>
         </section>
       ) : (
-        <Reveal><Properties properties={properties} /></Reveal>
+        <Properties properties={properties} />
       )}
-      <Reveal><WhyUs /></Reveal>
-      <Reveal><AgentsSection /></Reveal>
-      <Reveal><PerfectInvestment /></Reveal>
+      <WhyUs />
+      <AgentsSection />
+      <PerfectInvestment />
     </>
   );
 }

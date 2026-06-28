@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
+import Reveal, { RevealGroup, RevealItem } from "../components/motion/Reveal";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -276,7 +277,7 @@ export default function AddProperty() {
       <ContentWrapper>
         <div className="max-w-5xl mx-auto space-y-12">
 
-          <div className="text-center space-y-4 flex flex-col">
+          <Reveal className="text-center space-y-4 flex flex-col">
             <span className="bg-[#327878] mx-auto w-[180px] text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full">
               Listing Creator
             </span>
@@ -284,10 +285,12 @@ export default function AddProperty() {
             <p className="text-gray-400 font-medium max-w-lg mx-auto">
               Fill in the details below to list your luxury property on HavenSpace. Quality listings get 4x more engagement.
             </p>
-          </div>
+          </Reveal>
 
           <form onSubmit={addPropertyHandler} className="space-y-8">
+          <RevealGroup className="space-y-8" staggerDelay={0.1}>
 
+            <RevealItem>
             <FormSection title="Basic Information" icon={faInfoCircle}>
               <div className="col-span-2">
                 <Input label="Property Title" value={form.title} onChange={set("title")} icon={faBuilding} placeholder="Modern Villa with Sea View" error={errors.title} />
@@ -307,7 +310,9 @@ export default function AddProperty() {
                 ]}
               />
             </FormSection>
+            </RevealItem>
 
+            <RevealItem>
             <FormSection title="Property Details" icon={faBed}>
               <Select
                 label="Property Type"
@@ -334,14 +339,18 @@ export default function AddProperty() {
                 </label>
               </div>
             </FormSection>
+            </RevealItem>
 
+            <RevealItem>
             <FormSection title="Location Tracking" icon={faMapPin}>
               <Input label="City" value={form.city} onChange={set("city")} icon={faLocationDot} placeholder="Chicago, IL" error={errors.city} />
               <Input label="Street Address" value={form.address} onChange={set("address")} icon={faLocationDot} placeholder="1234 Maple Street" error={errors.address} />
               <Input label="Latitude" value={form.lat} onChange={set("lat")} type="number" step="any" icon={faMapPin} placeholder="41.8781" error={errors.lat} />
               <Input label="Longitude" value={form.lng} onChange={set("lng")} type="number" step="any" icon={faMapPin} placeholder="-87.6298" error={errors.lng} />
             </FormSection>
+            </RevealItem>
 
+            <RevealItem>
             <FormSection title="Amenities & Content" icon={faCheckDouble}>
               <div className="col-span-2 space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Description</label>
@@ -378,6 +387,9 @@ export default function AddProperty() {
                 error={errors.exteriorFeatures}
               />
             </FormSection>
+            </RevealItem>
+
+            </RevealGroup>
 
             {errors.general && (
               <div className="bg-red-50 p-4 rounded-2xl border border-red-100 text-red-600 text-[11px] font-black uppercase tracking-widest text-center">

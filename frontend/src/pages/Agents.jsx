@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL, avatarUrl } from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faPhone, faLocationDot, faGlobe, 
@@ -52,7 +52,7 @@ export default function Agents() {
           <div className="relative z-10 px-12 lg:px-20 flex items-center gap-16 w-full">
             <div className="hidden lg:block w-72 h-72 rounded-3xl overflow-hidden shadow-2xl ring-8 ring-[#f0f7f7]">
               <img 
-                src={`${API_BASE_URL}/assets/${topAgent.avatar}`} 
+                src={avatarUrl(topAgent.avatar)}
                 className="w-full h-full object-cover"
                 alt={topAgent.name}
               />
@@ -123,7 +123,7 @@ export default function Agents() {
             <RevealItem key={agent._id} className="group bg-white rounded-4xl border border-gray-100 p-4 transition-all duration-500 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.08)] hover:border-[#327878]/30">
               <div className="h-64 relative overflow-hidden rounded-3xl mb-6 shadow-inner bg-gray-50">
                 <img 
-                  src={`${API_BASE_URL}/assets/${agent.avatar}`} 
+                  src={avatarUrl(agent.avatar)}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                   alt={agent.name} 
                 />

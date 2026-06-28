@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import ContentWrapper from "../../contentWrapper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuilding, faCheckCircle, faArrowRight, faHeadset, faAward } from "@fortawesome/free-solid-svg-icons";
+import Reveal, { RevealGroup, RevealItem } from "../../motion/Reveal";
 
 export default function AboutUs() {
-  
+
   const stats = [
     { label: "Properties Listed", value: "2800+" },
     { label: "Success Rate", value: "95%" },
@@ -21,9 +22,9 @@ export default function AboutUs() {
     <section className=" bg-white overflow-hidden">
       <ContentWrapper>
         <div className="flex flex-col lg:flex-row items-center gap-20">
-          
-          <div className="w-full lg:w-1/2 space-y-10">
-            <div className="space-y-6">
+
+          <RevealGroup className="w-full lg:w-1/2 space-y-10">
+            <RevealItem className="space-y-6">
               <div className="inline-flex items-center gap-2 bg-[#327878]/10 text-[#327878] px-5 py-2.5 rounded-full">
                 <FontAwesomeIcon icon={faBuilding} className="text-[10px]" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">Premium Real Estate</span>
@@ -36,28 +37,28 @@ export default function AboutUs() {
               <p className="text-gray-400 text-lg font-medium leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
               </p>
-            </div>
+            </RevealItem>
 
-            <div className="grid grid-cols-3 gap-4">
+            <RevealGroup className="grid grid-cols-3 gap-4" staggerDelay={0.1}>
               {stats.map((stat, index) => (
-                <div key={index} className="bg-[#FBFCFC] border border-gray-50 rounded-4xl p-8 text-center shadow-sm">
+                <RevealItem key={index} direction="scale" className="bg-[#FBFCFC] border border-gray-50 rounded-4xl p-8 text-center shadow-sm">
                   <h4 className="text-3xl font-black text-slate-900 mb-1">{stat.value}</h4>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-300">{stat.label}</p>
-                </div>
+                </RevealItem>
               ))}
-            </div>
+            </RevealGroup>
 
-            <div className="space-y-4">
+            <RevealGroup className="space-y-4" staggerDelay={0.1}>
               {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-center gap-4 text-slate-700 font-bold text-sm">
+                <RevealItem key={index} direction="left" className="flex items-center gap-4 text-slate-700 font-bold text-sm">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#327878] text-lg" />
                   {benefit}
-                </div>
+                </RevealItem>
               ))}
-            </div>
+            </RevealGroup>
 
-            <div className="flex flex-wrap items-center gap-8 pt-4">
-              <Link to="/contact" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center gap-3 group">
+            <RevealItem className="flex flex-wrap items-center gap-8 pt-4">
+              <Link to="/contact" className="bg-[#327878] text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-900 hover:scale-105 transition-all duration-500 shadow-xl shadow-[#327878]/20 flex items-center gap-3 group">
                 Learn More About Us
                 <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -71,19 +72,19 @@ export default function AboutUs() {
                   <p className="text-sm font-black text-slate-900">+1 (555) 987-6543</p>
                 </div>
               </div>
-            </div>
-          </div>
+            </RevealItem>
+          </RevealGroup>
 
-          <div className="w-full lg:w-1/2 relative">
+          <Reveal direction="scale" className="w-full lg:w-1/2 relative" duration={0.7}>
             <div className="grid grid-cols-2 gap-6">
-              
+
               <div className="col-span-2 relative">
-                <img 
-                  src="/property-exterior-pool.webp" 
+                <img
+                  src="/property-exterior-pool.webp"
                   className="w-full h-[400px] object-cover rounded-[3rem] shadow-2xl"
                   alt="Modern Mansion"
                 />
-                
+
                 <div className="absolute bottom-10 right-10 bg-white p-6 rounded-4xl shadow-2xl border border-gray-50 flex items-center gap-4 z-20">
                   <div className="w-12 h-12 rounded-2xl bg-[#327878] flex items-center justify-center text-white">
                     <FontAwesomeIcon icon={faAward} size="lg" />
@@ -96,16 +97,16 @@ export default function AboutUs() {
               </div>
 
               <div className="relative h-60">
-                <img 
-                  src="/property-interior-8.webp" 
+                <img
+                  src="/property-interior-8.webp"
                   className="w-full h-full object-cover rounded-[2.5rem] shadow-xl"
                   alt="Interior"
                 />
               </div>
 
               <div className="relative h-60">
-                <img 
-                  src="/agent-3.webp" 
+                <img
+                  src="/agent-3.webp"
                   className="w-full h-full object-cover rounded-[2.5rem] shadow-xl"
                   alt="Consultation"
                 />
@@ -114,7 +115,7 @@ export default function AboutUs() {
             </div>
 
             <div className="absolute -z-10 -top-10 -right-10 w-64 h-64 bg-[#327878]/5 rounded-full blur-3xl"></div>
-          </div>
+          </Reveal>
 
         </div>
       </ContentWrapper>

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faUserCheck, faCircleCheck, faHome, faTrophy, faStar } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../contentWrapper";
 import InquiryModal from "../inquiry/InquiryModal";
+import Reveal, { RevealGroup, RevealItem } from "../motion/Reveal";
 
 export default function PerfectInvestment() {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -12,7 +13,8 @@ export default function PerfectInvestment() {
         <ContentWrapper>
       <div className=" mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-        <div className="flex flex-col justify-center">
+        <RevealGroup className="flex flex-col justify-center">
+          <RevealItem>
           <span className="inline-block self-start bg-[#d7ebeb] text-[#286161] text-xs font-bold px-4 py-1.5 rounded-md tracking-wide mb-6">
             Your Property Journey Starts Here
           </span>
@@ -27,8 +29,9 @@ export default function PerfectInvestment() {
             cubilia curae; Mauris viverra veniam sit amet lacus cursus. Sed ut perspiciatis
             unde omnis iste natus error sit voluptatem.
           </p>
+          </RevealItem>
 
-          <div className="space-y-4 mb-10">
+          <RevealItem className="space-y-4 mb-10">
             <div className="flex items-center gap-3">
               <FontAwesomeIcon icon={faCircleCheck} className="text-[#327878] text-lg" />
               <span className="text-sm font-bold text-slate-800 tracking-wide">
@@ -47,27 +50,27 @@ export default function PerfectInvestment() {
                 End-to-end transaction support
               </span>
             </div>
-          </div>
+          </RevealItem>
 
-          <div className="flex flex-wrap gap-4 items-center">
+          <RevealItem className="flex flex-wrap gap-4 items-center">
             <button
               onClick={() => setIsInquiryOpen(true)}
-              className="inline-flex items-center gap-2 bg-[#327878] hover:bg-[#286161] text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md shadow-[#327878]/10"
+              className="inline-flex items-center gap-2 bg-[#327878] hover:bg-[#286161] hover:scale-105 text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-md shadow-[#327878]/10"
             >
               <FontAwesomeIcon icon={faUserCheck} />
               Get Free Consultation
             </button>
             <a
               href="tel:5551234567"
-              className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-[#327878] text-[#327878] px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
+              className="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-[#327878] hover:scale-105 text-[#327878] px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
             >
               <FontAwesomeIcon icon={faPhone} />
               Call (555) 123-4567
             </a>
-          </div>
-        </div>
+          </RevealItem>
+        </RevealGroup>
 
-        <div className="relative flex justify-center lg:justify-end">
+        <Reveal direction="right" duration={0.7} className="relative flex justify-center lg:justify-end">
           <div className="relative w-full max-w-[540px] aspect-4/3 rounded-[2.5rem] overflow-hidden shadow-xl">
             <img
               src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800"
@@ -103,7 +106,7 @@ export default function PerfectInvestment() {
             </div>
           </div>
 
-        </div>
+        </Reveal>
 
       </div>
       </ContentWrapper>

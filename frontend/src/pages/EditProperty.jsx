@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
+import Reveal, { RevealGroup, RevealItem } from "../components/motion/Reveal";
 import { useEffect, useState } from "react";
 import Loading from "../components/loading/Loading";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -335,7 +336,7 @@ export default function EditProperty() {
       <ContentWrapper>
         <div className="max-w-5xl mx-auto space-y-12">
 
-          <div className="text-center space-y-4 flex flex-col">
+          <Reveal className="text-center space-y-4 flex flex-col">
             <span className="bg-[#327878] mx-auto w-[180px] text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-2 rounded-full">
               Edit Listing
             </span>
@@ -343,7 +344,7 @@ export default function EditProperty() {
             <p className="text-gray-400 font-medium max-w-lg mx-auto">
               Make changes to your listing below. All updates are reflected immediately after saving.
             </p>
-          </div>
+          </Reveal>
 
           {isLoadingPropertyData ? (
             <div className="flex justify-center py-24">
@@ -351,8 +352,10 @@ export default function EditProperty() {
             </div>
           ) : (
             <form onSubmit={saveChangesHandler} className="space-y-8">
+            <RevealGroup className="space-y-8" staggerDelay={0.08}>
 
               {/* BASIC INFO */}
+              <RevealItem>
               <FormSection title="Basic Information" icon={faInfoCircle}>
                 <div className="col-span-2">
                   <Input label="Property Title" value={form.title} onChange={set("title")} icon={faBuilding} placeholder="Modern Villa with Sea View" error={errors.title} />
@@ -372,7 +375,9 @@ export default function EditProperty() {
                   ]}
                 />
               </FormSection>
+              </RevealItem>
 
+              <RevealItem>
               <FormSection title="Property Details" icon={faBed}>
                 <Select
                   label="Property Type"
@@ -391,7 +396,9 @@ export default function EditProperty() {
                 <Input label="Bathrooms" value={form.bathNum} onChange={set("bathNum")} type="number" icon={faBath} placeholder="3" error={errors.bathNum} />
                 <Input label="Garage Slots" value={form.garage} onChange={set("garage")} type="number" icon={faCar} placeholder="0" error={errors.garage} />
               </FormSection>
+              </RevealItem>
 
+              <RevealItem>
               <FormSection title="Property Images" icon={faImages}>
                 <div className="col-span-2 space-y-4">
                   {existingImages.length > 0 && (
@@ -435,14 +442,18 @@ export default function EditProperty() {
                   </label>
                 </div>
               </FormSection>
+              </RevealItem>
 
+              <RevealItem>
               <FormSection title="Location Tracking" icon={faMapPin}>
                 <Input label="City" value={form.city} onChange={set("city")} icon={faLocationDot} placeholder="Chicago, IL" error={errors.city} />
                 <Input label="Street Address" value={form.address} onChange={set("address")} icon={faLocationDot} placeholder="1234 Maple Street" error={errors.address} />
                 <Input label="Latitude" value={form.lat} onChange={set("lat")} type="number" step="any" icon={faMapPin} placeholder="41.8781" error={errors.lat} />
                 <Input label="Longitude" value={form.lng} onChange={set("lng")} type="number" step="any" icon={faMapPin} placeholder="-87.6298" error={errors.lng} />
               </FormSection>
+              </RevealItem>
 
+              <RevealItem>
               <FormSection title="Amenities & Content" icon={faCheckDouble}>
                 <div className="col-span-2 space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Description</label>
@@ -477,6 +488,9 @@ export default function EditProperty() {
                   error={errors.exteriorFeatures}
                 />
               </FormSection>
+              </RevealItem>
+
+              </RevealGroup>
 
               {errors.general && (
                 <div className="bg-red-50 p-4 rounded-2xl border border-red-100 text-red-600 text-[11px] font-black uppercase tracking-widest text-center">

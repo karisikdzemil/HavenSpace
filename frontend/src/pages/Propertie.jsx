@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL, avatarUrl, propertyImageUrl } from "../config/api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -16,7 +16,8 @@ import { useFavorites } from "../hooks/useFavorites";
 import { useToast } from "../hooks/useToast";
 import ConfirmDialog from "../components/modal/ConfirmDialog";
 import InquiryModal from "../components/inquiry/InquiryModal";
-import PropertyLocationMap from "../components/map/PropertyLocationMap";
+const PropertyLocationMap = lazy(() => import("../components/map/PropertyLocationMap"));
+import Reveal, { RevealGroup, RevealItem } from "../components/motion/Reveal";
 
 export default function Propertie() {
   const [property, setProperty] = useState(null);
@@ -86,6 +87,7 @@ const deleteProperty = async () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- nextImage/prevImage close over currentImgIndex/property, already listed below
   }, [isLightboxOpen, currentImgIndex, property]);
 
   if (loading) return <PropertyDetailSkeleton />;
@@ -179,13 +181,13 @@ const deleteProperty = async () => {
           
           <div className="flex-1 max-w-[850px]">
             
-            <div className="grid grid-cols-4 grid-rows-2 gap-3 h-[500px] mb-10">
+            <Reveal direction="scale" className="grid grid-cols-4 grid-rows-2 gap-3 h-[500px] mb-10">
               
               <div 
                 onClick={() => openLightbox(0)} 
                 className="md:col-span-3 col-span-4 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
               >
-                <img src={`${API_BASE_URL}/${property.images[0]}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={propertyImageUrl(property.images[0])} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1 rounded text-[10px] font-black uppercase tracking-widest text-[#327878]">Featured</div>
               </div>
 
@@ -193,19 +195,19 @@ const deleteProperty = async () => {
                 onClick={() => openLightbox(1)} 
                 className="md:col-span-1 col-span-2 rounded-2xl overflow-hidden shadow-md cursor-pointer group"
               >
-                <img src={`${API_BASE_URL}/${property.images[1] || property.images[0]}`} className="w-full h-full object-cover transition duration-300 group-hover:brightness-90" />
+                <img src={propertyImageUrl(property.images[1] || property.images[0])} className="w-full h-full object-cover transition duration-300 group-hover:brightness-90" />
               </div>
 
               <div 
                 onClick={() => openLightbox(2)} 
                 className="md:col-span-1 col-span-2  relative rounded-2xl overflow-hidden shadow-md group cursor-pointer"
               >
-                <img src={`${API_BASE_URL}/${property.images[2] || property.images[0]}`} className="w-full h-full object-cover" />
+                <img src={propertyImageUrl(property.images[2] || property.images[0])} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white font-bold text-lg transition group-hover:bg-black/60">
                   <span>+{property.images.length} Photos</span>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             <div className="flex flex-wrap gap-8 py-8 border-y border-gray-100 mb-10">
               <div className="flex items-center gap-3">
@@ -290,39 +292,41 @@ const deleteProperty = async () => {
                       <FontAwesomeIcon icon={faLocationDot} className="text-[#327878]" />
                       {property.location.address}, {property.location.city}
                     </div>
-                    <PropertyLocationMap
-                      lat={property.location.lat}
-                      lng={property.location.lng}
-                      title={property.title}
-                      address={`${property.location.address}, ${property.location.city}`}
-                    />
+                    <Suspense fallback={<div className="h-[350px] rounded-3xl bg-gray-50 animate-pulse" />}>
+                      <PropertyLocationMap
+                        lat={property.location.lat}
+                        lng={property.location.lng}
+                        title={property.title}
+                        address={`${property.location.address}, ${property.location.city}`}
+                      />
+                    </Suspense>
                   </div>
                 )}
               </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-12">
-              <div className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
+            <RevealGroup className="grid grid-cols-3 gap-4 mb-12" staggerDelay={0.1}>
+              <RevealItem direction="scale" className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
                 <FontAwesomeIcon icon={faShieldHeart} className="text-[#327878] mb-3 text-xl" />
                 <h4 className="font-bold text-sm mb-1">Safety First</h4>
                 <p className="text-xs text-gray-500 leading-relaxed">Integrated smart security systems and 24/7 monitoring active.</p>
-              </div>
-              <div className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
+              </RevealItem>
+              <RevealItem direction="scale" className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
                 <FontAwesomeIcon icon={faBolt} className="text-[#327878] mb-3 text-xl" />
                 <h4 className="font-bold text-sm mb-1">Energy Efficient</h4>
                 <p className="text-xs text-gray-500 leading-relaxed">A+ energy rating with solar readiness and thermal insulation.</p>
-              </div>
-              <div className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
+              </RevealItem>
+              <RevealItem direction="scale" className="p-6 rounded-2xl bg-[#f0f5f5] border border-[#dceaea]">
                 <FontAwesomeIcon icon={faWater} className="text-[#327878] mb-3 text-xl" />
                 <h4 className="font-bold text-sm mb-1">Pure Living</h4>
                 <p className="text-xs text-gray-500 leading-relaxed">Advanced water filtration system installed throughout the home.</p>
-              </div>
-            </div>
+              </RevealItem>
+            </RevealGroup>
           </div>
 
           <aside className="w-full lg:w-[380px]">
-            <div className="sticky top-28 space-y-6">
+            <Reveal direction="right" duration={0.6} className="sticky top-28 space-y-6">
               <div className="bg-white p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-[#327878]/5 rounded-bl-[100px]" />
                 
@@ -346,7 +350,7 @@ const deleteProperty = async () => {
 
                 <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <img src={`${API_BASE_URL}/assets/${property.owner.avatar}`} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#f0f5f5]" />
+                    <img src={avatarUrl(property.owner.avatar)} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#f0f5f5]" />
                     <div>
                       <p className="text-sm font-bold">{property.owner.name}</p>
                       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{property.owner.position || "Agent"}</p>
@@ -368,14 +372,20 @@ const deleteProperty = async () => {
                   </div>
                 </div>
               )}
-            </div>
+            </Reveal>
           </aside>
         </div>
       </ContentWrapper>
 
+      <AnimatePresence>
       {isLightboxOpen && (
-        <div className="fixed inset-0 bg-black/95 z-9999 flex flex-col justify-between p-4 backdrop-blur-sm select-none animate-fadeIn">
-          
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="fixed inset-0 bg-black/95 z-9999 flex flex-col justify-between p-4 backdrop-blur-sm select-none"
+        >
           <div className="flex justify-between items-center text-white w-full max-w-7xl mx-auto py-2">
             <span className="text-sm font-semibold tracking-wider bg-white/10 px-4 py-1.5 rounded-full">
               {currentImgIndex + 1} / {property.images.length}
@@ -399,7 +409,7 @@ const deleteProperty = async () => {
 
             <div className="w-full h-full flex items-center justify-center p-2">
               <img 
-                src={`${API_BASE_URL}/${property.images[currentImgIndex]}`} 
+                src={propertyImageUrl(property.images[currentImgIndex])}
                 alt={`Property view ${currentImgIndex + 1}`}
                 className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300"
               />
@@ -422,13 +432,14 @@ const deleteProperty = async () => {
                   currentImgIndex === index ? "border-[#327878] scale-105 opacity-100 shadow-md" : "border-transparent opacity-40 hover:opacity-70"
                 }`}
               >
-                <img src={`${API_BASE_URL}/${img}`} className="w-full h-full object-cover" />
+                <img src={propertyImageUrl(img)} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
 
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       <ConfirmDialog
         open={isDeleteOpen}

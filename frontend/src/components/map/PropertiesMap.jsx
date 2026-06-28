@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../../config/api";
+import { propertyImageUrl } from "../../config/api";
 import "leaflet/dist/leaflet.css";
 import "./leafletIcons";
 
@@ -22,7 +22,7 @@ export default function PropertiesMap({ properties }) {
             <Popup>
               <div className="w-48 space-y-2">
                 <img
-                  src={`${API_BASE_URL}/${property.images[0]}`}
+                  src={propertyImageUrl(property.images[0])}
                   alt={property.title}
                   className="w-full h-24 object-cover rounded-lg"
                 />

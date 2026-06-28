@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Login from "../components/register/Login";
 import Signup from "../components/register/Signup";
+
+const EASE = [0.22, 1, 0.36, 1];
 
 export default function Register() {
   const [registerType, setRegisterType] = useState("login");
@@ -11,14 +14,24 @@ export default function Register() {
 
   return (
     <section className="min-h-screen flex flex-col lg:flex-row bg-white overflow-hidden">
-      
-      <div className="hidden lg:flex lg:w-5/12 xl:w-1/2 relative bg-[#327878]">
-        <img 
-          src="/luxury-interior.jpg" 
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="hidden lg:flex lg:w-5/12 xl:w-1/2 relative bg-[#327878]"
+      >
+        <img
+          src="/luxury-interior.jpg"
           className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60"
           alt="Luxury Interior"
         />
-        <div className="relative z-10 flex flex-col justify-end p-20 w-full h-full bg-linear-to-t from-black/60 to-transparent">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+          className="relative z-10 flex flex-col justify-end p-20 w-full h-full bg-linear-to-t from-black/60 to-transparent"
+        >
           <div className="mb-8">
              <span className="text-white font-black tracking-[0.3em] uppercase text-[10px] border border-white/40 px-5 py-2.5 rounded-full backdrop-blur-md">
                Elite Properties Only
@@ -30,26 +43,41 @@ export default function Register() {
           <p className="text-white/70 text-lg max-w-sm font-light leading-relaxed">
             Join the most exclusive real estate network. Connect with verified agents and discover homes that match your lifestyle.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       <div className="w-full lg:w-7/12 xl:w-1/2 h-screen overflow-y-auto bg-[#FBFCFC] pt-32 pb-20 px-8 md:px-20 lg:px-24">
-        <div className="w-full max-w-2xl mx-auto"> 
-          
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="w-full max-w-2xl mx-auto"
+        >
+
           <div className="mb-10 text-center lg:text-left">
             <h1 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">
               {registerType === "login" ? 'Welcome Back' : 'Join the Collective'}
             </h1>
             <p className="text-gray-400 font-medium text-sm leading-relaxed max-w-md">
-              {registerType === "login" 
-                ? 'Sign in to access your dashboard and manage your property portfolio.' 
+              {registerType === "login"
+                ? 'Sign in to access your dashboard and manage your property portfolio.'
                 : 'Create your professional profile to start listing and connecting with premium buyers worldwide.'}
             </p>
           </div>
 
           <div className="bg-white rounded-[3rem] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden mb-10">
             <div className="h-2 w-full bg-[#327878]" />
-            {registerType === "login" ? <Login /> : <Signup />}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={registerType}
+                initial={{ opacity: 0, x: registerType === "login" ? -16 : 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: registerType === "login" ? 16 : -16 }}
+                transition={{ duration: 0.3, ease: EASE }}
+              >
+                {registerType === "login" ? <Login /> : <Signup />}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="flex flex-col items-center gap-8">
@@ -58,7 +86,7 @@ export default function Register() {
               <p className="text-[9px] font-black uppercase tracking-[0.3em]">Account Access</p>
               <div className="h-px bg-gray-400 flex-1"></div>
             </div>
-            
+
             <div className="flex items-center gap-3 text-sm">
               <span className="text-gray-400 font-medium">
                 {registerType === "login" ? "Don't have an account yet?" : "Already a member of HavenSpace?"}
@@ -71,7 +99,7 @@ export default function Register() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

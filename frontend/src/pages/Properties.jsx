@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { API_BASE_URL } from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { PropertyCardSkeletonGrid } from "../components/loading/PropertyCardSkeleton";
 import PropertyCard from "../components/propertyCard/PropertyCard";
-import PropertiesMap from "../components/map/PropertiesMap";
+const PropertiesMap = lazy(() => import("../components/map/PropertiesMap"));
 import ContentWrapper from "../components/contentWrapper";
 import { RevealGroup, RevealItem } from "../components/motion/Reveal";
 
@@ -187,7 +187,9 @@ export default function Properties() {
               <PropertyCardSkeletonGrid count={6} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16" />
             ) : viewMode === "map" ? (
               <div className="mb-16">
-                <PropertiesMap properties={properties} />
+                <Suspense fallback={<div className="h-[600px] rounded-3xl bg-gray-50 animate-pulse" />}>
+                  <PropertiesMap properties={properties} />
+                </Suspense>
               </div>
             ) : (
               <>

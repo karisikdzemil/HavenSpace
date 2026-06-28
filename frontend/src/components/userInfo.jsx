@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { API_BASE_URL } from "../config/api";
+import { avatarUrl } from "../config/api";
 import { faEnvelope, faPhone, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
@@ -17,7 +17,7 @@ export default function UserInfo({ agent }) {
       <div className="relative shrink-0">
         <img
           className="w-64 h-80 object-cover rounded-[2.5rem] shadow-2xl shadow-slate-200"
-          src={`${API_BASE_URL}/assets/${agent.avatar}`}
+          src={avatarUrl(agent.avatar)}
           alt={`${agent.name} profile`}
         />
         <div className="absolute -bottom-4 -right-4 bg-white p-3 rounded-2xl shadow-lg flex gap-3 text-slate-400">

@@ -6,6 +6,7 @@ import ContentWrapper from "../components/contentWrapper";
 import Loading from "../components/loading/Loading";
 import { API_BASE_URL } from "../config/api";
 import { useToast } from "../hooks/useToast";
+import Reveal from "../components/motion/Reveal";
 
 const INITIAL_FORM = { name: "", email: "", subject: "Inquiry about property", message: "" };
 
@@ -66,7 +67,7 @@ export default function Contact() {
         <div className="max-w-6xl mx-auto">
 
           {/* HEADER SEKCIJA */}
-          <div className="text-center mb-16 space-y-4 flex flex-col">
+          <Reveal className="text-center mb-16 space-y-4 flex flex-col">
             <span className="bg-[#327878] w-[180px] mx-auto text-white text-[10px] font-black uppercase tracking-[0.3em] px-5 py-2.5 rounded-full">
               Get In Touch
             </span>
@@ -76,9 +77,9 @@ export default function Contact() {
             <p className="text-gray-400 font-medium max-w-xl mx-auto">
               Whether you're looking to buy, sell, or just need expert advice, our team at HavenSpace is here to guide you through every step.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="flex flex-col lg:flex-row bg-white rounded-[3rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,0.06)] border border-gray-50 overflow-hidden">
+          <Reveal direction="scale" duration={0.6} className="flex flex-col lg:flex-row bg-white rounded-[3rem] shadow-[0_30px_100px_-20px_rgba(0,0,0,0.06)] border border-gray-50 overflow-hidden">
 
             {/* LEVA STRANA: INFO PANEL */}
             <div className="w-full lg:w-5/12 bg-[#327878] p-12 md:p-16 text-white flex flex-col justify-between">
@@ -201,9 +202,9 @@ export default function Contact() {
                 </button>
               </form>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-8 text-gray-400 font-medium text-xs">
+          <Reveal className="mt-12 flex flex-col md:flex-row items-center justify-center gap-8 text-gray-400 font-medium text-xs">
             <div className="flex items-center gap-3">
               <FontAwesomeIcon icon={faClock} className="text-[#327878]" />
               <span>Mon - Fri: 09:00 - 18:00</span>
@@ -213,7 +214,7 @@ export default function Contact() {
               <FontAwesomeIcon icon={faClock} className="text-[#327878]" />
               <span>Sat: 10:00 - 14:00</span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </ContentWrapper>
     </section>

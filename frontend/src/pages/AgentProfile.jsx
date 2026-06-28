@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL, avatarUrl } from "../config/api";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -78,7 +78,7 @@ export default function AgentProfile() {
               <div className="relative mb-8">
                 <div className="aspect-square rounded-3xl md:rounded-4xl overflow-hidden shadow-2xl">
                   <img
-                    src={`${API_BASE_URL}/assets/${agent.avatar}`}
+                    src={avatarUrl(agent.avatar)}
                     alt={`${agent.name} ${agent.surname}`}
                     className="w-full h-full object-cover"
                   />
@@ -89,7 +89,7 @@ export default function AgentProfile() {
               </div>
 
               <div className="text-center mb-8">
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 leading-tight break-words">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-1 leading-tight wrap-break-word">
                   {agent.name} {agent.surname}
                 </h1>
                 <p className="text-[#327878] text-[10px] font-black uppercase tracking-[0.2em]">
