@@ -1,18 +1,7 @@
 const Property = require("../models/Property");
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
-const fs = require('fs');
-const path = require('path');
-
-const deleteFile = (filePath) => {
-  const fullPath = path.join(__dirname, "..", filePath);
-
-  fs.unlink(fullPath, (err) => {
-    if (err) {
-      console.log("Failed to delete file:", err);
-    }
-  });
-};
+const deleteFile = require("../utils/deleteFile");
 
 exports.getProperties = async (req, res, next) => {
   try {
@@ -244,7 +233,7 @@ exports.soldProperty = async (req, res, next) => {
   }
 };
 
-exports.editProperty = (req, res, next) => {
+exports.editProperty = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res
@@ -254,9 +243,13 @@ exports.editProperty = (req, res, next) => {
   const propertyId = req.params.id;
   const newTitle = req.body.title;
   const newPrice = req.body.price;
-  const newLocation = req.body.location;
+  const newLocation = {
+    city: req.body.city,
+    address: req.body.address,
+    lat: req.body.lat,
+    lng: req.body.lng,
+  };
   const newDescription = req.body.description;
-  // const images = req.body.images;
   const newType = req.body.type;
   const newBedNum = req.body.bedNum;
   const newBathNum = req.body.bathNum;
@@ -266,67 +259,89 @@ exports.editProperty = (req, res, next) => {
   const newInteriorFeatures = req.body.interiorFeatures;
   const newExteriorFeatures = req.body.exteriorFeatures;
 
-  Property.findByIdAndUpdate(
-    propertyId,
-    {
-      title: newTitle,
-      price: newPrice,
-      location: newLocation,
-      description: newDescription,
-      type: newType,
-      bedNum: newBedNum,
-      bathNum: newBathNum,
-      area: newArea,
-      garage: newGarage,
-      status: newStatus,
-      interiorFeatures: newInteriorFeatures,
-      exteriorFeatures: newExteriorFeatures,
-    },
-    { new: true }
-  )
-    .then((result) => {
-      if (!result) {
-        const error = new Error("Property Not Found!");
-        error.statusCode = 500;
-        throw error;
-      }
-      res
-        .status(201)
-        .json({ message: "Property updated successfully", property: result });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    });
+  try {
+    const property = await Property.findById(propertyId);
+    if (!property) {
+      const error = new Error("Property Not Found!");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (property.owner.toString() !== req.userId) {
+      const error = new Error("Not authorized!");
+      error.statusCode = 403;
+      throw error;
+    }
+
+    let keptImages = property.images;
+    if (req.body.removedImages) {
+      const removed = Array.isArray(req.body.removedImages)
+        ? req.body.removedImages
+        : [req.body.removedImages];
+      removed.forEach((imgPath) => deleteFile(imgPath));
+      keptImages = keptImages.filter((img) => !removed.includes(img));
+    }
+    if (req.files && req.files.length) {
+      const newImages = req.files.map((file) => file.path.replace("assets/", ""));
+      keptImages = [...keptImages, ...newImages];
+    }
+
+    property.title = newTitle;
+    property.price = newPrice;
+    property.location = newLocation;
+    property.description = newDescription;
+    property.type = newType;
+    property.bedNum = newBedNum;
+    property.bathNum = newBathNum;
+    property.area = newArea;
+    property.garage = newGarage;
+    property.status = newStatus;
+    property.interiorFeatures = newInteriorFeatures;
+    property.exteriorFeatures = newExteriorFeatures;
+    property.images = keptImages;
+
+    const result = await property.save();
+
+    res
+      .status(201)
+      .json({ message: "Property updated successfully", property: result });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
-exports.deleteProperty = (req, res, next) => {
+exports.deleteProperty = async (req, res, next) => {
   const propertyId = req.params.id;
 
-  Property.findById(propertyId)
-    .then((property) => {
-      if (!property) {
-        const error = new Error("Property Not Found!");
-        error.statusCode = 404;
-        throw error;
-      }
+  try {
+    const property = await Property.findById(propertyId);
+    if (!property) {
+      const error = new Error("Property Not Found!");
+      error.statusCode = 404;
+      throw error;
+    }
 
-      property.images.forEach((imgPath) => {
-        deleteFile(imgPath);
-      });
+    if (property.owner.toString() !== req.userId) {
+      const error = new Error("Not authorized!");
+      error.statusCode = 403;
+      throw error;
+    }
 
-      return Property.findByIdAndDelete(propertyId);
-    })
-    .then(() => {
-      res.status(200).json({ message: "Property deleted!" });
-    })
-    .catch((err) => {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
+    property.images.forEach((imgPath) => {
+      deleteFile(imgPath);
     });
+
+    await Property.findByIdAndDelete(propertyId);
+
+    res.status(200).json({ message: "Property deleted!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 

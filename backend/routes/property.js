@@ -75,21 +75,7 @@ const addValidation = [
     .withMessage("Longitude must be between -180 and 180"),
 ];
 
-const editValidation = [
-  ...sharedValidation,
-  body("location.city").trim().notEmpty().withMessage("City is required!"),
-  body("location.address").trim().notEmpty().withMessage("Address is required!"),
-  body("location.lat")
-    .notEmpty()
-    .withMessage("Latitude is required!")
-    .isFloat({ min: -90, max: 90 })
-    .withMessage("Latitude must be between -90 and 90"),
-  body("location.lng")
-    .notEmpty()
-    .withMessage("Longitude is required!")
-    .isFloat({ min: -180, max: 180 })
-    .withMessage("Longitude must be between -180 and 180"),
-];
+const editValidation = addValidation;
 
 router.get("/properties", propertyController.getProperties);
 
@@ -108,6 +94,7 @@ router.post(
 router.put(
   "/edit-property/:id",
   isAuth,
+  uploadPropertyImages,
   editValidation,
   propertyController.editProperty
 );
