@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Login from "../components/register/Login";
-import Signup from "../components/register/SignUp";
+import Signup from "../components/register/Signup";
 
 export default function Register() {
   const [registerType, setRegisterType] = useState("login");

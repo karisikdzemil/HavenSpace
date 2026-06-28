@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { API_BASE_URL } from "../config/api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -8,33 +10,70 @@ import {
   faShareNodes, faPrint, faHeart, faXmark, faChevronLeft, faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import ContentWrapper from "../components/contentWrapper";
-import Loading from "../components/loading/Loading";
+import PropertyDetailSkeleton from "../components/loading/PropertyDetailSkeleton";
 import { useAuth } from "../hooks/useAuth";
+import { useFavorites } from "../hooks/useFavorites";
+import { useToast } from "../hooks/useToast";
+import ConfirmDialog from "../components/modal/ConfirmDialog";
+import InquiryModal from "../components/inquiry/InquiryModal";
+import PropertyLocationMap from "../components/map/PropertyLocationMap";
 
 export default function Propertie() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
-  
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [inquiryType, setInquiryType] = useState(null);
+
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   const { user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const { id } = useParams();
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     const getProperty = async () => {
       try {
         setLoading(true);
-        const result = await fetch(`http://localhost:8080/api/property/${id}`);
+        const result = await fetch(`${API_BASE_URL}/api/property/${id}`);
         const data = await result.json();
         setProperty(data.property);
-      } catch (err) { console.error(err); } 
+      } catch (err) { console.error(err); }
       finally { setLoading(false); }
     };
     getProperty();
   }, [id]);
+
+
+const deleteProperty = async () => {
+  const token = localStorage.getItem("token");
+  setIsDeleting(true);
+
+  try {
+    const result = await fetch(`${API_BASE_URL}/api/property/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!result.ok) {
+      toast.error("Deleting failed, try again later!");
+      setIsDeleting(false);
+      return;
+    }
+
+    toast.success("Listing removed successfully.");
+    navigate("/");
+  } catch {
+    toast.error("Deleting failed, try again later!");
+    setIsDeleting(false);
+  }
+}
 
   useEffect(() => {
     if (!isLightboxOpen) return;
@@ -49,7 +88,7 @@ export default function Propertie() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isLightboxOpen, currentImgIndex, property]);
 
-  if (loading) return <div className="pt-36"><Loading loadingText="Opening the doors..." /></div>;
+  if (loading) return <PropertyDetailSkeleton />;
   if (!property) return null;
 
   const isOwner = user && property.owner._id === user._id;
@@ -73,6 +112,44 @@ export default function Propertie() {
     setCurrentImgIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
   };
 
+  const favoriteHandler = async () => {
+    const result = await toggleFavorite(property._id);
+    if (result.requiresAuth) {
+      toast.info("Please log in to save properties.");
+      navigate("/register");
+      return;
+    }
+    if (!result.ok) {
+      toast.error(result.message || "Could not update favorites.");
+      return;
+    }
+    toast.success(result.isFavorite ? "Added to saved properties." : "Removed from saved properties.");
+  };
+
+  const shareHandler = async () => {
+    const shareData = {
+      title: property.title,
+      text: `Check out this property on HavenSpace: ${property.title}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // user cancelled share, no-op
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    } catch {
+      toast.error("Could not copy link.");
+    }
+  };
+
   return (
     <main className="bg-white min-h-screen pb-20 pt-24">
       <ContentWrapper>
@@ -83,9 +160,18 @@ export default function Propertie() {
             <span className="text-gray-900">{property.type} in {property.location.city}</span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-2.5 rounded-full border border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50 transition"><FontAwesomeIcon icon={faHeart} /></button>
-            <button className="p-2.5 rounded-full border border-gray-200 text-gray-400 hover:text-[#327878] hover:bg-gray-50 transition"><FontAwesomeIcon icon={faShareNodes} /></button>
-            <button className="p-2.5 rounded-full border border-gray-200 text-gray-400 hover:text-gray-900 transition"><FontAwesomeIcon icon={faPrint} /></button>
+            <button
+              onClick={favoriteHandler}
+              className={`p-2.5 rounded-full border transition ${
+                isFavorite(property._id)
+                  ? "border-red-200 bg-red-50 text-red-500"
+                  : "border-gray-200 text-gray-400 hover:text-red-500 hover:bg-red-50"
+              }`}
+            >
+              <FontAwesomeIcon icon={faHeart} />
+            </button>
+            <button onClick={shareHandler} className="p-2.5 rounded-full border border-gray-200 text-gray-400 hover:text-[#327878] hover:bg-gray-50 transition"><FontAwesomeIcon icon={faShareNodes} /></button>
+            <button onClick={() => window.print()} className="p-2.5 rounded-full border border-gray-200 text-gray-400 hover:text-gray-900 transition"><FontAwesomeIcon icon={faPrint} /></button>
           </div>
         </div>
 
@@ -97,24 +183,24 @@ export default function Propertie() {
               
               <div 
                 onClick={() => openLightbox(0)} 
-                className="col-span-3 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
+                className="md:col-span-3 col-span-4 row-span-2 relative rounded-2xl overflow-hidden shadow-lg group cursor-pointer"
               >
-                <img src={`http://localhost:8080/${property.images[0]}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={`${API_BASE_URL}/${property.images[0]}`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1 rounded text-[10px] font-black uppercase tracking-widest text-[#327878]">Featured</div>
               </div>
 
               <div 
                 onClick={() => openLightbox(1)} 
-                className="col-span-1 rounded-2xl overflow-hidden shadow-md cursor-pointer group"
+                className="md:col-span-1 col-span-2 rounded-2xl overflow-hidden shadow-md cursor-pointer group"
               >
-                <img src={`http://localhost:8080/${property.images[1] || property.images[0]}`} className="w-full h-full object-cover transition duration-300 group-hover:brightness-90" />
+                <img src={`${API_BASE_URL}/${property.images[1] || property.images[0]}`} className="w-full h-full object-cover transition duration-300 group-hover:brightness-90" />
               </div>
 
               <div 
                 onClick={() => openLightbox(2)} 
-                className="col-span-1 relative rounded-2xl overflow-hidden shadow-md group cursor-pointer"
+                className="md:col-span-1 col-span-2  relative rounded-2xl overflow-hidden shadow-md group cursor-pointer"
               >
-                <img src={`http://localhost:8080/${property.images[2] || property.images[0]}`} className="w-full h-full object-cover" />
+                <img src={`${API_BASE_URL}/${property.images[2] || property.images[0]}`} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white font-bold text-lg transition group-hover:bg-black/60">
                   <span>+{property.images.length} Photos</span>
                 </div>
@@ -157,7 +243,14 @@ export default function Propertie() {
                 ))}
               </div>
               
-              <div className="animate-fadeIn">
+              <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+              >
                 {activeTab === "description" && (
                   <div className="max-w-[700px]">
                     <h2 className="text-2xl font-bold mb-6 text-gray-900 leading-tight">Property Overview</h2>
@@ -190,7 +283,23 @@ export default function Propertie() {
                     </div>
                   </div>
                 )}
-              </div>
+
+                {activeTab === "neighborhood" && (
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                      <FontAwesomeIcon icon={faLocationDot} className="text-[#327878]" />
+                      {property.location.address}, {property.location.city}
+                    </div>
+                    <PropertyLocationMap
+                      lat={property.location.lat}
+                      lng={property.location.lng}
+                      title={property.title}
+                      address={`${property.location.address}, ${property.location.city}`}
+                    />
+                  </div>
+                )}
+              </motion.div>
+              </AnimatePresence>
             </div>
 
             <div className="grid grid-cols-3 gap-4 mb-12">
@@ -231,13 +340,13 @@ export default function Propertie() {
                 </div>
 
                 <div className="space-y-3 mb-8">
-                  <button className="w-full bg-[#327878] text-white py-4 rounded-xl font-bold hover:bg-[#286161] hover:shadow-lg transition-all duration-300">Schedule a Tour</button>
-                  <button className="w-full border-2 border-[#327878] text-[#327878] py-4 rounded-xl font-bold hover:bg-[#327878] hover:text-white transition-all duration-300">Request Information</button>
+                  <button onClick={() => setInquiryType("tour")} className="w-full bg-[#327878] text-white py-4 rounded-xl font-bold hover:bg-[#286161] hover:shadow-lg transition-all duration-300">Schedule a Tour</button>
+                  <button onClick={() => setInquiryType("info")} className="w-full border-2 border-[#327878] text-[#327878] py-4 rounded-xl font-bold hover:bg-[#327878] hover:text-white transition-all duration-300">Request Information</button>
                 </div>
 
                 <div className="pt-6 border-t border-gray-100 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <img src={`http://localhost:8080/assets/${property.owner.avatar}`} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#f0f5f5]" />
+                    <img src={`${API_BASE_URL}/assets/${property.owner.avatar}`} className="w-12 h-12 rounded-full object-cover ring-2 ring-[#f0f5f5]" />
                     <div>
                       <p className="text-sm font-bold">{property.owner.name}</p>
                       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{property.owner.position || "Agent"}</p>
@@ -255,7 +364,7 @@ export default function Propertie() {
                   <p className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Management</p>
                   <div className="grid grid-cols-2 gap-3">
                     <button onClick={() => navigate(`/edit-property/${id}`)} className="bg-white/10 hover:bg-white/20 py-3 rounded-lg font-bold text-xs transition">Edit Details</button>
-                    <button onClick={() => navigate(`/`)} className="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white py-3 rounded-lg font-bold text-xs transition">Remove</button>
+                    <button onClick={() => setIsDeleteOpen(true)} className="bg-red-500/20 hover:bg-red-500 text-red-500 hover:text-white py-3 rounded-lg font-bold text-xs transition">Remove</button>
                   </div>
                 </div>
               )}
@@ -290,7 +399,7 @@ export default function Propertie() {
 
             <div className="w-full h-full flex items-center justify-center p-2">
               <img 
-                src={`http://localhost:8080/${property.images[currentImgIndex]}`} 
+                src={`${API_BASE_URL}/${property.images[currentImgIndex]}`} 
                 alt={`Property view ${currentImgIndex + 1}`}
                 className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300"
               />
@@ -313,13 +422,31 @@ export default function Propertie() {
                   currentImgIndex === index ? "border-[#327878] scale-105 opacity-100 shadow-md" : "border-transparent opacity-40 hover:opacity-70"
                 }`}
               >
-                <img src={`http://localhost:8080/${img}`} className="w-full h-full object-cover" />
+                <img src={`${API_BASE_URL}/${img}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
 
         </div>
       )}
+
+      <ConfirmDialog
+        open={isDeleteOpen}
+        title="Remove this listing?"
+        description="This will permanently delete the property and its photos. This action cannot be undone."
+        confirmLabel="Remove Listing"
+        isLoading={isDeleting}
+        onConfirm={deleteProperty}
+        onCancel={() => setIsDeleteOpen(false)}
+      />
+
+      <InquiryModal
+        open={!!inquiryType}
+        type={inquiryType}
+        propertyId={property._id}
+        ownerId={property.owner._id}
+        onClose={() => setInquiryType(null)}
+      />
     </main>
   );
 }
