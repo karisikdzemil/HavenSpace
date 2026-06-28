@@ -31,9 +31,11 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message });
 });
 
+const PORT = process.env.PORT || 8080;
+
 mongoose
   .connect(db_key)
-  .then((result) => {
-    app.listen(8080);
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.log(err));
