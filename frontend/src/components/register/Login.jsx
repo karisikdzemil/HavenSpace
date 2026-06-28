@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../../config/api";
 import Loading from "../loading/Loading";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faArrowRight, faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
@@ -43,7 +44,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const result = await fetch("http://localhost:8080/api/login", {
+      const result = await fetch(`${API_BASE_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, password: form.password }),
@@ -57,7 +58,7 @@ export default function Login() {
       login(data.user, data.token);
       setIsLoading(false);
       navigate("/");
-    } catch (err) {
+    } catch {
       setErrors({ general: "Server connection failed." });
       setIsLoading(false);
     }
@@ -85,7 +86,7 @@ export default function Login() {
       <div className="space-y-2">
         <div className="flex justify-between items-center px-1">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Password</label>
-          <span className="text-[9px] font-black text-[#327878] uppercase tracking-widest cursor-pointer hover:underline">Forgot?</span>
+          <Link to="/forgot-password" className="text-[9px] font-black text-[#327878] uppercase tracking-widest hover:underline">Forgot?</Link>
         </div>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-300 group-focus-within:text-[#327878] transition-colors">

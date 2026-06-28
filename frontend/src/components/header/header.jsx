@@ -1,16 +1,20 @@
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { API_BASE_URL } from "../../config/api";
 import HeaderLinks from "./components/HeaderLinks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faXmark, faChevronDown, faUserPen, faHeart, faBuildingUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const menuRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,6 +23,16 @@ export default function Header() {
   const closeMenu = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     let timeoutId = null;
@@ -41,10 +55,10 @@ export default function Header() {
       setLastScrollY(currentScrollY);
 
       if (timeoutId) clearTimeout(timeoutId);
-      
+
       timeoutId = setTimeout(() => {
         setIsVisible(true);
-      }, 150); 
+      }, 150);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -56,7 +70,7 @@ export default function Header() {
   }, [lastScrollY]);
 
   return (
-    <header 
+    <header
       className={`w-full py-5 z-50 md:px-10 px-4 fixed top-0 left-0 transition-transform duration-300 ease-in-out ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
@@ -82,12 +96,41 @@ export default function Header() {
 
         <div className="hidden items-center xl:flex">
           {isAuthenticated ? (
-            <button
-              onClick={logout}
-              className="text-white bg-[#2c7a7b] text-[14px] py-2 px-5 rounded-[50px] transition-all hover:bg-[#3d9ea0]"
-            >
-              LOGOUT
-            </button>
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                className="flex items-center gap-3 pl-2 pr-4 py-1.5 rounded-full hover:bg-gray-50 transition-all"
+              >
+                <img
+                  src={`${API_BASE_URL}/assets/${user?.avatar}`}
+                  alt={user?.name}
+                  className="w-9 h-9 rounded-full object-cover ring-2 ring-[#f0f5f5]"
+                />
+                <span className="text-[14px] font-semibold text-[#163535]">{user?.name}</span>
+                <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] text-gray-400 transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {isMenuOpen && (
+                <div className="absolute right-0 top-[calc(100%+12px)] w-56 bg-white rounded-3xl shadow-2xl border border-gray-50 p-2 animate-fadeIn">
+                  <Link onClick={() => setIsMenuOpen(false)} to="/edit-profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-[#323b3b] text-sm font-semibold hover:bg-gray-50 hover:text-[#2c7a7b] transition-all">
+                    <FontAwesomeIcon icon={faUserPen} className="w-4 text-[#2c7a7b]" /> Edit Profile
+                  </Link>
+                  <Link onClick={() => setIsMenuOpen(false)} to="/my-properties" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-[#323b3b] text-sm font-semibold hover:bg-gray-50 hover:text-[#2c7a7b] transition-all">
+                    <FontAwesomeIcon icon={faBuildingUser} className="w-4 text-[#2c7a7b]" /> My Properties
+                  </Link>
+                  <Link onClick={() => setIsMenuOpen(false)} to="/my-properties#saved" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-[#323b3b] text-sm font-semibold hover:bg-gray-50 hover:text-[#2c7a7b] transition-all">
+                    <FontAwesomeIcon icon={faHeart} className="w-4 text-[#2c7a7b]" /> Saved Properties
+                  </Link>
+                  <div className="h-px bg-gray-100 my-1.5" />
+                  <button
+                    onClick={() => { logout(); setIsMenuOpen(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-red-500 text-sm font-semibold hover:bg-red-50 transition-all"
+                  >
+                    <FontAwesomeIcon icon={faRightFromBracket} className="w-4" /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <NavLink
               to="/register"
@@ -112,8 +155,8 @@ export default function Header() {
 
       <div
         className={`xl:hidden absolute left-4 right-4 bg-white mt-3 rounded-4xl shadow-2xl p-6 transition-all duration-300 ease-in-out border border-gray-50 z-40 ${
-          isOpen 
-            ? "opacity-100 translate-y-0 visible" 
+          isOpen
+            ? "opacity-100 translate-y-0 visible"
             : "opacity-0 -translate-y-4 invisible pointer-events-none"
         }`}
       >
@@ -127,6 +170,7 @@ export default function Header() {
               <>
                 <div onClick={closeMenu}><HeaderLinks path="/new-listings" text="New Listings" /></div>
                 <div onClick={closeMenu}><HeaderLinks path="/my-properties" text="My Properties" /></div>
+                <div onClick={closeMenu}><HeaderLinks path="/edit-profile" text="Edit Profile" /></div>
               </>
             )}
             <div onClick={closeMenu}><HeaderLinks path="/contact" text="Contact" /></div>

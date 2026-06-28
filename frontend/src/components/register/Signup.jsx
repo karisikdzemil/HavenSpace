@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_BASE_URL } from "../../config/api";
 import Loading from "../loading/Loading";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -116,7 +117,7 @@ export default function Signup() {
     }
 
     try {
-      const result = await fetch("http://localhost:8080/api/create-user", {
+      const result = await fetch(`${API_BASE_URL}/api/create-user`, {
         method: "POST",
         body: formData,
       });
@@ -128,7 +129,7 @@ export default function Signup() {
       }
       login(data.user, data.token);
       navigate("/");
-    } catch (err) {
+    } catch {
       setErrors({ general: "Server connection failed." });
       setIsLoading(false);
     }
