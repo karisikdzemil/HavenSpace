@@ -125,28 +125,38 @@ router.get('/agents', userRoutes.getAgents);
 
 router.get('/get-user/:id', userRoutes.getUser);
 
-router.delete("/delete-user", userRoutes.deleteUser);
+router.delete("/delete-user", isAuth, userRoutes.deleteUser);
+
+const editUserValidation = [
+  body("name").optional().trim().isLength({ min: 2 }).withMessage("Name must have at least 2 characters."),
+  body("surname").optional().trim().isLength({ min: 2 }).withMessage("Surname must have at least 2 characters."),
+  body("position").optional().trim().notEmpty().withMessage("Position is required."),
+  body("description").optional().trim().isLength({ min: 10 }).withMessage("Description must be at least 10 characters."),
+  body("phone").optional().trim().notEmpty().withMessage("Phone number is required."),
+  body("location").optional().trim().notEmpty().withMessage("Location is required."),
+  body("linkedin").optional({ checkFalsy: true }).isURL().withMessage("LinkedIn must be a valid URL."),
+];
 
 router.put(
   "/edit-user",
-  // [
-  //   body("email")
-  //     .notEmpty()
-  //     .withMessage("Email is required!")
-  //     .isEmail()
-  //     .withMessage("Please enter a valid email!")
-  //     .normalizeEmail(),
-  //   body("password")
-  //     .isLength({ min: 8 })
-  //     .withMessage("Password must be at least 8 characters long!")
-  //     .matches(/[0-9]/)
-  //     .withMessage("Password must contain a number!")
-  //     .matches(/[A-Z]/)
-  //     .withMessage("Password must containt an uppercase letter!")
-  //     .matches(/[a-z]/)
-  //     .withMessage("Password must contant a lowercase letter!"),
-  // ],
+  isAuth,
+  uploadAvatar,
+  editUserValidation,
   userRoutes.editUser
 );
+
+router.put("/change-password", isAuth, userRoutes.changePassword);
+
+router.post(
+  "/forgot-password",
+  [body("email").isEmail().withMessage("Please enter a valid email!").normalizeEmail()],
+  userRoutes.forgotPassword
+);
+
+router.post("/reset-password/:token", userRoutes.resetPassword);
+
+router.put("/favorites/:id", isAuth, userRoutes.toggleFavorite);
+
+router.get("/favorites", isAuth, userRoutes.getFavorites);
 
 module.exports = router;

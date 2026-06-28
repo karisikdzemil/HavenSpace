@@ -5,6 +5,7 @@ const path = require('path');
 const propertyRoutes = require("./routes/property");
 const authRoutes = require("./routes/auth");
 const aiRoutes = require('./routes/ai');
+const inquiryRoutes = require('./routes/inquiry');
 const cors = require("cors");
 const User = require("./models/User");
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/api", propertyRoutes);
 app.use("/api", authRoutes);
 app.use("/api", aiRoutes);
+app.use("/api", inquiryRoutes);
 
 app.use("/images", express.static(path.join(__dirname, "assets/images")));
 app.use("/images", express.static(path.join(__dirname, "assets/avatar")));
