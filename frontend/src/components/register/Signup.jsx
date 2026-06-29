@@ -140,9 +140,9 @@ export default function Signup() {
 
       {/* BASIC */}
       <div className="grid grid-cols-2 gap-x-6 gap-y-5">
-        <Field label="First Name" name="name" icon={faUser} placeholder="Jamil" grid="col-span-1" value={form.name} onChange={set("name")} error={errors.name} />
-        <Field label="Last Name" name="surname" icon={faUser} placeholder="Karishik" grid="col-span-1" value={form.surname} onChange={set("surname")} error={errors.surname} />
-        <Field label="Email" name="email" type="email" icon={faEnvelope} placeholder="jamil@haven.com" value={form.email} onChange={set("email")} error={errors.email} />
+        <Field label="First Name" name="name" icon={faUser} placeholder="Name" grid="col-span-1" value={form.name} onChange={set("name")} error={errors.name} />
+        <Field label="Last Name" name="surname" icon={faUser} placeholder="Surname" grid="col-span-1" value={form.surname} onChange={set("surname")} error={errors.surname} />
+        <Field label="Email" name="email" type="email" icon={faEnvelope} placeholder="name@haven.com" value={form.email} onChange={set("email")} error={errors.email} />
         <Field label="Password" name="password" type="password" icon={faLock} placeholder="••••••••" grid="col-span-1" value={form.password} onChange={set("password")} error={errors.password} />
         <Field label="Confirm Password" name="confirmPassword" type="password" icon={faLock} placeholder="••••••••" grid="col-span-1" value={form.confirmPassword} onChange={set("confirmPassword")} error={errors.confirmPassword} />
       </div>
