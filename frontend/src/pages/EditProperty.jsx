@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL, propertyImageUrl } from "../config/api";
 import ContentWrapper from "../components/contentWrapper";
 import Reveal, { RevealGroup, RevealItem } from "../components/motion/Reveal";
 import { useEffect, useState } from "react";
@@ -10,6 +10,8 @@ import {
   faBed, faBath, faRulerCombined, faCar, faImages,
   faCheckDouble, faMapPin, faArrowRight, faXmark, faPlus
 } from "@fortawesome/free-solid-svg-icons";
+
+const MAX_IMAGES = 20;
 
 const INITIAL_FORM = {
   title: "", price: "", status: "", type: "",
@@ -263,6 +265,16 @@ export default function EditProperty() {
 
   const addNewImageFiles = (e) => {
     const files = Array.from(e.target.files || []);
+    const total = existingImages.length + newImageFiles.length + files.length;
+
+    if (total > MAX_IMAGES) {
+      const allowed = Math.max(0, MAX_IMAGES - existingImages.length - newImageFiles.length);
+      setErrors((prev) => ({ ...prev, images: `You can have up to ${MAX_IMAGES} images per listing.` }));
+      setNewImageFiles((prev) => [...prev, ...files.slice(0, allowed)]);
+      return;
+    }
+
+    setErrors((prev) => ({ ...prev, images: undefined }));
     setNewImageFiles((prev) => [...prev, ...files]);
   };
 
@@ -405,7 +417,7 @@ export default function EditProperty() {
                     <div className="flex flex-wrap gap-4">
                       {existingImages.map((img) => (
                         <div key={img} className="relative w-28 h-28 rounded-2xl overflow-hidden border border-gray-100 group">
-                          <img src={`${API_BASE_URL}/${img}`} className="w-full h-full object-cover" />
+                          <img src={propertyImageUrl(img)} className="w-full h-full object-cover" />
                           <button
                             type="button"
                             onClick={() => removeExistingImage(img)}
@@ -440,6 +452,7 @@ export default function EditProperty() {
                     <span className="text-xs font-bold text-[#327878]">Add More Photos (Multiple)</span>
                     <input type="file" multiple accept="image/png,image/jpg,image/jpeg" className="hidden" onChange={addNewImageFiles} />
                   </label>
+                  {errors.images && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.images}</p>}
                 </div>
               </FormSection>
               </RevealItem>

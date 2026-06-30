@@ -112,12 +112,15 @@ const TagInput = ({ label, inputValue, onInputChange, onKeyDown, onAdd, tags, on
 );
 
 
+const MAX_IMAGES = 20;
+
 export default function AddProperty() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState(INITIAL_FORM);
   const [interiorFeatures, setInteriorFeatures] = useState([]);
   const [exteriorFeatures, setExteriorFeatures] = useState([]);
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -208,6 +211,21 @@ export default function AddProperty() {
       setExteriorFeatures((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const imagesChangeHandler = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > MAX_IMAGES) {
+      setErrors((prev) => ({ ...prev, images: `You can upload up to ${MAX_IMAGES} images.` }));
+      setImages(files.slice(0, MAX_IMAGES));
+      return;
+    }
+    setErrors((prev) => ({ ...prev, images: undefined }));
+    setImages(files);
+  };
+
+  const removeImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const addPropertyHandler = async (e) => {
     e.preventDefault();
 
@@ -237,9 +255,8 @@ export default function AddProperty() {
     interiorFeatures.forEach((f) => formData.append("interiorFeatures", f));
     exteriorFeatures.forEach((f) => formData.append("exteriorFeatures", f));
 
-    const fileInput = document.querySelector('input[name="images"]');
-    if (fileInput?.files?.length) {
-      Array.from(fileInput.files).forEach((file) => formData.append("images", file));
+    if (images.length) {
+      images.forEach((file) => formData.append("images", file));
     }
 
     try {
@@ -334,9 +351,24 @@ export default function AddProperty() {
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Property Images</label>
                 <label className="flex items-center gap-3 w-full bg-[#f0f7f7] border border-dashed border-[#327878]/30 rounded-2xl px-5 py-4 cursor-pointer hover:bg-[#e8f2f2] transition-colors">
                   <FontAwesomeIcon icon={faImages} className="text-[#327878]" />
-                  <span className="text-xs font-bold text-[#327878]">Upload High-Res Photos (Multiple)</span>
-                  <input type="file" name="images" multiple className="hidden" />
+                  <span className="text-xs font-bold text-[#327878]">
+                    {images.length > 0 ? `${images.length} / ${MAX_IMAGES} photos selected` : `Upload High-Res Photos (up to ${MAX_IMAGES})`}
+                  </span>
+                  <input type="file" name="images" multiple accept="image/png,image/jpeg" onChange={imagesChangeHandler} className="hidden" />
                 </label>
+                {images.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {images.map((file, i) => (
+                      <span key={i} className="flex items-center gap-2 bg-[#327878]/10 text-[#327878] text-[11px] font-bold px-3 py-1.5 rounded-full">
+                        {file.name}
+                        <button type="button" onClick={() => removeImage(i)} className="hover:text-red-500 transition-colors">
+                          <FontAwesomeIcon icon={faXmark} size="xs" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {errors.images && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.images}</p>}
               </div>
             </FormSection>
             </RevealItem>

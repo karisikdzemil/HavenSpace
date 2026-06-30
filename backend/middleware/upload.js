@@ -15,8 +15,23 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+const MAX_PROPERTY_IMAGES = 20;
+
 const uploadAvatarMulter = multer({ storage, fileFilter }).single("avatar");
-const uploadPropertyImagesMulter = multer({ storage, fileFilter }).array("images", 5);
+const uploadPropertyImagesMulter = multer({ storage, fileFilter }).array("images", MAX_PROPERTY_IMAGES);
+
+const friendlyMulterError = (err) => {
+  if (err.code === "LIMIT_UNEXPECTED_FILE" || err.code === "LIMIT_FILE_COUNT") {
+    return Object.assign(
+      new Error(`You can upload up to ${MAX_PROPERTY_IMAGES} images per listing.`),
+      { statusCode: 422 }
+    );
+  }
+  if (err.code === "LIMIT_FILE_SIZE") {
+    return Object.assign(new Error("One of your images is too large."), { statusCode: 422 });
+  }
+  return err;
+};
 
 const uploadToCloudinary = (file, folder) =>
   new Promise((resolve, reject) => {
@@ -32,7 +47,7 @@ const uploadToCloudinary = (file, folder) =>
 
 exports.uploadAvatar = (req, res, next) => {
   uploadAvatarMulter(req, res, async (err) => {
-    if (err) return next(err);
+    if (err) return next(friendlyMulterError(err));
     if (!req.file) return next();
 
     try {
@@ -48,7 +63,7 @@ exports.uploadAvatar = (req, res, next) => {
 
 exports.uploadPropertyImages = (req, res, next) => {
   uploadPropertyImagesMulter(req, res, async (err) => {
-    if (err) return next(err);
+    if (err) return next(friendlyMulterError(err));
     if (!req.files || !req.files.length) return next();
 
     try {
