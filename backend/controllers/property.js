@@ -27,11 +27,13 @@ exports.getProperties = async (req, res, next) => {
     }
 
     if (bedNum && bedNum !== "any") {
-      filter.bedNum = Number(bedNum);
+      const n = parseInt(bedNum, 10);
+      filter.bedNum = bedNum.includes("+") ? { $gte: n } : n;
     }
 
     if (bathNum && bathNum !== "any") {
-      filter.bathNum = Number(bathNum);
+      const n = parseInt(bathNum, 10);
+      filter.bathNum = bathNum.includes("+") ? { $gte: n } : n;
     }
 
     if (minPrice || maxPrice) {

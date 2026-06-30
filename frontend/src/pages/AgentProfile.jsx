@@ -9,7 +9,6 @@ import {
   faGlobe,
   faAward,
   faCheckDouble,
-  faChartLine,
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -149,21 +148,25 @@ export default function AgentProfile() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[
                 {
+                  label: "Active Listings",
+                  value: properties.filter((p) => p.status !== "sold").length,
+                  icon: faAward,
+                },
+                {
                   label: "Properties Sold",
-                  value: agent.soldProperties,
+                  value: properties.filter((p) => p.status === "sold").length,
                   icon: faCheckDouble,
                 },
                 {
-                  label: "Total Sales",
-                  value: `€${(agent.totalSales / 1000).toFixed(0)}k`,
-                  icon: faChartLine,
+                  label: "Languages",
+                  value: agent.languages?.length || 0,
+                  icon: faGlobe,
                 },
                 {
-                  label: "Active Listings",
-                  value: properties.length,
+                  label: "Member Since",
+                  value: new Date(agent.createdAt).getFullYear(),
                   icon: faCalendarDays,
                 },
-                { label: "Experience", value: "8+ Years", icon: faAward },
               ].map((stat, i) => (
                 <div
                   key={i}

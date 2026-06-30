@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { API_BASE_URL } from "../../config/api";
+import { propertyImageUrl } from "../../config/api";
 import { faBath, faBed, faLocationDot, faMaximize, faWarehouse, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useFavorites } from "../../hooks/useFavorites";
@@ -49,7 +49,7 @@ export default function PropertyCard({ property }) {
 
         <div className="relative w-full h-64 overflow-hidden rounded-3xl">
           <div
-            style={{ backgroundImage: `url(${API_BASE_URL}/${property.images[0]})` }}
+            style={{ backgroundImage: `url(${propertyImageUrl(property.images[0])})` }}
             className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
           />
 
